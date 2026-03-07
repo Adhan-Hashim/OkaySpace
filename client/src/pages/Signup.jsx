@@ -258,4 +258,43 @@ const Signup = () => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '0.5rem',
-                                boxShadow: loading ? 'none' : '0 10px 30px rgba(65, 201, 150, 0.3)'\n                            }}\n                            onMouseEnter={(e) => !loading && (e.target.style.background = '#2ea975')}\n                            onMouseLeave={(e) => !loading && (e.target.style.background = 'var(--mint-green)')}\n                        >\n                            {loading ? '✓ Creating Account...' : <><UserPlus size={18} /> Create Account</>\n                        }\n                        </button>\n                    </form>\n\n                    {/* Footer */}\n                    <div style={{\n                        textAlign: 'center',\n                        paddingTop: '1.5rem',\n                        borderTop: '1px solid #eee'\n                    }}>\n                        <p style={{\n                            fontSize: '1rem',\n                            color: '#666',\n                            margin: '0 0 0.5rem 0',\n                            fontFamily: 'var(--font-body)'\n                        }}>Already have an account?</p>\n                        <Link to=\"/login\" style={{\n                            color: 'var(--accent)',\n                            textDecoration: 'none',\n                            fontWeight: 600,\n                            fontSize: '1rem',\n                            fontFamily: 'var(--font-accent)',\n                            transition: 'opacity 0.3s',\n                            cursor: 'pointer',\n                            borderBottom: '2px solid var(--accent)',\n                            paddingBottom: '2px'\n                        }}>Sign In</Link>\n                    </div>\n                </div>\n            </div>\n        </div>\n    );\n};\n\nexport default Signup;
+                                boxShadow: loading ? 'none' : '0 10px 30px rgba(65, 201, 150, 0.3)'
+                            }}
+                            onMouseEnter={(e) => !loading && (e.target.style.background = '#2ea975')}
+                            onMouseLeave={(e) => !loading && (e.target.style.background = 'var(--mint-green)')}
+                        >
+                            {loading ? '✓ Creating Account...' : <><UserPlus size={18} /> Create Account</>}
+                        </button>
+                    </form>
+
+                    {/* Footer */}
+                    <div style={{
+                        textAlign: 'center',
+                        paddingTop: '1.5rem',
+                        borderTop: '1px solid #eee'
+                    }}>
+                        <p style={{
+                            fontSize: '1rem',
+                            color: '#666',
+                            margin: '0 0 0.5rem 0',
+                            fontFamily: 'var(--font-body)'
+                        }}>Already have an account?</p>
+                        <Link to="/login" style={{
+                            color: 'var(--accent)',
+                            textDecoration: 'none',
+                            fontWeight: 600,
+                            fontSize: '1rem',
+                            fontFamily: 'var(--font-accent)',
+                            transition: 'opacity 0.3s',
+                            cursor: 'pointer',
+                            borderBottom: '2px solid var(--accent)',
+                            paddingBottom: '2px'
+                        }}>Sign In</Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Signup;
