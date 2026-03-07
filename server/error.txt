@@ -1,0 +1,19 @@
+[dotenv@17.3.1] injecting env (4) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+file:///C:/Users/adhan/OneDrive/Desktop/ok%20space/server/node_modules/bad-words/dist/index.js:2
+Object.defineProperty(exports, "__esModule", { value: true });
+                      ^
+
+ReferenceError: exports is not defined in ES module scope
+This file is being treated as an ES module because it has a '.js' file extension and 'C:\Users\adhan\OneDrive\Desktop\ok space\server\node_modules\bad-words\package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
+    at file:///C:/Users/adhan/OneDrive/Desktop/ok%20space/server/node_modules/bad-words/dist/index.js:2:23
+    at ModuleJobSync.runSync (node:internal/modules/esm/module_job:450:37)
+    at ModuleLoader.importSyncForRequire (node:internal/modules/esm/loader:429:47)
+    at loadESMFromCJS (node:internal/modules/cjs/loader:1519:24)
+    at Module._compile (node:internal/modules/cjs/loader:1670:5)
+    at Object..js (node:internal/modules/cjs/loader:1820:10)
+    at Module.load (node:internal/modules/cjs/loader:1423:32)
+    at Function._load (node:internal/modules/cjs/loader:1246:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+
+Node.js v22.18.0
