@@ -2,189 +2,199 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const ParticleBackground = ({ gender = 'default' }) => {
-    const canvasRef = useRef(null);
+    const containerRef = useRef(null);
     const sceneRef = useRef(null);
-    const particlesRef = useRef([]);
-    const animationIdRef = useRef(null);
+    const rendererRef = useRef(null);
+    const cameraRef = useRef(null);
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+        const container = containerRef.current;
+        if (!container) return;
 
-        // Scene setup
-        const scene = new THREE.Scene();
-        sceneRef.current = scene;
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x000000, 0);
+        try {
+            // Scene setup
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xfafafa);
+            sceneRef.current = scene;
 
-        camera.position.z = 100;
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            camera.position.z = 100;
+            cameraRef.current = camera;
 
-        // Particle configuration based on gender
-        const getParticleConfig = () => {
-            switch (gender) {
-                case 'male':
-                    return {
-                        count: 150,
-                        color: 0x4a90e2,
-                        shape: 'cube',
-                        speed: 0.5,
-                        spread: 200,
-                        gravity: 0.1,
-                        attraction: 0.02
-                    };
-                case 'female':
-                    return {
-                        count: 200,
-                        color: 0xe74c8e,
-                        shape: 'sphere',
-                        speed: 0.3,
-                        spread: 250,
-                        gravity: 0.05,
-                        attraction: 0.01
-                    };
-                default:
-                    return {
-                        count: 120,
-                        color: 0xf48b47,
-                        shape: 'tetrahedron',
-                        speed: 0.4,
-                        spread: 180,
-                        gravity: 0.08,
-                        attraction: 0.015
-                    };
-            }
-        };
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+            rendererRef.current = renderer;
 
-        const config = getParticleConfig();
-        const centerX = 0, centerY = 0;
-
-        // Create particles
-        const particles = [];
-        for (let i = 0; i < config.count; i++) {
-            const geometry = config.shape === 'cube' 
-                ? new THREE.BoxGeometry(1, 1, 1)
-                : config.shape === 'sphere'
-                ? new THREE.IcosahedronGeometry(0.5, 4)
-                : new THREE.TetrahedronGeometry(0.5);
-
-            const material = new THREE.MeshPhongMaterial({
-                color: config.color,
-                emissive: config.color,
-                emissiveIntensity: 0.3,
-                wireframe: Math.random() > 0.7
-            });
-            const mesh = new THREE.Mesh(geometry, material);
-
-            const angle = (Math.random() * Math.PI * 2);
-            const radius = Math.random() * config.spread;
-            mesh.position.x = centerX + Math.cos(angle) * radius;
-            mesh.position.y = centerY + Math.sin(angle) * radius;
-            mesh.position.z = (Math.random() - 0.5) * 100;
-
-            mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-
-            const particle = {
-                mesh,
-                vx: (Math.random() - 0.5) * config.speed,
-                vy: (Math.random() - 0.5) * config.speed,
-                vz: (Math.random() - 0.5) * config.speed,
-                rotVx: (Math.random() - 0.5) * 0.02,
-                rotVy: (Math.random() - 0.5) * 0.02,
-                rotVz: (Math.random() - 0.5) * 0.02,
-                angle: angle,
-                radius: radius,
-                life: 1,
-                maxLife: 1,
-                originalY: mesh.position.y
+            // Particle configuration based on gender
+            const getParticleConfig = () => {
+                switch (gender) {
+                    case 'male':
+                        return {
+                            count: 100,
+                            colors: [0x4a90e2, 0x2e5cb8, 0x6ba3f5],
+                            shape: 'cube',
+                            speed: 0.3,
+                            spread: 150
+                        };
+                    case 'female':
+                        return {
+                            count: 120,
+                            colors: [0xe74c8e, 0xff69b4, 0xff1493],
+                            shape: 'sphere',
+                            speed: 0.25,
+                            spread: 180
+                        };
+                    default:
+                        return {
+                            count: 90,
+                            colors: [0xf48b47, 0xff9d5c, 0xff6b35],
+                            shape: 'tetrahedron',
+                            speed: 0.28,
+                            spread: 140
+                        };
+                }
             };
 
-            scene.add(mesh);
-            particles.push(particle);
-        }
+            const config = getParticleConfig();
+            const particles = [];
 
-        particlesRef.current = particles;
-
-        // Lighting
-        const light1 = new THREE.PointLight(config.color, 1, 500);
-        light1.position.set(100, 100, 100);
-        scene.add(light1);
-
-        const light2 = new THREE.PointLight(0xffffff, 0.3, 800);
-        light2.position.set(-100, -100, 100);
-        scene.add(light2);
-
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-        scene.add(ambientLight);
-
-        // Animation loop
-        const animate = () => {
-            animationIdRef.current = requestAnimationFrame(animate);
-
-            particles.forEach((p) => {
-                // Gravity
-                p.vy -= config.gravity * 0.01;
-
-                // Attraction to center
-                const dx = centerX - p.mesh.position.x;
-                const dy = centerY - p.mesh.position.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance > 0) {
-                    p.vx += (dx / distance) * config.attraction;
-                    p.vy += (dy / distance) * config.attraction * 0.5;
+            // Create particles
+            for (let i = 0; i < config.count; i++) {
+                let geometry;
+                if (config.shape === 'cube') {
+                    geometry = new THREE.BoxGeometry(2, 2, 2);
+                } else if (config.shape === 'sphere') {
+                    geometry = new THREE.IcosahedronGeometry(1.2, 3);
+                } else {
+                    geometry = new THREE.TetrahedronGeometry(1.5);
                 }
 
-                // Update position
-                p.mesh.position.x += p.vx;
-                p.mesh.position.y += p.vy;
-                p.mesh.position.z += p.vz;
+                const colorIndex = Math.floor(Math.random() * config.colors.length);
+                const material = new THREE.MeshPhongMaterial({
+                    color: config.colors[colorIndex],
+                    emissive: config.colors[colorIndex],
+                    emissiveIntensity: 0.4,
+                    shininess: 100,
+                    wireframe: Math.random() > 0.7
+                });
 
-                // Rotation
-                p.mesh.rotation.x += p.rotVx;
-                p.mesh.rotation.y += p.rotVy;
-                p.mesh.rotation.z += p.rotVz;
+                const mesh = new THREE.Mesh(geometry, material);
 
-                // Oscillation
-                const time = Date.now() * 0.001;
-                p.mesh.position.z += Math.sin(time + p.angle) * 0.2;
+                // Random position in spread area
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * config.spread;
+                mesh.position.x = Math.cos(angle) * radius;
+                mesh.position.y = Math.sin(angle) * radius;
+                mesh.position.z = (Math.random() - 0.5) * 50;
 
-                // Boundary wrapping
-                if (Math.abs(p.mesh.position.x) > 300) p.vx *= -1;
-                if (Math.abs(p.mesh.position.y) > 300) p.vy *= -1;
-            });
+                mesh.rotation.set(
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI
+                );
 
-            renderer.render(scene, camera);
-        };
-        animate();
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
 
-        // Handle window resize
-        const handleResize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        };
-        window.addEventListener('resize', handleResize);
+                const particle = {
+                    mesh,
+                    vx: (Math.random() - 0.5) * config.speed,
+                    vy: (Math.random() - 0.5) * config.speed,
+                    vz: (Math.random() - 0.5) * config.speed,
+                    rotVx: (Math.random() - 0.5) * 0.03,
+                    rotVy: (Math.random() - 0.5) * 0.03,
+                    rotVz: (Math.random() - 0.5) * 0.03,
+                    life: 1
+                };
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            cancelAnimationFrame(animationIdRef.current);
-            renderer.dispose();
-            particles.forEach(p => scene.remove(p.mesh));
-        };
+                scene.add(mesh);
+                particles.push(particle);
+            }
+
+            // Lighting setup
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const pointLight1 = new THREE.PointLight(0xffffff, 0.8, 500);
+            pointLight1.position.set(200, 200, 200);
+            pointLight1.castShadow = true;
+            scene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0xffffff, 0.4, 300);
+            pointLight2.position.set(-200, -200, 100);
+            scene.add(pointLight2);
+
+            let animationId;
+
+            const animate = () => {
+                animationId = requestAnimationFrame(animate);
+
+                particles.forEach((particle) => {
+                    // Update position
+                    particle.mesh.position.x += particle.vx;
+                    particle.mesh.position.y += particle.vy;
+                    particle.mesh.position.z += particle.vz;
+
+                    // Update rotation
+                    particle.mesh.rotation.x += particle.rotVx;
+                    particle.mesh.rotation.y += particle.rotVy;
+                    particle.mesh.rotation.z += particle.rotVz;
+
+                    // Floating effect
+                    const time = Date.now() * 0.001;
+                    particle.mesh.position.y += Math.sin(time + particle.mesh.uuid) * 0.01;
+
+                    // Boundary wrapping
+                    if (Math.abs(particle.mesh.position.x) > 300) particle.vx *= -1;
+                    if (Math.abs(particle.mesh.position.y) > 300) particle.vy *= -1;
+                    if (Math.abs(particle.mesh.position.z) > 250) particle.vz *= -1;
+                });
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Handle window resize
+            const handleResize = () => {
+                const newWidth = window.innerWidth;
+                const newHeight = window.innerHeight;
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+            };
+
+            window.addEventListener('resize', handleResize);
+
+            // Cleanup
+            return () => {
+                window.removeEventListener('resize', handleResize);
+                cancelAnimationFrame(animationId);
+                renderer.dispose();
+                container.removeChild(renderer.domElement);
+            };
+        } catch (error) {
+            console.error('Particle background error:', error);
+        }
     }, [gender]);
 
     return (
-        <canvas
-            ref={canvasRef}
+        <div
+            ref={containerRef}
             style={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 width: '100vw',
                 height: '100vh',
-                zIndex: 0
+                zIndex: 0,
+                pointerEvents: 'none'
             }}
         />
     );
