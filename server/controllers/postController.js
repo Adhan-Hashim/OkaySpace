@@ -1,13 +1,18 @@
 const Post = require('../models/Post');
 const Comment = require('../models/Comment');
-const Filter = require('bad-words');
-const filter = new Filter();
+
+// Simple profanity check
+const PROFANITY_WORDS = ['badword1', 'badword2']; // Add common profanities as needed
+const isProfane = (text) => {
+    const lowerText = text.toLowerCase();
+    return PROFANITY_WORDS.some(word => lowerText.includes(word));
+};
 
 exports.createPost = async (req, res) => {
     try {
         const { content, anonymous } = req.body;
 
-        if (filter.isProfane(content)) {
+        if (isProfane(content)) {
             return res.status(400).json({ message: 'Harmful content detected. Please keep the community safe.' });
         }
 
@@ -64,7 +69,7 @@ exports.addComment = async (req, res) => {
     try {
         const { comment } = req.body;
 
-        if (filter.isProfane(comment)) {
+        if (isProfane(comment)) {
             return res.status(400).json({ message: 'Harmful language detected. Please keep the community safe.' });
         }
 

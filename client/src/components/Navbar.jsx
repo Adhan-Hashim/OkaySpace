@@ -1,148 +1,169 @@
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { SafeModeContext } from '../context/SafeModeContext';
-import { Shield, ShieldOff, Menu } from 'lucide-react';
+import { X, Menu } from 'lucide-react';
+
+const NAV_LINKS_GUEST = [
+    { to: '/login', label: 'Sign In' },
+    { to: '/signup', label: 'Join Us' },
+];
+
+const NAV_LINKS_USER = [
+    { to: '/dashboard', label: 'Community' },
+    { to: '/chat', label: 'AI Chat' },
+    { to: '/mood', label: 'Mood' },
+    { to: '/letters', label: 'Letters' },
+    { to: '/therapists', label: 'Therapists' },
+    { to: '/resources', label: 'Resources' },
+    { to: '/emergency', label: 'Emergency' },
+];
 
 const Navbar = () => {
+    const [open, setOpen] = useState(false);
     const { user, logout } = useContext(AuthContext);
-    const { isSafeMode, toggleSafeMode } = useContext(SafeModeContext);
-    const [isHovered, setIsHovered] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const links = user ? NAV_LINKS_USER : NAV_LINKS_GUEST;
 
     const handleLogout = () => {
+        setOpen(false);
         logout();
         navigate('/');
     };
 
     return (
-        <div style={{
-            position: 'fixed',
-            top: '4vh',
-            left: '71vw', // Roughly the 25vw from the right position, but anchored from the left
-            transform: 'translateX(-50%)', // This forces perfectly symmetrical expansion in both directions
-            zIndex: 99999
-        }}>
-            <nav
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+        <>
+            {/* Floating hamburger button — top right */}
+            <button
+                onClick={() => setOpen(!open)}
+                aria-label="Toggle menu"
                 style={{
-                    background: 'var(--text-main)', // Dark Navy
-                    borderRadius: '30px', /* Dynamic Island extreme radius */
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: isHovered ? '0 20px' : '0',
-                    boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.15)',
-                    transition: 'all 0.8s cubic-bezier(0.5, 1.8, 0.2, 1)',
-                    overflow: 'hidden',
-                    maxWidth: isHovered ? '1200px' : '60px',
-                    width: 'max-content',
-                    minWidth: '60px',
-                    height: '60px',
-                    cursor: isHovered ? 'default' : 'pointer',
-                    position: 'relative',
-                    justifyContent: 'center'
-                }}>
-                {/* Collapsed Icon */}
-                <div style={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -50%) scale(${isHovered ? 0.5 : 1})`,
+                    position: 'fixed',
+                    top: '20px',
+                    right: '20px',
+                    zIndex: 10000,
+                    width: '52px',
+                    height: '52px',
+                    borderRadius: '50%',
+                    background: '#1a1a1a',
+                    border: 'none',
+                    cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    opacity: isHovered ? 0 : 1,
-                    transition: 'all 0.4s ease',
-                    pointerEvents: 'none'
-                }}>
-                    <Menu color="var(--bg-color)" size={28} />
-                </div>
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+                    transition: 'transform 0.2s ease, background 0.2s ease',
+                    color: '#fff',
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
+                {open ? <X size={22} /> : <Menu size={22} />}
+            </button>
 
-                {/* Expanded Content */}
-                <div style={{
-                    display: 'flex',
-                    gap: '5px',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontFamily: 'var(--font-accent)',
-                    fontWeight: 'bold',
-                    fontSize: '1rem',
-                    letterSpacing: '0.5px',
-                    opacity: isHovered ? 1 : 0,
-                    transform: isHovered ? 'scale(1)' : 'scale(0.8)',
-                    transition: 'all 0.8s cubic-bezier(0.5, 1.8, 0.2, 1)',
-                    whiteSpace: 'nowrap',
-                    pointerEvents: isHovered ? 'auto' : 'none',
-                    position: 'relative', // Changed from absolute to relative to expand the container
-                    width: 'max-content'
-                }}>
-                    <button
-                        onClick={toggleSafeMode}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            background: isSafeMode ? 'var(--success)' : 'transparent',
-                            color: isSafeMode ? 'var(--text-main)' : 'var(--bg-color)',
-                            border: isSafeMode ? 'none' : '1px solid rgba(255,255,255,0.4)',
-                            padding: '10px 20px',
-                            borderRadius: '4px', /* Geometric */
-                            cursor: 'pointer',
-                            fontFamily: 'var(--font-accent)',
-                            fontSize: '1rem',
-                            fontWeight: '500',
-                            transition: 'all 0.3s ease'
+            {/* Backdrop */}
+            {open && (
+                <div
+                    onClick={() => setOpen(false)}
+                    style={{
+                        position: 'fixed', inset: 0, zIndex: 9998,
+                        background: 'rgba(0,0,0,0.2)',
+                        backdropFilter: 'blur(2px)',
+                    }}
+                />
+            )}
+
+            {/* Slide-in panel */}
+            <div style={{
+                position: 'fixed',
+                top: 0, right: 0,
+                width: '280px',
+                height: '100vh',
+                zIndex: 9999,
+                background: 'white',
+                boxShadow: '-8px 0 32px rgba(0,0,0,0.12)',
+                transform: open ? 'translateX(0)' : 'translateX(100%)',
+                transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1)',
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '5rem 2rem 2rem',
+            }}>
+                {/* Logo */}
+                <Link
+                    to="/"
+                    onClick={() => setOpen(false)}
+                    style={{
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 800,
+                        fontSize: '1.4rem',
+                        color: '#1a1a1a',
+                        textDecoration: 'none',
+                        marginBottom: '2rem',
+                        display: 'block',
+                    }}
+                >
+                    Okay<span style={{ color: 'var(--green)' }}>Space</span>
+                </Link>
+
+                {/* Nav links */}
+                <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
+                    {links.map(link => {
+                        const active = location.pathname === link.to;
+                        return (
+                            <Link
+                                key={link.to}
+                                to={link.to}
+                                onClick={() => setOpen(false)}
+                                style={{
+                                    padding: '0.7rem 0.9rem',
+                                    borderRadius: '10px',
+                                    textDecoration: 'none',
+                                    fontSize: '0.95rem',
+                                    fontWeight: active ? 600 : 500,
+                                    color: active ? 'var(--green)' : '#555',
+                                    background: active ? 'var(--green-light)' : 'transparent',
+                                    transition: 'all 0.15s ease',
+                                }}
+                                onMouseEnter={e => {
+                                    if (!active) {
+                                        e.currentTarget.style.background = '#f5f5f5';
+                                        e.currentTarget.style.color = '#1a1a1a';
+                                    }
+                                }}
+                                onMouseLeave={e => {
+                                    if (!active) {
+                                        e.currentTarget.style.background = 'transparent';
+                                        e.currentTarget.style.color = '#555';
+                                    }
+                                }}
+                            >
+                                {link.label}
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                {/* Logout / bottom actions */}
+                {user && (
+                    <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '1.25rem' }}>
+                        <p style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.75rem' }}>
+                            Signed in as <strong style={{ color: '#555' }}>{user.name?.split(' ')[0]}</strong>
+                        </p>
+                        <button onClick={handleLogout} style={{
+                            width: '100%', padding: '0.7rem', borderRadius: '10px',
+                            background: '#f5f5f5', border: 'none', cursor: 'pointer',
+                            color: '#555', fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 500,
+                            transition: 'background 0.15s',
                         }}
-                    >
-                        {isSafeMode ? <Shield size={16} /> : <ShieldOff size={16} />}
-                        {isSafeMode ? "SAFE MODE: ON" : "SAFE MODE: OFF"}
-                    </button>
-                    <a href="/#concerns" className="nav-link">CONCERNS</a>
-                    {user ? (
-                        <>
-                            <Link to="/dashboard" className="nav-link">LEDGER</Link>
-                            <Link to="/mood" className="nav-link">TRACK</Link>
-                            <Link to="/chat" className="nav-link">LISTENER</Link>
-                            <Link to="/letters" className="nav-link">LETTERS</Link>
-                            <Link to="/therapists" className="nav-link">THERAPISTS</Link>
-                            <Link to="/resources" className="nav-link">EDUCATION</Link>
-                            <button onClick={handleLogout} className="nav-link" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-                                DISCONNECT
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/login" className="nav-link">AUTHENTICATE</Link>
-                            <Link to="/signup" className="nav-link active-link">ENTER VAULT</Link>
-                        </>
-                    )}
-                </div>
-            </nav>
-
-            <style>{`
-                .nav-link {
-                    color: var(--bg-color);
-                    text-decoration: none;
-                    text-transform: uppercase;
-                    padding: 10px 20px;
-                    border-radius: 4px;
-                    transition: all 0.3s ease;
-                    font-size: 0.9rem;
-                    letter-spacing: 1px;
-                }
-                .nav-link:hover {
-                    background: rgba(255,255,255,0.1);
-                }
-                .active-link {
-                    background: var(--accent);
-                    color: white;
-                }
-                .active-link:hover {
-                    background: #cc0000;
-                }
-            `}</style>
-        </div >
+                            onMouseEnter={e => e.currentTarget.style.background = '#ebebeb'}
+                            onMouseLeave={e => e.currentTarget.style.background = '#f5f5f5'}>
+                            Sign Out
+                        </button>
+                    </div>
+                )}
+            </div>
+        </>
     );
 };
 

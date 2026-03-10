@@ -1,178 +1,130 @@
-import React, { useEffect, useRef } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { AuthContext } from '../context/AuthContext';
+
+const FEATURES = [
+    { emoji: '🤝', title: 'Anonymous Sharing', desc: 'Share your thoughts without fear of judgment.' },
+    { emoji: '🤖', title: 'AI Companion', desc: 'Talk to an AI listener anytime, day or night.' },
+    { emoji: '📊', title: 'Mood Tracker', desc: 'Log how you feel and see patterns over time.' },
+    { emoji: '💌', title: 'Kindness Letters', desc: 'Send and receive messages of support.' },
+    { emoji: '👩‍⚕️', title: 'Find Therapists', desc: 'Connect with verified mental health professionals.' },
+    { emoji: '📚', title: 'Resources', desc: 'Curated guides and tools to support your journey.' },
+];
+
+const CONCERNS = [
+    'Anxiety', 'Depression', 'Loneliness', 'Grief', 'Burnout',
+    'Trauma', 'Relationships', 'Sleep', 'Self-esteem', 'Anger',
+];
 
 const Home = () => {
-    const containerRef = useRef(null);
-    const heroRef = useRef(null);
-    const textRef = useRef(null);
-    const exhibitRef = useRef(null);
-    const concernsRef = useRef(null);
-    const footerRef = useRef(null);
-
-    useEffect(() => {
-        gsap.registerPlugin(ScrollTrigger);
-
-        const sections = [heroRef.current, exhibitRef.current, concernsRef.current, footerRef.current];
-        const bgColors = ['var(--bg-color)', 'var(--mint-green)', 'var(--accent)', 'var(--text-main)'];
-
-        // ScrollTrigger to animate the main container's background color
-        sections.forEach((sec, i) => {
-            if (!sec) return;
-            ScrollTrigger.create({
-                trigger: sec,
-                start: "top 50%",
-                end: "bottom 50%",
-                onEnter: () => gsap.to(containerRef.current, { backgroundColor: bgColors[i], duration: 0.6 }),
-                onEnterBack: () => gsap.to(containerRef.current, { backgroundColor: bgColors[i], duration: 0.6 }),
-            });
-        });
-
-        // Hero Parallax text reveal
-        gsap.fromTo(textRef.current,
-            { y: 100, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }
-        );
-
-        // Slide up block reveal for exhibits and concerns
-        const revealBlocks = gsap.utils.toArray('.reveal-block');
-        revealBlocks.forEach(block => {
-            gsap.fromTo(block,
-                { y: 100, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: block,
-                        start: "top 80%",
-                    }
-                }
-            );
-        });
-
-        return () => {
-            if (typeof ScrollTrigger !== 'undefined' && ScrollTrigger.getAll) {
-                ScrollTrigger.getAll().forEach(t => t.kill());
-            }
-        };
-    }, []);
-
-    const exhibits = [
-        {
-            title: "Encrypted\nSharing.",
-            description: "A private vault to lock away your daily anxieties. No judgment, no traces. Pure unadulterated offloading.",
-            color: "var(--light-blue)",
-            textColor: "white"
-        },
-        {
-            title: "AI\nCompanion.",
-            description: "Our neural listeners are programmed to validate and compound your emotional growth. 24/7 active listening.",
-            color: "transparent",
-            textColor: "var(--text-main)",
-            border: "1px solid var(--text-main)"
-        },
-        {
-            title: "Community\nLedger.",
-            description: "Witness the collective emotional currency of the platform. Anonymous, stark, and beautiful human nature.",
-            color: "var(--secondary-bg)",
-            textColor: "var(--text-main)"
-        }
-    ];
-
-    const concerns = [
-        "Anxiety & Stress",
-        "Depression & Mood Disorder",
-        "Trauma & PTSD",
-        "Relationship Issues",
-        "Grief Counselling",
-        "Anger Management",
-        "Queer Affirmative Concerns",
-        "Work Stress & Burnout",
-        "Parenting & Child Issues"
-    ];
+    const { user } = useContext(AuthContext);
 
     return (
-        <div ref={containerRef} style={{ backgroundColor: 'var(--bg-color)', transition: 'background-color 0.1s ease', minHeight: '100vh', overflowX: 'hidden' }}>
-
-            {/* HERO SECTION */}
-            <section ref={heroRef} style={{ height: '90vh', position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '5vw', paddingBottom: '10vh' }}>
-                <div ref={textRef} style={{ maxWidth: '1200px' }}>
-                    <h1 className="display-text" style={{ textTransform: 'none', lineHeight: 0.9 }}>
-                        Okay Space.<br />
-                        <span style={{ color: 'var(--accent)' }}>The safest place.</span>
+        <div style={{ background: 'var(--bg)' }}>
+            {/* Hero */}
+            <section style={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                padding: '6rem 1.5rem 4rem',
+            }}>
+                <div style={{ maxWidth: '620px' }}>
+                    <span className="badge badge-green" style={{ marginBottom: '1.5rem' }}>
+                        Safe · Anonymous · Free
+                    </span>
+                    <h1 style={{
+                        fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+                        fontWeight: 800,
+                        lineHeight: 1.1,
+                        marginBottom: '1.25rem',
+                        color: '#1a1a1a',
+                    }}>
+                        OkaySpace
                     </h1>
-                    <p style={{ marginTop: '2rem', fontSize: '1.5rem', fontFamily: 'var(--font-body)', color: 'var(--text-main)', maxWidth: '600px', lineHeight: 1.6 }}>
-                        A minimalist emotional support platform built for processing, sharing, and healing without noise.
+                    <p style={{
+                        fontSize: '1.15rem',
+                        color: 'var(--text-sub)',
+                        lineHeight: 1.7,
+                        marginBottom: '2.5rem',
+                        maxWidth: '480px',
+                        margin: '0 auto 2.5rem',
+                    }}>
+                        A safe, anonymous space to share your feelings, connect with others, and find support — whenever you need it.
                     </p>
-                    <div style={{ marginTop: '3rem', display: 'flex', gap: '1.5rem' }}>
-                        <Link to="/signup" className="btn-durable">Enter the vault</Link>
-                        <Link to="/login" className="btn-durable" style={{ background: 'transparent', color: 'var(--text-main)' }}>Login</Link>
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        {user ? (
+                            <Link to="/dashboard" className="btn-primary" style={{ fontSize: '1rem', padding: '1rem 2.5rem' }}>
+                                Go to Community →
+                            </Link>
+                        ) : (
+                            <>
+                                <Link to="/signup" className="btn-primary" style={{ fontSize: '1rem', padding: '1rem 2.5rem' }}>
+                                    Get Started Free
+                                </Link>
+                                <Link to="/login" className="btn-secondary" style={{ fontSize: '1rem', padding: '1rem 2rem' }}>
+                                    Sign In
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>
 
-            {/* EXHIBITS / FEATURES SECTION */}
-            <section ref={exhibitRef} style={{ padding: '15vh 5vw', display: 'flex', flexDirection: 'column', gap: '10vh' }}>
-                <div className="reveal-block" style={{ borderBottom: '1px solid var(--text-main)', paddingBottom: '2rem', marginBottom: '2rem' }}>
-                    <h2 className="heading-lg" style={{ color: 'var(--text-main)' }}>
-                        What we do.
+            {/* Features */}
+            <section style={{ padding: '5rem 1.5rem', background: 'white' }}>
+                <div className="container">
+                    <h2 style={{ textAlign: 'center', fontSize: '1.75rem', marginBottom: '0.75rem' }}>
+                        Everything you need to heal
                     </h2>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem' }}>
-                    {exhibits.map((exhibit, idx) => (
-                        <div key={idx} className="reveal-block" style={{
-                            background: exhibit.color,
-                            color: exhibit.textColor,
-                            padding: '4rem 3rem',
-                            border: exhibit.border || 'none',
-                            borderRadius: '8px', /* Sleek geometric */
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '2rem',
-                            aspectRatio: '1 / 1.1',
-                            justifyContent: 'space-between'
-                        }}>
-                            <h3 style={{ fontSize: '3rem', fontFamily: 'var(--font-accent)', lineHeight: 1, whiteSpace: 'pre-line', fontWeight: 500 }}>{exhibit.title}</h3>
-                            <p style={{ fontSize: '1.2rem', fontFamily: 'var(--font-body)', lineHeight: 1.5 }}>{exhibit.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* SPECIALIZED CONCERNS SECTION */}
-            <section ref={concernsRef} style={{ padding: '15vh 5vw', display: 'flex', flexDirection: 'column', gap: '5vh' }}>
-                <div className="reveal-block" style={{ borderBottom: '1px solid var(--text-main)', paddingBottom: '2rem', marginBottom: '2rem' }}>
-                    <h2 className="heading-lg" style={{ color: 'var(--text-main)' }}>
-                        Specialized Concerns.
-                    </h2>
-                    <p style={{ fontSize: '1.5rem', fontFamily: 'var(--font-body)', color: 'var(--text-main)', marginTop: '1rem', maxWidth: '800px' }}>
-                        No matter what you're facing, you are completely safe here. Click to explore focused resources.
+                    <p style={{ textAlign: 'center', color: 'var(--text-sub)', marginBottom: '3rem' }}>
+                        Tools and community built for mental wellness
                     </p>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1px', backgroundColor: 'var(--text-main)', border: '1px solid var(--text-main)' }}>
-                    {concerns.map((concern, idx) => (
-                        <div key={idx} className="reveal-block" style={{
-                            padding: '3rem 2rem',
-                            background: 'var(--secondary-bg)',
-                            color: 'var(--text-main)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            transition: 'background-color 0.3s, color 0.3s',
-                            cursor: 'pointer'
-                        }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--text-main)'; e.currentTarget.style.color = 'var(--secondary-bg)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--secondary-bg)'; e.currentTarget.style.color = 'var(--text-main)'; }}>
-                            <span style={{ fontSize: '1.5rem', fontWeight: 500, fontFamily: 'var(--font-accent)' }}>{concern}</span>
-                        </div>
-                    ))}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+                        {FEATURES.map(f => (
+                            <div key={f.title} className="card" style={{ padding: '1.75rem', transition: 'transform 0.2s, box-shadow 0.2s' }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,0,0,0.12)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = ''; }}>
+                                <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{f.emoji}</div>
+                                <h3 style={{ fontSize: '1rem', marginBottom: '0.4rem', color: '#1a1a1a' }}>{f.title}</h3>
+                                <p style={{ color: 'var(--text-sub)', fontSize: '0.875rem', lineHeight: 1.6 }}>{f.desc}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
-            {/* SPACER SECTION to ensure footer scroll trigger fires cleanly */}
-            <section ref={footerRef} style={{ height: '30vh' }}></section>
+            {/* Concerns */}
+            <section style={{ padding: '4rem 1.5rem' }}>
+                <div className="container" style={{ textAlign: 'center' }}>
+                    <h2 style={{ fontSize: '1.5rem', marginBottom: '0.6rem' }}>We're here for these concerns</h2>
+                    <p style={{ color: 'var(--text-sub)', marginBottom: '2rem', fontSize: '0.9rem' }}>
+                        Whatever you're going through, OkaySpace has a place for you.
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', justifyContent: 'center' }}>
+                        {CONCERNS.map(c => (
+                            <span key={c} className="badge badge-green" style={{ fontSize: '0.875rem', padding: '0.4rem 1rem' }}>{c}</span>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA */}
+            {!user && (
+                <section style={{ padding: '5rem 1.5rem', background: 'white', textAlign: 'center' }}>
+                    <div className="container" style={{ maxWidth: '500px' }}>
+                        <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Ready to start?</h2>
+                        <p style={{ color: 'var(--text-sub)', marginBottom: '2rem' }}>
+                            Join thousands finding peace and connection.
+                        </p>
+                        <Link to="/signup" className="btn-primary" style={{ fontSize: '1rem', padding: '1rem 3rem' }}>
+                            Create Your Free Account
+                        </Link>
+                    </div>
+                </section>
+            )}
         </div>
     );
 };

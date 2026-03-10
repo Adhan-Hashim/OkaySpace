@@ -22,26 +22,26 @@ const QuickExit = () => {
                 position: 'fixed',
                 bottom: '20px',
                 right: '20px',
-                zIndex: 999999, // Ensure it's ALWAYS on top
-                background: 'var(--danger)',
-                color: 'var(--bg-color)',
-                border: '4px solid var(--bg-color)',
+                zIndex: 999999,
+                background: '#ef4444',
+                color: 'white',
+                border: '2px solid rgba(255,255,255,0.4)',
                 borderRadius: '50px',
-                padding: '12px 24px',
+                padding: '10px 20px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
-                fontFamily: 'var(--font-accent)',
-                fontSize: '1.2rem',
-                fontWeight: 'bold',
+                gap: '8px',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '0.875rem',
+                fontWeight: '700',
                 cursor: 'pointer',
-                boxShadow: '0px 10px 30px rgba(0,0,0,0.5)',
+                boxShadow: '0px 6px 20px rgba(239,68,68,0.35)',
                 transition: 'transform 0.2s ease',
             }}
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         >
-            <ShieldAlert size={24} /> QUICK EXIT
+            <ShieldAlert size={18} /> Quick Exit
         </button>
     );
 };

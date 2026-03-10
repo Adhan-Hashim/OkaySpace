@@ -57,7 +57,7 @@ const Particles = () => {
                 width: '100vw',
                 height: '100vh',
                 pointerEvents: 'none',
-                zIndex: 0,
+                zIndex: 10000, // Increased z-index
                 overflow: 'hidden'
             }}
         />

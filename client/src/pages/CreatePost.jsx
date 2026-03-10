@@ -7,75 +7,63 @@ const CreatePost = () => {
     const [content, setContent] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!content.trim()) return;
         setLoading(true);
-
         try {
             await api.post('/posts', { content, anonymous: isAnonymous });
             navigate('/dashboard');
         } catch (err) {
-            console.error(err);
-            if (err.response && err.response.status === 400) {
-                alert(err.response.data.message);
-            } else {
-                alert('FAILED TO RECORD DEPOSIT.');
-            }
-        } finally {
-            setLoading(false);
-        }
+            alert(err.response?.data?.message || 'Failed to create post.');
+        } finally { setLoading(false); }
     };
 
     return (
-        <div style={{ padding: '8vw 4vw', display: 'flex', justifyContent: 'center' }}>
-            <div style={{ width: '100%', maxWidth: '800px', background: 'white', border: '4px solid var(--text-main)', padding: '4rem', boxShadow: '16px 16px 0px var(--accent)' }}>
+        <div style={{ background: 'var(--bg)', minHeight: '100vh', padding: '2rem 1.5rem', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '620px' }}>
+                <button onClick={() => navigate('/dashboard')} style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: 'var(--text-muted)', fontSize: '0.875rem',
+                    marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem',
+                    fontFamily: 'var(--font-body)', padding: 0,
+                    transition: 'color 0.15s',
+                }}
+                    onMouseEnter={e => e.currentTarget.style.color = '#1a1a1a'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+                    ← Back
+                </button>
+                <div className="card" style={{ padding: '2rem' }}>
+                    <h1 style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>Share Something</h1>
+                    <p style={{ color: 'var(--text-sub)', fontSize: '0.875rem', marginBottom: '1.75rem' }}>Write what's on your mind — your community is listening.</p>
 
-                <h2 className="heading-lg" style={{ fontSize: '3rem', marginBottom: '1rem' }}>EMOTIONAL DEPOSIT</h2>
-                <p style={{ fontFamily: 'var(--font-accent)', fontSize: '1.25rem', marginBottom: '3rem', paddingBottom: '1rem', borderBottom: '2px solid var(--text-main)' }}>
-                    RECORD YOUR THOUGHTS IN THE LEDGER.
-                </p>
+                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+                        <div>
+                            <label className="input-label">Your Post</label>
+                            <textarea rows={8} value={content} onChange={e => setContent(e.target.value)}
+                                placeholder="What's on your mind? Share your thoughts and feelings..." required
+                                className="input-field" style={{ resize: 'vertical', lineHeight: 1.7 }} />
+                        </div>
 
-                <form onSubmit={handleSubmit}>
-                    <div style={{ marginBottom: '2rem' }}>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-accent)', fontWeight: 'bold', marginBottom: '1rem', fontSize: '1.25rem' }}>TRANSMISSION DATA</label>
-                        <textarea
-                            className="input-brutalist"
-                            rows="6"
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
-                            placeholder="ENTER RAW EMOTIONAL DATA HERE..."
-                            required
-                            style={{ resize: 'vertical' }}
-                        />
-                    </div>
-
-                    <div style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <input
-                            type="checkbox"
-                            id="anonymous"
-                            checked={isAnonymous}
-                            onChange={(e) => setIsAnonymous(e.target.checked)}
-                            style={{ width: '24px', height: '24px', accentColor: 'var(--text-main)' }}
-                        />
-                        <label htmlFor="anonymous" style={{ fontFamily: 'var(--font-accent)', fontSize: '1.25rem', cursor: 'pointer' }}>
-                            ENCRYPT IDENTITY (POST ANONYMOUSLY)
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
+                            <input type="checkbox" checked={isAnonymous} onChange={e => setIsAnonymous(e.target.checked)}
+                                style={{ width: '16px', height: '16px', accentColor: 'var(--green)', cursor: 'pointer' }} />
+                            <span style={{ fontSize: '0.875rem', color: 'var(--text-sub)' }}>
+                                Post anonymously (your name won't be shown)
+                            </span>
                         </label>
-                    </div>
 
-                    <div style={{ display: 'flex', gap: '1.5rem' }}>
-                        <button type="submit" className="btn-brutalist" style={{ flex: 1 }} disabled={loading || !content.trim()}>
-                            {loading ? 'PROCESSING...' : 'COMMIT TO LEDGER'}
-                        </button>
-                        <button type="button" onClick={() => navigate('/dashboard')} className="btn-brutalist" style={{ background: 'transparent', color: 'var(--text-main)' }}>
-                            CANCEL
-                        </button>
-                    </div>
-                </form>
-
+                        <div style={{ display: 'flex', gap: '0.75rem' }}>
+                            <button type="submit" className="btn-primary" disabled={loading || !content.trim()}
+                                style={{ flex: 1, opacity: !content.trim() ? 0.5 : 1 }}>
+                                {loading ? <><div className="spinner" />Posting...</> : 'Post to Community'}
+                            </button>
+                            <button type="button" onClick={() => navigate('/dashboard')} className="btn-secondary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );
