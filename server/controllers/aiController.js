@@ -58,3 +58,62 @@ exports.moderate = async (req, res) => {
         res.status(500).json({ message: 'Moderation service error' });
     }
 };
+
+exports.analyzeMood = async (req, res) => {
+    try {
+        const { moodHistory } = req.body;
+        if (!moodHistory || !moodHistory.length) return res.status(400).json({ message: 'History required' });
+
+        const historyString = moodHistory.map(m => `${m.date}: ${m.mood}`).join('\n');
+
+        const response = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: "You are a psychiatric data analyst. Analyze the following mood history (format: date: score 1-5). Provide a technical but supportive insight into the user's emotional trajectory. Be brief and use futurist/technical terminology." },
+                { role: "user", content: `Analyze this trajectory:\n${historyString}` }
+            ]
+        });
+
+        res.json({ analysis: response.choices[0].message.content });
+    } catch (err) {
+        res.status(500).json({ message: 'Analysis Error' });
+    }
+};
+
+exports.matchTherapist = async (req, res) => {
+    try {
+        const { needs, therapists } = req.body;
+
+        const therapistList = therapists.map(t => `${t.name} (ID: ${t._id}): ${t.specialization} - ${t.bio}`).join('\n');
+
+        const response = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: "You are a specialist matching algorithm. Based on the user's described needs and the list of available specialists, recommend the best match. Explain why in technical/supportive terms. Keep it concise." },
+                { role: "user", content: `NEEDS: ${needs}\n\nSPECIALISTS:\n${therapistList}` }
+            ]
+        });
+
+        res.json({ recommendation: response.choices[0].message.content });
+    } catch (err) {
+        res.status(500).json({ message: 'Matching Error' });
+    }
+};
+
+exports.triageEmergency = async (req, res) => {
+    try {
+        const { situation } = req.body;
+
+        const response = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: "You are an URGENT_TRIAGE_BOT. The user is in distress. Provide immediate, grounding, and scientifically-backed stabilization advice. Be calm, technical, and prioritize safety. Use short, impactful instructions." },
+                { role: "user", content: situation }
+            ]
+        });
+
+        res.json({ advice: response.choices[0].message.content });
+    } catch (err) {
+        res.status(500).json({ message: 'Triage Error' });
+    }
+};

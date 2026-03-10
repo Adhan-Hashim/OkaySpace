@@ -1,130 +1,166 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const FEATURES = [
-    { emoji: '🤝', title: 'Anonymous Sharing', desc: 'Share your thoughts without fear of judgment.' },
-    { emoji: '🤖', title: 'AI Companion', desc: 'Talk to an AI listener anytime, day or night.' },
-    { emoji: '📊', title: 'Mood Tracker', desc: 'Log how you feel and see patterns over time.' },
-    { emoji: '💌', title: 'Kindness Letters', desc: 'Send and receive messages of support.' },
-    { emoji: '👩‍⚕️', title: 'Find Therapists', desc: 'Connect with verified mental health professionals.' },
-    { emoji: '📚', title: 'Resources', desc: 'Curated guides and tools to support your journey.' },
-];
-
-const CONCERNS = [
-    'Anxiety', 'Depression', 'Loneliness', 'Grief', 'Burnout',
-    'Trauma', 'Relationships', 'Sleep', 'Self-esteem', 'Anger',
-];
+gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
     const { user } = useContext(AuthContext);
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            // Parallax backgrounds
+            gsap.utils.toArray('.parallax-bg').forEach((bg, i) => {
+                gsap.to(bg, {
+                    yPercent: 20,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: bg.parentElement,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: true,
+                    }
+                });
+            });
+
+            // Text entrance animations
+            gsap.utils.toArray('.reveal-text').forEach((text) => {
+                gsap.from(text, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1.2,
+                    ease: 'power4.out',
+                    scrollTrigger: {
+                        trigger: text,
+                        start: 'top 85%',
+                    }
+                });
+            });
+
+            // Feature cards staggered entrance
+            gsap.from('.feature-card', {
+                y: 100,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.features-grid',
+                    start: 'top 70%',
+                }
+            });
+        }, containerRef);
+
+        return () => ctx.revert();
+    }, []);
 
     return (
-        <div style={{ background: 'var(--bg)' }}>
-            {/* Hero */}
-            <section style={{
-                minHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                padding: '6rem 1.5rem 4rem',
-            }}>
-                <div style={{ maxWidth: '620px' }}>
-                    <span className="badge badge-green" style={{ marginBottom: '1.5rem' }}>
-                        Safe · Anonymous · Free
-                    </span>
-                    <h1 style={{
-                        fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-                        fontWeight: 800,
-                        lineHeight: 1.1,
-                        marginBottom: '1.25rem',
-                        color: '#1a1a1a',
-                    }}>
-                        OkaySpace
-                    </h1>
-                    <p style={{
-                        fontSize: '1.15rem',
-                        color: 'var(--text-sub)',
-                        lineHeight: 1.7,
-                        marginBottom: '2.5rem',
-                        maxWidth: '480px',
-                        margin: '0 auto 2.5rem',
-                    }}>
-                        A safe, anonymous space to share your feelings, connect with others, and find support — whenever you need it.
+        <div ref={containerRef} style={{ background: 'var(--bg-deep)', overflowX: 'hidden' }}>
+
+            {/* Hero Section */}
+            <section className="scroll-section" style={{ borderBottom: '1px solid var(--border-line)' }}>
+                <div className="parallax-bg" style={{
+                    background: 'radial-gradient(circle at 50% 50%, #002b2e 0%, #050505 70%)',
+                    opacity: 0.8
+                }} />
+
+                <div style={{ textAlign: 'center', zIndex: 10 }}>
+                    <p className="text-technical reveal-text" style={{ marginBottom: '2rem' }}>
+                        [ CONNECTION_INITIATED // SYSTEM_READY ]
                     </p>
-                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        {user ? (
-                            <Link to="/dashboard" className="btn-primary" style={{ fontSize: '1rem', padding: '1rem 2.5rem' }}>
-                                Go to Community →
-                            </Link>
-                        ) : (
-                            <>
-                                <Link to="/signup" className="btn-primary" style={{ fontSize: '1rem', padding: '1rem 2.5rem' }}>
-                                    Get Started Free
-                                </Link>
-                                <Link to="/login" className="btn-secondary" style={{ fontSize: '1rem', padding: '1rem 2rem' }}>
-                                    Sign In
-                                </Link>
-                            </>
-                        )}
+                    <h1 className="reveal-text" style={{
+                        fontSize: 'clamp(3rem, 10vw, 8rem)',
+                        lineHeight: 0.9,
+                        marginBottom: '1.5rem',
+                    }}>
+                        OKAY<br /><span style={{ color: 'transparent', WebkitTextStroke: '1px var(--text-primary)' }}>SPACE</span>
+                    </h1>
+                    <p className="reveal-text" style={{
+                        fontSize: '1.2rem',
+                        color: 'var(--text-secondary)',
+                        maxWidth: '600px',
+                        margin: '0 auto 3rem',
+                        lineHeight: 1.8
+                    }}>
+                        A technical sanctuary for the mind. Where anonymity meets empathy, and data-driven insight empowers human healing.
+                    </p>
+                    <div className="reveal-text">
+                        <Link to={user ? "/dashboard" : "/signup"} className="btn-mindjoin">
+                            {user ? 'Enter Workspace' : 'Initialize Protocol'}
+                        </Link>
                     </div>
                 </div>
             </section>
 
-            {/* Features */}
-            <section style={{ padding: '5rem 1.5rem', background: 'white' }}>
+            {/* Architecture Section (Features) */}
+            <section className="scroll-section" style={{ minHeight: '120vh' }}>
+                <div className="parallax-bg" style={{
+                    background: 'linear-gradient(180deg, #050505 0%, #001a1d 100%)'
+                }} />
+
                 <div className="container">
-                    <h2 style={{ textAlign: 'center', fontSize: '1.75rem', marginBottom: '0.75rem' }}>
-                        Everything you need to heal
-                    </h2>
-                    <p style={{ textAlign: 'center', color: 'var(--text-sub)', marginBottom: '3rem' }}>
-                        Tools and community built for mental wellness
-                    </p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
-                        {FEATURES.map(f => (
-                            <div key={f.title} className="card" style={{ padding: '1.75rem', transition: 'transform 0.2s, box-shadow 0.2s' }}
-                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,0,0,0.12)'; }}
-                                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = ''; }}>
-                                <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{f.emoji}</div>
-                                <h3 style={{ fontSize: '1rem', marginBottom: '0.4rem', color: '#1a1a1a' }}>{f.title}</h3>
-                                <p style={{ color: 'var(--text-sub)', fontSize: '0.875rem', lineHeight: 1.6 }}>{f.desc}</p>
+                    <div style={{ marginBottom: '6rem', textAlign: 'center' }}>
+                        <p className="text-technical" style={{ marginBottom: '1rem' }}>ARCHITECTURE_OVERVIEW</p>
+                        <h2 style={{ fontSize: '3rem' }}>SYSTEM CAPABILITIES</h2>
+                    </div>
+
+                    <div className="features-grid" style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                        gap: '2px', /* Technical grid lines */
+                        background: 'var(--border-line)',
+                        border: '1px solid var(--border-line)'
+                    }}>
+                        {[
+                            { id: '01', title: 'ANONYMOUS_VOID', desc: 'Secure, encrypted sharing protocols to protect your identity in the mental collective.' },
+                            { id: '02', title: 'NEURAL_LISTENER', desc: 'Advanced AI listeners available 24/7 for immediate cognitive processing and support.' },
+                            { id: '03', title: 'MIND_METRICS', desc: 'Real-time mood tracking and pattern recognition to visualize your emotional trajectory.' },
+                            { id: '04', title: 'EMPATHY_BUFFER', desc: 'Send and receive digital letters of support through our curated kindness gateway.' }
+                        ].map((f) => (
+                            <div key={f.id} className="feature-card" style={{
+                                background: 'var(--bg-deep)',
+                                padding: '4rem 3rem',
+                                position: 'relative'
+                            }}>
+                                <span className="text-technical" style={{ fontSize: '0.6rem', position: 'absolute', top: '2rem', left: '3rem' }}>
+                                    MODULE_{f.id}
+                                </span>
+                                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{f.title}</h3>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{f.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* Concerns */}
-            <section style={{ padding: '4rem 1.5rem' }}>
-                <div className="container" style={{ textAlign: 'center' }}>
-                    <h2 style={{ fontSize: '1.5rem', marginBottom: '0.6rem' }}>We're here for these concerns</h2>
-                    <p style={{ color: 'var(--text-sub)', marginBottom: '2rem', fontSize: '0.9rem' }}>
-                        Whatever you're going through, OkaySpace has a place for you.
-                    </p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', justifyContent: 'center' }}>
-                        {CONCERNS.map(c => (
-                            <span key={c} className="badge badge-green" style={{ fontSize: '0.875rem', padding: '0.4rem 1rem' }}>{c}</span>
-                        ))}
+            {/* Final CTA */}
+            <section className="scroll-section" style={{ minHeight: '80vh' }}>
+                <div className="parallax-bg" style={{
+                    background: 'radial-gradient(circle at 50% 100%, #1a001a 0%, #050505 80%)',
+                    opacity: 0.5
+                }} />
+
+                <div style={{ textAlign: 'center', zIndex: 10 }}>
+                    <p className="text-technical reveal-text" style={{ marginBottom: '2rem' }}>TERMINAL_END</p>
+                    <h2 className="reveal-text" style={{ fontSize: '4rem', marginBottom: '3rem' }}>READY TO SYNC?</h2>
+                    <div className="reveal-text" style={{ display: 'flex', gap: '2rem', justifyContent: 'center' }}>
+                        {!user && (
+                            <Link to="/signup" className="btn-mindjoin" style={{ background: 'var(--accent-teal)', color: '#000' }}>
+                                Create Identity
+                            </Link>
+                        )}
+                        <Link to="/resources" className="btn-mindjoin" style={{ background: 'transparent', border: '1px solid var(--text-primary)', color: 'var(--text-primary)' }}>
+                            Read Documentation
+                        </Link>
                     </div>
                 </div>
             </section>
 
-            {/* CTA */}
-            {!user && (
-                <section style={{ padding: '5rem 1.5rem', background: 'white', textAlign: 'center' }}>
-                    <div className="container" style={{ maxWidth: '500px' }}>
-                        <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Ready to start?</h2>
-                        <p style={{ color: 'var(--text-sub)', marginBottom: '2rem' }}>
-                            Join thousands finding peace and connection.
-                        </p>
-                        <Link to="/signup" className="btn-primary" style={{ fontSize: '1rem', padding: '1rem 3rem' }}>
-                            Create Your Free Account
-                        </Link>
-                    </div>
-                </section>
-            )}
+            {/* Footer Padding for Dispersed Nav */}
+            <div style={{ height: '10rem' }} />
         </div>
     );
 };

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Lenis from '@studio-freight/lenis';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -17,10 +18,43 @@ import Resources from './pages/Resources';
 import Emergency from './pages/Emergency';
 import Letters from './pages/Letters';
 import Therapists from './pages/Therapists';
+import Breath from './pages/Breath';
+import ZenGarden from './pages/ZenGarden';
 
 function App() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   return (
     <Router basename="/OkaySpace">
+      <div className="grain-overlay" />
+      <div className="technical-frame" />
+      <div className="frame-line line-v-left" />
+      <div className="frame-line line-v-right" />
+      <div className="frame-line line-h-top" />
+
       <QuickExit />
       <BackgroundMusic />
       <Navbar />
@@ -36,6 +70,8 @@ function App() {
         <Route path="/emergency" element={<Emergency />} />
         <Route path="/letters" element={<Letters />} />
         <Route path="/therapists" element={<Therapists />} />
+        <Route path="/breath" element={<Breath />} />
+        <Route path="/zen" element={<ZenGarden />} />
       </Routes>
       <Footer id="main-footer" />
     </Router>

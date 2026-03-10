@@ -1,167 +1,163 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { X, Menu } from 'lucide-react';
-
-const NAV_LINKS_GUEST = [
-    { to: '/login', label: 'Sign In' },
-    { to: '/signup', label: 'Join Us' },
-];
-
-const NAV_LINKS_USER = [
-    { to: '/dashboard', label: 'Community' },
-    { to: '/chat', label: 'AI Chat' },
-    { to: '/mood', label: 'Mood' },
-    { to: '/letters', label: 'Letters' },
-    { to: '/therapists', label: 'Therapists' },
-    { to: '/resources', label: 'Resources' },
-    { to: '/emergency', label: 'Emergency' },
-];
 
 const Navbar = () => {
-    const [open, setOpen] = useState(false);
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
 
-    const links = user ? NAV_LINKS_USER : NAV_LINKS_GUEST;
-
     const handleLogout = () => {
-        setOpen(false);
         logout();
         navigate('/');
     };
 
+    const navItemStyle = {
+        position: 'fixed',
+        zIndex: 10001,
+        textDecoration: 'none',
+        transition: 'color 0.3s ease, transform 0.3s ease',
+    };
+
     return (
         <>
-            {/* Floating hamburger button — top right */}
-            <button
-                onClick={() => setOpen(!open)}
-                aria-label="Toggle menu"
+            {/* Top Left: COMMUNE */}
+            <Link
+                to={user ? "/dashboard" : "/login"}
+                className="text-technical"
+                style={{
+                    ...navItemStyle,
+                    top: '2.5rem',
+                    left: '2.5rem',
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateX(5px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'translateX(0)'}
+            >
+                [ COMMUNE ]
+            </Link>
+
+            {/* Top Center: CORE */}
+            <Link
+                to="/"
+                style={{
+                    ...navItemStyle,
+                    top: '2.5rem',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: '1.2rem',
+                    letterSpacing: '0.3em',
+                    color: 'var(--text-primary)',
+                }}
+            >
+                OKAYSPACE
+            </Link>
+
+            {/* Top Right: INSIGHT */}
+            <Link
+                to="/resources"
+                className="text-technical"
+                style={{
+                    ...navItemStyle,
+                    top: '2.5rem',
+                    right: '2.5rem',
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateX(-5px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'translateX(0)'}
+            >
+                [ INSIGHT ]
+            </Link>
+
+            {/* Middle Left: CALIBRATE */}
+            <Link
+                to="/breath"
+                className="text-technical"
+                style={{
+                    ...navItemStyle,
+                    top: '50%',
+                    left: '2.5rem',
+                    transform: 'translateY(-50%)',
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-50%) translateX(5px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(-50%) translateX(0)'}
+            >
+                [ CALIBRATE ]
+            </Link>
+
+            {/* Middle Right: VOID */}
+            <Link
+                to="/zen"
+                className="text-technical"
+                style={{
+                    ...navItemStyle,
+                    top: '50%',
+                    right: '2.5rem',
+                    transform: 'translateY(-50%)',
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-50%) translateX(-5px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(-50%) translateX(0)'}
+            >
+                [ VOID ]
+            </Link>
+
+            {/* Bottom Right: AUTH / EXIT */}
+            <div
                 style={{
                     position: 'fixed',
-                    top: '20px',
-                    right: '20px',
-                    zIndex: 10000,
-                    width: '52px',
-                    height: '52px',
-                    borderRadius: '50%',
-                    background: '#1a1a1a',
-                    border: 'none',
-                    cursor: 'pointer',
+                    bottom: '2.5rem',
+                    right: '2.5rem',
+                    zIndex: 10001,
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
-                    transition: 'transform 0.2s ease, background 0.2s ease',
-                    color: '#fff',
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    gap: '0.5rem'
                 }}
-                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
             >
-                {open ? <X size={22} /> : <Menu size={22} />}
-            </button>
-
-            {/* Backdrop */}
-            {open && (
-                <div
-                    onClick={() => setOpen(false)}
-                    style={{
-                        position: 'fixed', inset: 0, zIndex: 9998,
-                        background: 'rgba(0,0,0,0.2)',
-                        backdropFilter: 'blur(2px)',
-                    }}
-                />
-            )}
-
-            {/* Slide-in panel */}
-            <div style={{
-                position: 'fixed',
-                top: 0, right: 0,
-                width: '280px',
-                height: '100vh',
-                zIndex: 9999,
-                background: 'white',
-                boxShadow: '-8px 0 32px rgba(0,0,0,0.12)',
-                transform: open ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1)',
-                display: 'flex',
-                flexDirection: 'column',
-                padding: '5rem 2rem 2rem',
-            }}>
-                {/* Logo */}
-                <Link
-                    to="/"
-                    onClick={() => setOpen(false)}
-                    style={{
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 800,
-                        fontSize: '1.4rem',
-                        color: '#1a1a1a',
-                        textDecoration: 'none',
-                        marginBottom: '2rem',
-                        display: 'block',
-                    }}
-                >
-                    Okay<span style={{ color: 'var(--green)' }}>Space</span>
-                </Link>
-
-                {/* Nav links */}
-                <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
-                    {links.map(link => {
-                        const active = location.pathname === link.to;
-                        return (
-                            <Link
-                                key={link.to}
-                                to={link.to}
-                                onClick={() => setOpen(false)}
-                                style={{
-                                    padding: '0.7rem 0.9rem',
-                                    borderRadius: '10px',
-                                    textDecoration: 'none',
-                                    fontSize: '0.95rem',
-                                    fontWeight: active ? 600 : 500,
-                                    color: active ? 'var(--green)' : '#555',
-                                    background: active ? 'var(--green-light)' : 'transparent',
-                                    transition: 'all 0.15s ease',
-                                }}
-                                onMouseEnter={e => {
-                                    if (!active) {
-                                        e.currentTarget.style.background = '#f5f5f5';
-                                        e.currentTarget.style.color = '#1a1a1a';
-                                    }
-                                }}
-                                onMouseLeave={e => {
-                                    if (!active) {
-                                        e.currentTarget.style.background = 'transparent';
-                                        e.currentTarget.style.color = '#555';
-                                    }
-                                }}
-                            >
-                                {link.label}
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                {/* Logout / bottom actions */}
-                {user && (
-                    <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: '1.25rem' }}>
-                        <p style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.75rem' }}>
-                            Signed in as <strong style={{ color: '#555' }}>{user.name?.split(' ')[0]}</strong>
+                {user ? (
+                    <>
+                        <p className="text-technical" style={{ fontSize: '0.6rem', opacity: 0.5 }}>
+                            USER_ID: {user.name?.split(' ')[0].toUpperCase()}
                         </p>
-                        <button onClick={handleLogout} style={{
-                            width: '100%', padding: '0.7rem', borderRadius: '10px',
-                            background: '#f5f5f5', border: 'none', cursor: 'pointer',
-                            color: '#555', fontFamily: 'var(--font-body)', fontSize: '0.9rem', fontWeight: 500,
-                            transition: 'background 0.15s',
-                        }}
-                            onMouseEnter={e => e.currentTarget.style.background = '#ebebeb'}
-                            onMouseLeave={e => e.currentTarget.style.background = '#f5f5f5'}>
-                            Sign Out
+                        <button
+                            onClick={handleLogout}
+                            className="text-technical"
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                color: 'var(--accent-magenta)',
+                                padding: 0
+                            }}
+                        >
+                            [ DISCONNECT ]
                         </button>
-                    </div>
+                    </>
+                ) : (
+                    <Link
+                        to="/signup"
+                        className="text-technical"
+                        style={{ color: 'var(--accent-teal)' }}
+                    >
+                        [ INITIALIZE ]
+                    </Link>
                 )}
+            </div>
+
+            {/* Side Branding - Vertical */}
+            <div
+                className="text-technical"
+                style={{
+                    position: 'fixed',
+                    left: '2.5rem',
+                    bottom: '2.5rem',
+                    zIndex: 10001,
+                    writingMode: 'vertical-rl',
+                    transform: 'rotate(180deg)',
+                    opacity: 0.3
+                }}
+            >
+                MIND_SYNC_ACTIVE // VER 0.4.2
             </div>
         </>
     );

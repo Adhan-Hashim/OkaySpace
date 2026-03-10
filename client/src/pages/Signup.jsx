@@ -4,10 +4,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 const PARTICLE_FORMS = [
-    'Blue Cubes (Male)',
-    'Pink Orbs (Female)',
-    'Green Dust (Neutral)',
-    'Golden Stars (Custom)',
+    'BLUE_CUBE // MALE',
+    'PINK_ORB // FEMALE',
+    'GREEN_DUST // NEUTRAL',
+    'GOLDEN_STAR // CUSTOM',
 ];
 
 const Signup = () => {
@@ -26,14 +26,11 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(''); setLoading(true);
-        if (!formData.name || !formData.email || !formData.password) {
-            setError('Please fill in all fields'); setLoading(false); return;
-        }
         try {
             await register(formData.name, formData.email, formData.password);
             navigate('/dashboard');
         } catch (err) {
-            setError(err.response?.data?.message || 'Sign up failed. Please try again.');
+            setError(err.response?.data?.message || 'Initialization failed.');
             setLoading(false);
         }
     };
@@ -45,101 +42,151 @@ const Signup = () => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '2rem 1.5rem',
-            background: 'var(--bg)',
+            background: 'var(--bg-deep)',
         }}>
-            <div className="card fade-in-up" style={{ width: '100%', maxWidth: '420px', padding: '2.5rem' }}>
-                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <h1 style={{ fontSize: '2rem', color: 'var(--green)', marginBottom: '0.4rem' }}>Join Us</h1>
-                    <p style={{ color: 'var(--text-sub)', fontSize: '0.9rem' }}>Start your healing journey</p>
+            <div style={{
+                width: '100%',
+                maxWidth: '420px',
+                padding: '4rem 3rem',
+                border: '1px solid var(--border-line)',
+                background: 'rgba(255, 255, 255, 0.02)',
+                backdropFilter: 'blur(10px)',
+                position: 'relative',
+                marginTop: '4rem',
+                marginBottom: '4rem'
+            }}>
+                <span className="text-technical" style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', fontSize: '0.6rem' }}>
+                    NEW_ENTITY_REGS_01
+                </span>
+
+                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                    <h1 style={{ fontSize: '1.5rem', marginBottom: '0.75rem', letterSpacing: '0.2em' }}>ENTITY_INITIALIZE</h1>
+                    <p className="text-technical">Begin your neural trajectory</p>
                 </div>
 
                 {error && (
                     <div style={{
-                        padding: '0.75rem 1rem', marginBottom: '1.25rem',
-                        background: '#fef2f2', border: '1px solid #fecaca',
-                        borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.6rem',
+                        padding: '1rem', marginBottom: '2rem',
+                        border: '1px solid var(--accent-magenta)',
+                        background: 'rgba(255, 0, 255, 0.05)',
+                        display: 'flex', alignItems: 'center', gap: '0.8rem',
                     }}>
-                        <AlertCircle size={16} color="#ef4444" />
-                        <span style={{ color: '#ef4444', fontSize: '0.875rem' }}>{error}</span>
+                        <AlertCircle size={16} color="var(--accent-magenta)" />
+                        <span style={{ color: 'var(--accent-magenta)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>{error.toUpperCase()}</span>
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-                    {/* Full Name */}
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     <div>
-                        <label className="input-label">Full Name</label>
+                        <label className="text-technical" style={{ fontSize: '0.6rem', marginBottom: '0.75rem', display: 'block' }}>ENTITY_NAME</label>
                         <div style={{ position: 'relative' }}>
-                            <User size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#bbb', pointerEvents: 'none' }} />
+                            <User size={14} style={{ position: 'absolute', left: '0', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                             <input
                                 name="name" type="text" value={formData.name} onChange={handleChange}
-                                placeholder="Your name" required className="input-field"
-                                style={{ paddingLeft: '2.5rem' }}
+                                placeholder="ENTER_NAME" required
+                                style={{
+                                    width: '100%',
+                                    background: 'none',
+                                    border: 'none',
+                                    borderBottom: '1px solid var(--border-line)',
+                                    padding: '0.75rem 0 0.75rem 2rem',
+                                    color: 'var(--text-primary)',
+                                    fontFamily: 'var(--font-mono)',
+                                    outline: 'none',
+                                    fontSize: '0.9rem'
+                                }}
                             />
                         </div>
                     </div>
 
-                    {/* Email */}
                     <div>
-                        <label className="input-label">Email</label>
+                        <label className="text-technical" style={{ fontSize: '0.6rem', marginBottom: '0.75rem', display: 'block' }}>ENTITY_EMAIL</label>
                         <div style={{ position: 'relative' }}>
-                            <Mail size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#bbb', pointerEvents: 'none' }} />
+                            <Mail size={14} style={{ position: 'absolute', left: '0', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                             <input
                                 name="email" type="email" value={formData.email} onChange={handleChange}
-                                placeholder="you@example.com" required className="input-field"
-                                style={{ paddingLeft: '2.5rem' }}
+                                placeholder="ENTER_EMAIL" required
+                                style={{
+                                    width: '100%',
+                                    background: 'none',
+                                    border: 'none',
+                                    borderBottom: '1px solid var(--border-line)',
+                                    padding: '0.75rem 0 0.75rem 2rem',
+                                    color: 'var(--text-primary)',
+                                    fontFamily: 'var(--font-mono)',
+                                    outline: 'none',
+                                    fontSize: '0.9rem'
+                                }}
                             />
                         </div>
                     </div>
 
-                    {/* Particle Form */}
                     <div>
-                        <label className="input-label">Particle Form</label>
+                        <label className="text-technical" style={{ fontSize: '0.6rem', marginBottom: '0.75rem', display: 'block' }}>PARTICLE_FORM</label>
                         <div style={{ position: 'relative' }}>
                             <select
                                 name="particleForm"
                                 value={formData.particleForm}
                                 onChange={handleChange}
-                                className="input-field"
-                                style={{ appearance: 'none', cursor: 'pointer', paddingRight: '2rem' }}
+                                style={{
+                                    width: '100%',
+                                    background: 'none',
+                                    border: 'none',
+                                    borderBottom: '1px solid var(--border-line)',
+                                    padding: '0.75rem 0.5rem 0.75rem 0',
+                                    color: 'var(--text-primary)',
+                                    fontFamily: 'var(--font-mono)',
+                                    outline: 'none',
+                                    fontSize: '0.9rem',
+                                    appearance: 'none',
+                                    cursor: 'pointer'
+                                }}
                             >
                                 {PARTICLE_FORMS.map(f => (
-                                    <option key={f} value={f}>{f}</option>
+                                    <option key={f} value={f} style={{ background: '#111' }}>{f}</option>
                                 ))}
                             </select>
-                            {/* Dropdown arrow */}
-                            <svg style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" strokeWidth="2">
-                                <polyline points="6,9 12,15 18,9" />
-                            </svg>
                         </div>
                     </div>
 
-                    {/* Password */}
                     <div>
-                        <label className="input-label">Password</label>
+                        <label className="text-technical" style={{ fontSize: '0.6rem', marginBottom: '0.75rem', display: 'block' }}>SECURE_KEY</label>
                         <div style={{ position: 'relative' }}>
-                            <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: '#bbb', pointerEvents: 'none' }} />
+                            <Lock size={14} style={{ position: 'absolute', left: '0', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                             <input
                                 name="password" type={showPassword ? 'text' : 'password'}
                                 value={formData.password} onChange={handleChange}
-                                placeholder="••••••••" required className="input-field"
-                                style={{ paddingLeft: '2.5rem', paddingRight: '2.75rem' }}
+                                placeholder="••••••••" required
+                                style={{
+                                    width: '100%',
+                                    background: 'none',
+                                    border: 'none',
+                                    borderBottom: '1px solid var(--border-line)',
+                                    padding: '0.75rem 2.5rem 0.75rem 2rem',
+                                    color: 'var(--text-primary)',
+                                    fontFamily: 'var(--font-mono)',
+                                    outline: 'none',
+                                    fontSize: '0.9rem'
+                                }}
                             />
                             <button type="button" onClick={() => setShowPassword(!showPassword)}
-                                style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#bbb', display: 'flex', alignItems: 'center' }}>
+                                style={{ position: 'absolute', right: '0', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
                                 {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
                             </button>
                         </div>
                     </div>
 
-                    <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '0.5rem' }}>
-                        {loading ? <><div className="spinner" />Creating account...</> : <><span>⊕</span> Create Account</>}
+                    <button type="submit" disabled={loading} className="btn-mindjoin" style={{ width: '100%', marginTop: '1rem' }}>
+                        {loading ? 'INITIALIZING...' : 'ACTIVATE_INTERFACE'}
                     </button>
                 </form>
 
-                <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-sub)', fontSize: '0.875rem' }}>
-                    Already have an account?{' '}
-                    <Link to="/login" style={{ color: 'var(--green)', fontWeight: 600 }}>Sign in</Link>
-                </p>
+                <div style={{ marginTop: '3rem', textAlign: 'center', borderTop: '1px solid var(--border-line)', paddingTop: '2rem' }}>
+                    <p className="text-technical" style={{ fontSize: '0.7rem' }}>
+                        Already synced?{' '}
+                        <Link to="/login" style={{ color: 'var(--accent-teal)', textDecoration: 'none' }}>[ RESUME_SESSION ]</Link>
+                    </p>
+                </div>
             </div>
         </div>
     );

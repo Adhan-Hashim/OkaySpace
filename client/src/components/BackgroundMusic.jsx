@@ -62,8 +62,8 @@ const BackgroundMusic = () => {
         };
     }, []);
 
-    const buttonColor = isOverFooter ? 'var(--bg-color)' : 'var(--text-main)';
-    const inverseColor = isOverFooter ? 'var(--text-main)' : 'var(--bg-color)';
+    const buttonColor = isOverFooter ? 'var(--bg-deep)' : '#ffffff';
+    const inverseColor = isOverFooter ? '#ffffff' : 'var(--bg-deep)';
 
     const togglePlay = () => {
         if (!audioRef.current) return;
@@ -80,7 +80,7 @@ const BackgroundMusic = () => {
         <>
             <audio
                 ref={audioRef}
-                src="/assets/bg-music.mp3"
+                src={`${import.meta.env.BASE_URL}assets/bg-music.mp3`.replace(/\/+/g, '/')}
                 loop
                 preload="auto"
             />

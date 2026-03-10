@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import { AuthContext } from '../context/AuthContext';
 
 const CreatePost = () => {
     const [content, setContent] = useState('');
@@ -17,50 +16,75 @@ const CreatePost = () => {
             await api.post('/posts', { content, anonymous: isAnonymous });
             navigate('/dashboard');
         } catch (err) {
-            alert(err.response?.data?.message || 'Failed to create post.');
+            console.error(err);
         } finally { setLoading(false); }
     };
 
     return (
-        <div style={{ background: 'var(--bg)', minHeight: '100vh', padding: '2rem 1.5rem', display: 'flex', justifyContent: 'center' }}>
-            <div style={{ width: '100%', maxWidth: '620px' }}>
-                <button onClick={() => navigate('/dashboard')} style={{
+        <div style={{ background: 'var(--bg-deep)', minHeight: '100vh', padding: '10rem 10% 4rem' }}>
+            <div style={{ width: '100%', maxWidth: '800px' }}>
+                <button onClick={() => navigate('/dashboard')} className="text-technical" style={{
                     background: 'none', border: 'none', cursor: 'pointer',
-                    color: 'var(--text-muted)', fontSize: '0.875rem',
-                    marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem',
-                    fontFamily: 'var(--font-body)', padding: 0,
-                    transition: 'color 0.15s',
-                }}
-                    onMouseEnter={e => e.currentTarget.style.color = '#1a1a1a'}
-                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
-                    ← Back
+                    color: 'var(--text-muted)', fontSize: '0.7rem',
+                    marginBottom: '3rem', padding: 0
+                }}>
+                    [ RETURN_TO_COLLECTIVE ]
                 </button>
-                <div className="card" style={{ padding: '2rem' }}>
-                    <h1 style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>Share Something</h1>
-                    <p style={{ color: 'var(--text-sub)', fontSize: '0.875rem', marginBottom: '1.75rem' }}>Write what's on your mind — your community is listening.</p>
 
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+                <div style={{ border: '1px solid var(--border-line)', padding: '4rem' }}>
+                    <p className="text-technical" style={{ fontSize: '0.6rem', marginBottom: '1.5rem' }}>THOUGHT_TRANSMISSION // INITIALIZE</p>
+                    <h1 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', letterSpacing: '-0.01em' }}>BROADCAST_MOD</h1>
+                    <p className="text-technical" style={{ marginBottom: '4rem', opacity: 0.5 }}>Your neural signature will be processed according to selected protocols.</p>
+
+                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
                         <div>
-                            <label className="input-label">Your Post</label>
-                            <textarea rows={8} value={content} onChange={e => setContent(e.target.value)}
-                                placeholder="What's on your mind? Share your thoughts and feelings..." required
-                                className="input-field" style={{ resize: 'vertical', lineHeight: 1.7 }} />
+                            <label className="text-technical" style={{ display: 'block', fontSize: '0.6rem', marginBottom: '1.5rem' }}>THOUGHT_STREAM_INPUT</label>
+                            <textarea rows={10} value={content} onChange={e => setContent(e.target.value)}
+                                placeholder="ENTER_CONTENT..." required
+                                style={{
+                                    width: '100%',
+                                    background: 'rgba(255, 255, 255, 0.02)',
+                                    border: '1px solid var(--border-line)',
+                                    padding: '2rem',
+                                    color: 'var(--text-primary)',
+                                    fontFamily: 'var(--font-mono)',
+                                    fontSize: '1rem',
+                                    lineHeight: 1.8,
+                                    outline: 'none',
+                                    resize: 'none'
+                                }}
+                                onFocus={e => e.target.style.borderColor = 'var(--border-active)'}
+                                onBlur={e => e.target.style.borderColor = 'var(--border-line)'}
+                            />
                         </div>
 
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', userSelect: 'none' }}>
-                            <input type="checkbox" checked={isAnonymous} onChange={e => setIsAnonymous(e.target.checked)}
-                                style={{ width: '16px', height: '16px', accentColor: 'var(--green)', cursor: 'pointer' }} />
-                            <span style={{ fontSize: '0.875rem', color: 'var(--text-sub)' }}>
-                                Post anonymously (your name won't be shown)
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer', userSelect: 'none' }}>
+                            <div style={{
+                                width: '18px',
+                                height: '18px',
+                                border: '1px solid var(--border-line)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                background: isAnonymous ? 'var(--accent-teal)' : 'transparent'
+                            }}>
+                                <input type="checkbox" checked={isAnonymous} onChange={e => setIsAnonymous(e.target.checked)}
+                                    style={{ display: 'none' }} />
+                                {isAnonymous && <div style={{ width: '8px', height: '8px', background: '#000' }} />}
+                            </div>
+                            <span className="text-technical" style={{ fontSize: '0.7rem', opacity: 0.6 }}>
+                                ENABLE_ANONYMOUS_ENCRYPTION_LAYER
                             </span>
                         </label>
 
-                        <div style={{ display: 'flex', gap: '0.75rem' }}>
-                            <button type="submit" className="btn-primary" disabled={loading || !content.trim()}
-                                style={{ flex: 1, opacity: !content.trim() ? 0.5 : 1 }}>
-                                {loading ? <><div className="spinner" />Posting...</> : 'Post to Community'}
+                        <div style={{ display: 'flex', gap: '1.5rem', marginTop: '2rem' }}>
+                            <button type="submit" className="btn-mindjoin" disabled={loading || !content.trim()}
+                                style={{ flex: 1, background: 'var(--accent-teal)', color: '#000' }}>
+                                {loading ? 'TRANSMITTING...' : '[ INITIALIZE_BROADCAST ]'}
                             </button>
-                            <button type="button" onClick={() => navigate('/dashboard')} className="btn-secondary">Cancel</button>
+                            <button type="button" onClick={() => navigate('/dashboard')} className="btn-mindjoin" style={{ background: 'transparent', border: '1px solid var(--border-line)', color: 'var(--text-muted)' }}>
+                                [ ABORT ]
+                            </button>
                         </div>
                     </form>
                 </div>
