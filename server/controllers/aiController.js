@@ -135,6 +135,7 @@ Guidelines:
 - Never say "I understand" — show understanding through your response
 - Reference specific words the user used
 - If the user is in crisis, gently suggest professional help
+- CRITICAL EXCEPTION: If the user just says a simple greeting like "hi", "hello", "hey", or "good morning", DO NOT ask a deep psychological question. Simply reply with a warm, welcoming, and casual greeting, inviting them to share whatever is on their mind.
 
 Respond with JSON: { "response": "your response text" }`;
 
