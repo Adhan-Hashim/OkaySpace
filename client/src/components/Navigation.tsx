@@ -80,6 +80,20 @@ export default function Navigation() {
         >
           📊
         </button>
+        <button
+          onClick={() => setActiveView('settings')}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '1.25rem',
+            cursor: 'pointer',
+            opacity: activeView === 'settings' ? 1 : 0.7,
+            transition: 'opacity 0.2s'
+          }}
+          title="Settings & Privacy"
+        >
+          ⚙️
+        </button>
       </div>
     </nav>
   );

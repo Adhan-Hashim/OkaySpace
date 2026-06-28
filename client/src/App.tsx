@@ -6,7 +6,8 @@ import EchoView from './views/EchoView';
 import ResonanceView from './views/ResonanceView';
 import PrismView from './views/PrismView';
 import NexusView from './views/NexusView';
-import CortexView from './views/CortexView';
+import AnalyticsView from './views/AnalyticsView';
+import SettingsView from './views/SettingsView';
 import useStore from './store/useStore';
 
 const VIEW_COMPONENTS = {
@@ -15,7 +16,8 @@ const VIEW_COMPONENTS = {
   'resonance': ResonanceView,
   'prism': PrismView,
   'nexus': NexusView,
-  'cortex': CortexView,
+  'cortex': AnalyticsView,
+  'settings': SettingsView,
 };
 
 function App() {

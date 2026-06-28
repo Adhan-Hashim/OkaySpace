@@ -2,6 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
+const CBTEntry = require('../models/CBTEntry');
 
 exports.register = async (req, res) => {
     try {
@@ -128,5 +129,31 @@ exports.resendVerification = async (req, res) => {
         res.json({ message: 'Verification link sent' });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.exportData = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        const entries = await CBTEntry.find({ userId: req.user.id });
+        
+        logger.info('User exported data', { userId: req.user.id });
+        res.json({ user, entries });
+    } catch (error) {
+        logger.error('Export error:', error);
+        res.status(500).json({ message: 'Server error during export' });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    try {
+        await CBTEntry.deleteMany({ userId: req.user.id });
+        await User.findByIdAndDelete(req.user.id);
+        
+        logger.info('User deleted account', { userId: req.user.id });
+        res.json({ message: 'Account and all associated data successfully deleted' });
+    } catch (error) {
+        logger.error('Delete user error:', error);
+        res.status(500).json({ message: 'Server error during deletion' });
     }
 };
