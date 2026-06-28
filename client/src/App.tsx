@@ -9,6 +9,7 @@ import NexusView from './views/NexusView';
 import AnalyticsView from './views/AnalyticsView';
 import SettingsView from './views/SettingsView';
 import useStore from './store/useStore';
+import { AuthProvider } from './context/AuthContext';
 
 const VIEW_COMPONENTS = {
   'home': OkaySpaceHomeView,
@@ -25,16 +26,18 @@ function App() {
   const ActiveComponent = VIEW_COMPONENTS[activeView] || OkaySpaceHomeView;
 
   return (
-    <div className="app-layout" style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-      <Navigation />
-      <main style={{ flex: 1, position: 'relative', overflowY: 'auto', overflowX: 'hidden' }}>
-        <MotionConfig reducedMotion="user">
-          <AnimatePresence mode="wait">
-            <ActiveComponent key={activeView} />
-          </AnimatePresence>
-        </MotionConfig>
-      </main>
-    </div>
+    <AuthProvider>
+      <div className="app-layout" style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+        <Navigation />
+        <main style={{ flex: 1, position: 'relative', overflowY: 'auto', overflowX: 'hidden' }}>
+          <MotionConfig reducedMotion="user">
+            <AnimatePresence mode="wait">
+              <ActiveComponent key={activeView} />
+            </AnimatePresence>
+          </MotionConfig>
+        </main>
+      </div>
+    </AuthProvider>
   );
 }
 
