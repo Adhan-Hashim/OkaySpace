@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import Navigation from './components/Navigation';
 import OkaySpaceHomeView from './views/OkaySpaceHomeView';
 import EchoView from './views/EchoView';
@@ -28,9 +28,11 @@ function App() {
     <div className="app-layout" style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
       <Navigation />
       <main style={{ flex: 1, position: 'relative', overflowY: 'auto', overflowX: 'hidden' }}>
-        <AnimatePresence mode="wait">
-          <ActiveComponent key={activeView} />
-        </AnimatePresence>
+        <MotionConfig reducedMotion="user">
+          <AnimatePresence mode="wait">
+            <ActiveComponent key={activeView} />
+          </AnimatePresence>
+        </MotionConfig>
       </main>
     </div>
   );

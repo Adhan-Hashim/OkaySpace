@@ -26,6 +26,10 @@ export default function Navigation() {
       <div 
         className="nav-brand"
         onClick={() => setActiveView('home')}
+        onKeyDown={(e) => e.key === 'Enter' && setActiveView('home')}
+        role="button"
+        tabIndex={0}
+        aria-label="Go to Home page"
         style={{ 
           cursor: 'pointer', 
           display: 'flex', 
@@ -38,7 +42,7 @@ export default function Navigation() {
           fontFamily: 'Outfit, sans-serif'
         }}
       >
-        <span style={{ fontSize: '1.5rem' }}>☁️</span>
+        <span aria-hidden="true" style={{ fontSize: '1.5rem' }}>☁️</span>
         OkaySpace
       </div>
 
@@ -48,6 +52,8 @@ export default function Navigation() {
           <button
             key={mod.id}
             onClick={() => setActiveView(mod.id)}
+            aria-label={`Open ${mod.label} module`}
+            aria-current={activeView === mod.id ? 'page' : undefined}
             style={{
               background: 'none',
               border: 'none',
@@ -68,6 +74,7 @@ export default function Navigation() {
       <div className="nav-actions" style={{ display: 'flex', gap: '1rem' }}>
         <button
           onClick={() => setActiveView('cortex')}
+          aria-label="Open Cortex Analytics"
           style={{
             background: 'none',
             border: 'none',
@@ -78,10 +85,11 @@ export default function Navigation() {
           }}
           title="Cortex Analytics"
         >
-          📊
+          <span aria-hidden="true">📊</span>
         </button>
         <button
           onClick={() => setActiveView('settings')}
+          aria-label="Open Settings and Privacy"
           style={{
             background: 'none',
             border: 'none',
@@ -92,7 +100,7 @@ export default function Navigation() {
           }}
           title="Settings & Privacy"
         >
-          ⚙️
+          <span aria-hidden="true">⚙️</span>
         </button>
       </div>
     </nav>
