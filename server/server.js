@@ -3,6 +3,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const logger = require('./utils/logger');
 
 const app = express();
 const server = http.createServer(app);
@@ -26,7 +27,7 @@ app.use('/api/ai', require('./routes/aiRoutes'));
 const PORT = process.env.PORT || 5000;
 if (require.main === module) {
     server.listen(PORT, () => {
-        console.log(`Ascend & Lifeline server running on port ${PORT}`);
+        logger.info(`Ascend & Lifeline server running on port ${PORT}`);
     });
 }
 

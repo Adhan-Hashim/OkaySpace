@@ -11,7 +11,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "npx": "^10.2.2"
-  }
+
 }

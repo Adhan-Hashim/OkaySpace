@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const logger = require('../utils/logger');
 
 const connectDB = async () => {
   try {
@@ -6,16 +7,16 @@ const connectDB = async () => {
 
     // If no URI is provided, use an in-memory MongoDB for local testing
     if (!uri) {
-      console.log('No MONGO_URI provided. Starting in-memory MongoDB server...');
+      logger.info('No MONGO_URI provided. Starting in-memory MongoDB server...');
       const { MongoMemoryServer } = require('mongodb-memory-server');
       const mongoServer = await MongoMemoryServer.create();
       uri = mongoServer.getUri();
     }
 
     const conn = await mongoose.connect(uri);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    logger.info(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`Error connecting to MongoDB: ${error.message}`);
+    logger.error(`Error connecting to MongoDB: ${error.message}`);
     process.exit(1);
   }
 };

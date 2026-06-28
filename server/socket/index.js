@@ -1,12 +1,13 @@
 const seekers = []; // queue of socket objects who need help
 const helpers = []; // (optional) queue of helpers if we auto-match, but we might just broadcast
+const logger = require('../utils/logger');
 
 module.exports = (io) => {
     io.on('connection', (socket) => {
-        console.log(`User connected: ${socket.id}`);
+        logger.info(`User connected: ${socket.id}`);
 
         socket.on('sonar_ping', () => {
-            console.log(`${socket.id} sent a sonar ping (Seeker).`);
+            logger.info(`${socket.id} sent a sonar ping (Seeker).`);
             // Add to seekers list
             if (!seekers.find(s => s.id === socket.id)) {
                 seekers.push(socket);
@@ -16,7 +17,7 @@ module.exports = (io) => {
         });
 
         socket.on('answer_ping', (seekerId) => {
-            console.log(`${socket.id} (Helper) is answering ping from ${seekerId}`);
+            logger.info(`${socket.id} (Helper) is answering ping from ${seekerId}`);
             const seekerIndex = seekers.findIndex(s => s.id === seekerId);
             
             if (seekerIndex !== -1) {
@@ -43,7 +44,7 @@ module.exports = (io) => {
         });
 
         socket.on('disconnect', () => {
-            console.log(`User disconnected: ${socket.id}`);
+            logger.info(`User disconnected: ${socket.id}`);
             // Remove from queue if they were seeking
             const index = seekers.findIndex(s => s.id === socket.id);
             if (index !== -1) {

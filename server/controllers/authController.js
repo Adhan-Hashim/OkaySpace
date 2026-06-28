@@ -1,19 +1,20 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const logger = require('../utils/logger');
 
 exports.register = async (req, res) => {
     try {
         const { name, email, password, concerns } = req.body;
         // Basic validation and logging to help diagnose duplicate-user reports
-        console.log('Register attempt:', { name, email: email && email.toLowerCase(), concerns });
+        logger.info('Register attempt', { hasEmail: !!email });
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Please provide name, email and password' });
         }
         const normalizedEmail = email.toLowerCase();
         let user = await User.findOne({ email: normalizedEmail });
         if (user) {
-            console.log('Existing user found for email:', normalizedEmail, 'id:', user._id);
+            logger.warn('Registration failed: User already exists');
             return res.status(400).json({ message: 'User already exists' });
         }
 
@@ -40,12 +41,12 @@ exports.register = async (req, res) => {
             const { sendVerificationEmail } = require('../utils/email');
             await sendVerificationEmail(normalizedEmail, verifyToken, name);
         } catch (emailErr) {
-            console.error('Verification email error:', emailErr);
+            logger.error('Verification email error:', emailErr);
         }
 
         res.status(201).json({ message: 'Registered. Please verify your email. Check your inbox (or server logs in dev).', user: { id: user._id, name, email: normalizedEmail, concerns: user.concerns } });
     } catch (error) {
-        console.error('Register error:', error);
+        logger.error('Register error:', error);
         if (error.code === 11000) {
             return res.status(400).json({ message: 'User already exists' });
         }
@@ -56,13 +57,13 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log('Login attempt:', { email: email && email.toLowerCase(), passwordLength: password ? password.length : 0 });
+        logger.info('Login attempt', { hasEmail: !!email });
         const user = await User.findOne({ email: email && email.toLowerCase() });
-        console.log('User found:', user ? { id: user._id, email: user.email, isVerified: user.isVerified } : 'No user found');
+        logger.info('Login - User search result', { found: !!user, isVerified: user?.isVerified });
         if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        console.log('Password match result:', isMatch);
+        logger.info('Login - Password match result', { isMatch });
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
         if (!user.isVerified) {
@@ -72,7 +73,7 @@ exports.login = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
         res.json({ token, user: { id: user._id, name: user.name, email: user.email, concerns: user.concerns } });
     } catch (error) {
-        console.error('Login error:', error);
+        logger.error('Login error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -122,7 +123,7 @@ exports.resendVerification = async (req, res) => {
         user.verifyTokenExpires = new Date(Date.now() + 1000 * 60 * 60 * 24);
         await user.save();
 
-        console.log(`Resend verification link (DEV): ${process.env.APP_URL || 'http://localhost:5173'}/verify?token=${verifyToken}&email=${encodeURIComponent(user.email)}`);
+        logger.debug('Resend verification link (DEV) generated');
 
         res.json({ message: 'Verification link sent' });
     } catch (err) {
