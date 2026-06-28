@@ -11,6 +11,9 @@ const server = http.createServer(app);
 app.use(cors());
 app.use(express.json());
 
+const passport = require('./config/passport');
+app.use(passport.initialize());
+
 // Socket.io setup
 const io = new Server(server, {
     cors: {
@@ -22,7 +25,13 @@ const io = new Server(server, {
 require('./socket/index')(io);
 
 // Routes
+app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/ai', require('./routes/aiRoutes'));
+app.use('/api/cbt', require('./routes/cbtRoutes'));
+app.use('/api/letters', require('./routes/letterRoutes'));
+app.use('/api/mood', require('./routes/moodRoutes'));
+app.use('/api/resources', require('./routes/resourceRoutes'));
+app.use('/api/therapist', require('./routes/therapistRoutes'));
 
 const PORT = process.env.PORT || 5000;
 if (require.main === module) {
