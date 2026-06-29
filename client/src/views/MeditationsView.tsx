@@ -272,9 +272,9 @@ export default function MeditationsView() {
           {!meditationRunning ? (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
               {GUIDED_MEDITATIONS.map((m) => (
-                <div key={m.id} style={{ background: 'var(--surface)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+                <div key={m.id} style={{ background: 'var(--surface-solid)', padding: '1.5rem', borderRadius: '12px', border: '2px solid var(--text-primary)', boxShadow: '4px 4px 0px var(--accent)' }}>
                   <h3 className="heading-sm" style={{ marginBottom: '0.5rem' }}>{m.title}</h3>
-                  <p className="text-caption" style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>{m.duration} • Best for: {m.bestFor}</p>
+                  <p className="text-caption" style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>{m.duration} • Best for: {m.bestFor}</p>
                   <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => startGuided(m)}>Play Audio Session</button>
                 </div>
               ))}
@@ -282,7 +282,7 @@ export default function MeditationsView() {
           ) : (
             <div style={{ textAlign: 'center', marginTop: '4rem' }}>
               <h2 className="heading-lg" style={{ marginBottom: '1rem' }}>{activeMeditation?.title}</h2>
-              <div style={{ background: 'var(--surface)', padding: '2rem', borderRadius: '16px', minHeight: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: 'var(--surface-solid)', padding: '2rem', borderRadius: '12px', minHeight: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--text-primary)', boxShadow: '4px 4px 0px var(--accent)' }}>
                 <p className="text-body" style={{ fontSize: '1.2rem', lineHeight: '1.6' }}>
                   {activeStepIndex >= 0 ? activeMeditation?.steps[activeStepIndex] : 'Starting session...'}
                 </p>

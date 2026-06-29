@@ -27,9 +27,9 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="app-layout" style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      <div className="app-layout">
         <Navigation />
-        <main style={{ flex: 1, position: 'relative', overflowY: 'auto', overflowX: 'hidden' }}>
+        <main className="main-content">
           <MotionConfig reducedMotion="user">
             <AnimatePresence mode="wait">
               <ActiveComponent key={activeView} />

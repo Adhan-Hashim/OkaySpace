@@ -1,86 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import useStore from '../store/useStore';
-import './OkaySpaceHomeView.css';
 
-const OkaySpaceHomeView: React.FC = () => {
-  const [thought, setThought] = useState('');
-  const setActiveView = useStore((s) => s.setActiveView);
-  const setPrismThought = useStore((s) => s.setPrismThought);
-
-  const handleRefract = () => {
-    if (thought.trim()) {
-      setPrismThought(thought.trim());
-      setActiveView('prism');
-    }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
-  };
-
+export default function OkaySpaceHomeView() {
   return (
-    <div className="home-container">
+    <div className="view-container">
       <motion.div 
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-        className="home-content"
+        className="home-hero"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       >
-        {/* Subtle top text / social proof style */}
-        <motion.div variants={itemVariants} className="social-proof-container">
-          <div className="social-proof-avatars">
-            <div className="avatar-1" />
-            <div className="avatar-2" />
-            <div className="avatar-3" />
+        <div className="hero-text">
+          <h1 className="hero-title">OKAYSPACE</h1>
+          
+          <div style={{ marginTop: '2rem' }}>
+            <h2 className="heading-sm" style={{ marginBottom: '1rem', color: 'var(--accent)' }}>About Us</h2>
+            <p className="text-body" style={{ fontSize: '1.25rem', maxWidth: '400px' }}>
+              OkaySpace is a digital sanctuary that celebrates contemporary mindfulness and mental wellbeing across a wide range of interactive disciplines.
+            </p>
           </div>
-          <span className="text-caption social-proof-text">
-            Join a mindful community
-          </span>
-        </motion.div>
-
-        {/* Hero Title */}
-        <motion.h1 variants={itemVariants} className="heading-xl hero-title">
-          A Safe Space for Your Mind
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p variants={itemVariants} className="text-body hero-subtitle">
-          Tools for emotional clarity — say goodbye to overwhelming anxiety and endless rumination. 
-          Say hello to intentional living.
-        </motion.p>
-
-        {/* Action Glass Pill */}
-        <motion.div variants={itemVariants} className="action-container">
-          <div className="glass action-glass">
-            <input 
-              type="text" 
-              placeholder="What's on your mind?..." 
-              value={thought}
-              onChange={(e) => setThought(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleRefract()}
-              className="action-input"
-            />
-            <button 
-              onClick={handleRefract}
-              className="action-button"
-            >
-              Refract Thought
-            </button>
+          
+          <div style={{ marginTop: '3rem', display: 'flex', gap: '1rem' }}>
+            <button className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>Get Started</button>
+            <button className="btn btn-ghost" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>Learn More</button>
           </div>
+        </div>
+
+        <motion.div 
+          className="hero-image-container"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <img src="/hero_editorial.png" alt="Editorial Abstract Illustration" />
         </motion.div>
       </motion.div>
     </div>
   );
 }
-
-export default OkaySpaceHomeView;
