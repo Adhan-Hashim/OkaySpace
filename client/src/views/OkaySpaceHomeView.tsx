@@ -21,6 +21,10 @@ const FEATURES = [
 
 export default function OkaySpaceHomeView() {
   const setCurrentView = useStore((s) => s.setCurrentView);
+  
+  const today = new Date();
+  const dateStr = today.getDate().toString().padStart(2, '0');
+  const monthStr = (today.getMonth() + 1).toString().padStart(2, '0');
 
   return (
     <motion.div className="home-page-nature" {...fade}>
@@ -38,6 +42,8 @@ export default function OkaySpaceHomeView() {
 
         {/* Central Typography Section */}
         <div className="home-center-content">
+          <div className="home-date-left t-organic" style={{ opacity: 0.6 }}>{dateStr}</div>
+          
           <div className="home-title-wrapper">
             <div className="home-location">A safe space for you</div>
             <img src={logo} alt="OkaySpace Logo" style={{ width: '100%', maxWidth: '300px', marginBottom: '1.5rem', mixBlendMode: 'multiply' }} />
@@ -46,6 +52,8 @@ export default function OkaySpaceHomeView() {
               You just have to be willing to try.
             </p>
           </div>
+
+          <div className="home-date-right t-organic" style={{ opacity: 0.6 }}>{monthStr}</div>
         </div>
 
         {/* Features Glass Panels at the bottom */}
