@@ -41,9 +41,7 @@ export default function OkaySpaceHomeView() {
           
           <div className="home-title-wrapper">
             <div className="home-location">A safe space for you</div>
-            <h1 className="home-title t-organic">
-              OKAY<br/>SPACE
-            </h1>
+            <img src="/src/assets/logo.png" alt="OkaySpace Logo" style={{ width: '100%', maxWidth: '300px', marginBottom: '1.5rem', mixBlendMode: 'multiply' }} />
             <p className="home-quote t-serif">
               You don't have to be okay to come here.<br/>
               You just have to be willing to try.

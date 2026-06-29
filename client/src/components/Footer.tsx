@@ -10,9 +10,7 @@ export default function Footer() {
       <div className="creative-footer-inner">
         <div className="creative-footer-top">
           <div className="creative-footer-brand">
-            <h2 className="t-organic t-display" style={{ fontSize: '3rem', color: 'var(--primary-dark)', marginBottom: '1rem' }}>
-              OkaySpace
-            </h2>
+            <img src="/src/assets/logo.png" alt="OkaySpace Logo" style={{ height: '60px', objectFit: 'contain', marginBottom: '1rem', mixBlendMode: 'multiply' }} />
             <p className="t-italic t-serif" style={{ fontSize: '1.2rem', color: 'var(--text)', maxWidth: '300px' }}>
               Alam selalu menjadi tempat yang nyaman untuk menyembuhkan diri yang lelah.
             </p>

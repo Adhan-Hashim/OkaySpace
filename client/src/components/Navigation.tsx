@@ -24,17 +24,8 @@ export default function Navigation() {
       <nav className="nav">
         <div className="nav-inner">
           {/* Logo */}
-          <div className="nav-logo" onClick={() => go('home')} role="button" tabIndex={0}>
-            <div className="nav-logo-mark">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="4" fill="white" opacity="0.9"/>
-                <path d="M10 2 Q14 6 10 10 Q6 6 10 2Z" fill="white" opacity="0.6"/>
-                <path d="M18 10 Q14 14 10 10 Q14 6 18 10Z" fill="white" opacity="0.6"/>
-                <path d="M10 18 Q6 14 10 10 Q14 14 10 18Z" fill="white" opacity="0.6"/>
-                <path d="M2 10 Q6 6 10 10 Q6 14 2 10Z" fill="white" opacity="0.6"/>
-              </svg>
-            </div>
-            <span className="nav-logo-text">OkaySpace</span>
+          <div className="nav-logo" onClick={() => go('home')} role="button" tabIndex={0} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <img src="/src/assets/logo.png" alt="OkaySpace Logo" style={{ height: '36px', objectFit: 'contain' }} />
           </div>
 
           {/* Desktop Links */}
