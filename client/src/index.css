@@ -124,8 +124,8 @@ p { color: var(--text-secondary); line-height: 1.7; }
 .t-mono     { font-family: 'DM Mono', monospace; font-size: 0.875rem; }
 .t-italic   { font-style: italic; }
 .t-serif    { font-family: 'Playfair Display', serif; }
-.t-organic  { font-family: 'Chewy', system-ui, sans-serif; font-weight: 400; }
-.t-sans     { font-family: 'DM Sans', sans-serif; }
+.t-organic  { font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500; letter-spacing: -0.02em; }
+.t-sans     { font-family: 'DM Sans', system-ui, sans-serif; }
 .t-muted    { color: var(--text-muted); }
 .t-primary  { color: var(--primary-dark); }
 .t-accent   { color: var(--accent); }
