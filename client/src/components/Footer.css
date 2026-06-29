@@ -1,244 +1,219 @@
-.gc-footer {
+.z-footer {
   width: 100%;
-  background-color: #2D2D2D; /* Dark charcoal */
-  border-radius: 40px 40px 0 0;
-  position: relative;
-  overflow: hidden;
+  background-color: #12221A; /* Deep, intense nature green to match OkaySpace while retaining the solid Zettlor vibe */
   color: #fff;
-  min-height: 500px;
-  display: flex;
   font-family: 'DM Sans', sans-serif;
-  margin-top: -40px; /* Pulls it up slightly over the home view to eliminate white gaps */
-  z-index: 10;
-}
-
-.gc-footer-content {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 80px 40px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
   position: relative;
   z-index: 10;
-  pointer-events: none;
+  padding-top: 4rem;
+  margin-top: -20px; /* Pulls it up slightly over the home view to eliminate white gaps */
 }
 
-.gc-footer-left,
-.gc-footer-right {
-  pointer-events: auto;
+/* MASSIVE TITLE */
+.z-huge-title {
+  font-size: 19vw; /* Scales massively across the screen like Zettlor */
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  /* Use a condensed impactful font stack */
+  font-family: 'Impact', 'Oswald', 'DM Sans', sans-serif; 
 }
 
-/* LEFT SIDE */
-.gc-footer-left {
+/* NEWSLETTER PILL */
+.z-newsletter-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 4rem auto 2rem;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-}
-
-.gc-brand-huge {
-  margin-bottom: 4rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.gc-brand-huge h1 {
-  font-size: clamp(4.5rem, 8vw, 7rem);
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  margin: 0;
-  color: #fff;
-}
-
-.gc-brand-row {
-  display: flex;
   align-items: center;
-  gap: 1.5rem;
 }
 
-.gc-small-logo-badge {
-  background: var(--bg-warm);
-  color: #2D2D2D;
-  font-weight: 800;
-  font-size: 1.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  border-bottom-left-radius: 10px; /* Funky shape like Groom Club's small logo */
+.z-newsletter-pill {
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.gc-newsletter {
-  max-width: 400px;
-  margin-top: 2rem;
-}
-
-.gc-newsletter-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #fff;
-}
-
-.gc-input-group {
-  display: flex;
-  background: #fff;
-  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
   padding: 8px;
   align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.gc-input {
+.z-newsletter-pill input {
   flex: 1;
-  border: none;
   background: transparent;
-  padding: 12px 16px;
-  font-size: 1.1rem;
-  color: #333;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.25rem;
+  color: #fff;
   outline: none;
   font-family: 'DM Sans', sans-serif;
 }
 
-.gc-input::placeholder {
-  color: #999;
+.z-newsletter-pill input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.gc-submit-btn {
-  background: #2D2D2D;
-  color: #fff;
+.z-newsletter-pill button {
+  background-color: #fff;
+  color: #12221A; /* Matches footer background */
   border: none;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.gc-submit-btn:hover {
-  transform: scale(1.05);
-  background: #111;
-}
-
-/* RIGHT SIDE */
-.gc-footer-right {
-  padding-left: 120px; /* Push it inward */
-  padding-top: 20px;
-}
-
-.gc-nav-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 2rem;
-  font-weight: 400;
-  margin-bottom: 2.5rem;
-  color: #fff;
-}
-
-.gc-nav-title b {
+  border-radius: 100px;
+  padding: 15px 40px;
+  font-size: 1.2rem;
   font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  font-family: 'DM Sans', sans-serif;
 }
 
-.gc-nav-links {
+.z-newsletter-pill button:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+.z-newsletter-container p {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: #fff;
+  opacity: 0.9;
+}
+
+/* SOCIALS */
+.z-socials {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.z-socials a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: opacity 0.2s ease;
+}
+
+.z-socials a:hover {
+  opacity: 0.7;
+}
+
+/* LINKS GRID */
+.z-links-grid {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-bottom: 5rem;
+}
+
+.z-links-col {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 1rem;
 }
 
-.gc-nav-links button,
-.gc-nav-links a {
+.z-col-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+  opacity: 0.7;
+}
+
+.z-links-col a,
+.z-links-col button {
   background: none;
   border: none;
   padding: 0;
   font-family: inherit;
-  font-size: 1.15rem;
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  cursor: pointer;
-  text-align: left;
-  transition: color 0.2s ease, transform 0.2s ease;
-  width: fit-content;
-}
-
-.gc-nav-links button:hover,
-.gc-nav-links a:hover {
+  font-size: 1rem;
   color: #fff;
-  transform: translateX(5px);
+  text-decoration: none;
+  text-align: left;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
-/* BOTTOM RIGHT CUTOUT */
-.gc-footer-cutout {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 65%; /* Make it wider so it's shallower */
-  height: 60%; /* Keep it lower so it doesn't hit the links */
-  z-index: 5;
+.z-links-col a:hover,
+.z-links-col button:hover {
+  opacity: 0.7;
 }
 
-.gc-curve-svg {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
+/* MARQUEE */
+.z-marquee-container {
   width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.gc-cutout-content {
-  position: absolute;
-  bottom: 40px;
-  right: 80px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-}
-
-.gc-socials {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.gc-social-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(45, 45, 45, 0.05);
-  color: #2D2D2D;
+  background-color: #fff;
+  color: #12221A;
+  padding: 1.5rem 0;
+  overflow: hidden;
+  white-space: nowrap;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.1rem;
-  transition: background 0.2s ease, transform 0.2s ease;
-  border: 1px solid rgba(45, 45, 45, 0.15);
 }
 
-.gc-social-btn:hover {
-  background: #2D2D2D;
-  color: #fff;
-  transform: translateY(-4px);
+.z-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  animation: marquee 30s linear infinite;
+}
+
+.z-marquee-dot {
+  color: #FA5032; /* Small pop of that Zettlor orange for the dot! */
+  font-size: 2rem;
+  line-height: 1;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 @media (max-width: 900px) {
-  .gc-footer-content {
-    grid-template-columns: 1fr;
-    gap: 4rem;
-    padding: 60px 20px;
+  .z-huge-title {
+    font-size: 24vw; /* Slightly larger relative size on mobile */
   }
-  .gc-footer-right {
-    padding-left: 0;
+  
+  .z-links-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
   }
-  .gc-footer-cutout {
+  
+  .z-newsletter-pill {
+    flex-direction: column;
+    background: transparent;
+    border: none;
+  }
+  
+  .z-newsletter-pill input {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 100px;
     width: 100%;
-    height: 250px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
-  .gc-cutout-content {
-    right: 40px;
-    bottom: 30px;
+  
+  .z-newsletter-pill button {
+    width: 100%;
   }
 }
+
