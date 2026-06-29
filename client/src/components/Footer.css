@@ -1,124 +1,216 @@
-.light-footer {
+.gc-footer-container {
   width: 100%;
+  padding-top: 2rem;
   background-color: var(--bg-warm);
-  border-top: 1px solid var(--border-light);
-  padding: 4rem 2rem 2rem;
-  color: var(--primary-dark);
-  font-family: 'DM Sans', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  z-index: 10;
 }
 
-.light-footer-inner {
+.gc-footer {
+  width: 100%;
+  background-color: #2D2D2D; /* Dark charcoal */
+  border-radius: 40px 40px 0 0;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  min-height: 500px;
+  display: flex;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Background topographic pattern or subtle texture can go here if needed */
+
+.gc-footer-content {
   width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 40px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  z-index: 10;
+  pointer-events: none; /* Let clicks pass through empty areas to social icons if needed */
+}
+
+.gc-footer-left,
+.gc-footer-right {
+  pointer-events: auto; /* Re-enable clicks */
+}
+
+/* LEFT SIDE */
+.gc-footer-left {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 4rem;
+}
+
+.gc-logo-container {
   margin-bottom: 4rem;
 }
 
-.light-footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 300px;
-}
-
-.light-footer-logo {
-  height: 60px;
+.gc-logo {
+  height: 120px;
   object-fit: contain;
-  mix-blend-mode: multiply;
-  margin-left: -10px;
+  /* Since logo is dark green, we need to make it bright white for this design */
+  filter: brightness(0) invert(1);
 }
 
-.light-footer-tagline {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
+.gc-newsletter {
+  max-width: 400px;
 }
 
-.light-footer-links {
+.gc-newsletter-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.gc-input-group {
   display: flex;
-  gap: 4rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 6px;
+  align-items: center;
 }
 
-.light-footer-col {
+.gc-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 16px;
+  font-size: 1rem;
+  color: #333;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.gc-submit-btn {
+  background: #2D2D2D;
+  color: #fff;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.gc-submit-btn:hover {
+  transform: scale(1.05);
+  background: #111;
+}
+
+/* RIGHT SIDE */
+.gc-footer-right {
+  padding-left: 100px;
+}
+
+.gc-nav-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.gc-nav-links {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
-.light-footer-title {
-  font-weight: 700;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--primary-dark);
-  margin-bottom: 0.5rem;
-}
-
-.light-footer-col button,
-.light-footer-col a {
+.gc-nav-links button,
+.gc-nav-links a {
   background: none;
   border: none;
   padding: 0;
   font-family: inherit;
-  font-size: 0.95rem;
-  color: var(--text-secondary);
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   cursor: pointer;
   text-align: left;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+  width: fit-content;
 }
 
-.light-footer-col button:hover,
-.light-footer-col a:hover {
-  color: var(--accent);
+.gc-nav-links button:hover,
+.gc-nav-links a:hover {
+  color: #fff;
+  padding-left: 8px;
 }
 
-.light-footer-bottom {
+/* BOTTOM RIGHT CUTOUT */
+.gc-footer-cutout {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 55%;
+  height: 85%;
+  z-index: 5;
+}
+
+.gc-curve-svg {
+  position: absolute;
+  bottom: -2px; /* Fix any sub-pixel gap */
+  right: -2px;
   width: 100%;
-  max-width: 1200px;
-  border-top: 1px solid var(--border-light);
-  padding-top: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  color: var(--text-light);
+  height: 100%;
+  display: block;
 }
 
-.light-footer-social {
+.gc-cutout-content {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 20%; /* Push content away from the curve edge */
+}
+
+.gc-socials {
   display: flex;
   gap: 1.5rem;
 }
 
-.light-footer-social a {
-  color: var(--text-light);
+.gc-social-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(45, 45, 45, 0.1); /* Very light dark grey on warm bg */
+  color: #2D2D2D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  transition: color 0.2s ease;
+  font-weight: 700;
+  font-size: 1.2rem;
+  transition: background 0.2s ease, transform 0.2s ease;
+  border: 1px solid rgba(45, 45, 45, 0.2);
 }
 
-.light-footer-social a:hover {
-  color: var(--accent);
+.gc-social-btn:hover {
+  background: #2D2D2D;
+  color: #fff;
+  transform: translateY(-4px);
 }
 
-@media (max-width: 768px) {
-  .light-footer-inner {
-    flex-direction: column;
-    gap: 3rem;
+@media (max-width: 900px) {
+  .gc-footer-content {
+    grid-template-columns: 1fr;
+    gap: 4rem;
   }
-  .light-footer-links {
-    flex-wrap: wrap;
-    gap: 2rem;
+  .gc-footer-right {
+    padding-left: 0;
   }
-  .light-footer-bottom {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
+  .gc-footer-cutout {
+    width: 100%;
+    height: 300px;
+    z-index: 0;
+  }
+  .gc-footer-content {
+    z-index: 10;
   }
 }
