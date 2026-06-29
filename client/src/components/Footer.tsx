@@ -8,41 +8,23 @@ export default function Footer() {
 
   return (
     <footer className="creative-footer">
-      <div className="creative-footer-inner">
-        <div className="creative-footer-top">
-          <div className="creative-footer-brand">
-            <img src={logo} alt="OkaySpace Logo" style={{ height: '60px', objectFit: 'contain', marginBottom: '1rem', mixBlendMode: 'multiply' }} />
-            <p className="t-italic t-serif" style={{ fontSize: '1.2rem', color: 'var(--text)', maxWidth: '300px' }}>
-              Alam selalu menjadi tempat yang nyaman untuk menyembuhkan diri yang lelah.
-            </p>
-            <p className="t-sans" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-              (Nature is always a comfortable place to heal a tired self.)
-            </p>
-          </div>
-          <div className="creative-footer-links">
-             <div className="footer-nav-col">
-                <span className="t-label">Modules</span>
-                <button onClick={() => setCurrentView('echo')}>Echo</button>
-                <button onClick={() => setCurrentView('prism')}>Prism</button>
-                <button onClick={() => setCurrentView('meditations')}>Meditations</button>
-                <button onClick={() => setCurrentView('nexus')}>Nexus</button>
-             </div>
-             <div className="footer-nav-col">
-                <span className="t-label">Connect</span>
-                <a href="#">About</a>
-                <a href="#">Privacy</a>
-                <a href="#">Terms</a>
-                <a href="#">Contact</a>
-             </div>
-          </div>
+      <div className="minimal-footer-inner">
+        <div className="footer-left">
+          <img src={logo} alt="OkaySpace Logo" className="footer-logo-img" />
+          <span className="footer-tagline">Neural Wellness OS</span>
         </div>
         
-        <div className="creative-footer-bottom">
-          <div className="creative-footer-credit">
-            Creative story by <span style={{ fontWeight: 600 }}>OkaySpace</span>
+        <div className="footer-right">
+          <div className="footer-links">
+             <button onClick={() => setCurrentView('echo')}>Echo</button>
+             <button onClick={() => setCurrentView('prism')}>Prism</button>
+             <button onClick={() => setCurrentView('meditations')}>Meditations</button>
+             <button onClick={() => setCurrentView('nexus')}>Nexus</button>
           </div>
-          <div className="creative-footer-year">
-            {new Date().getFullYear()}
+          <div className="footer-meta">
+            <span>© {new Date().getFullYear()}</span>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
           </div>
         </div>
       </div>

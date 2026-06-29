@@ -38,8 +38,6 @@ export default function OkaySpaceHomeView() {
 
         {/* Central Typography Section */}
         <div className="home-center-content">
-          <div className="home-date-left t-organic">10</div>
-          
           <div className="home-title-wrapper">
             <div className="home-location">A safe space for you</div>
             <img src={logo} alt="OkaySpace Logo" style={{ width: '100%', maxWidth: '300px', marginBottom: '1.5rem', mixBlendMode: 'multiply' }} />
@@ -48,8 +46,6 @@ export default function OkaySpaceHomeView() {
               You just have to be willing to try.
             </p>
           </div>
-
-          <div className="home-date-right t-organic">06</div>
         </div>
 
         {/* Features Glass Panels at the bottom */}
