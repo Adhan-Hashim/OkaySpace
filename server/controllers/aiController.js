@@ -3,11 +3,12 @@
 // Handles: Echo, Prism, Sentiment, Insights
 // ========================================
 
-const getOpenAI = () => {
-    const apiKey = process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.trim() : '';
-    if (!apiKey || apiKey === 'your_openai_api_key_here') return null;
-    const OpenAI = require('openai');
-    return new OpenAI({ apiKey });
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const getGemini = () => {
+    const apiKey = process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.trim() : '';
+    if (!apiKey || apiKey === 'your_gemini_api_key_here') return null;
+    return new GoogleGenerativeAI(apiKey);
 };
 
 // Simple in-memory sentiment analysis fallback
@@ -69,9 +70,9 @@ exports.echo = async (req, res) => {
         if (!message) return res.status(400).json({ message: 'Message is required' });
 
         const sentiment = detectSentiment(message);
-        const openai = getOpenAI();
+        const genAI = getGemini();
 
-        if (!openai) {
+        if (!genAI) {
             // Smart mock responses based on sentiment
             const responses = {
                 sadness: [
@@ -119,8 +120,10 @@ exports.echo = async (req, res) => {
             return res.json({ response, sentiment });
         }
 
-        // OpenAI-powered response
-        const systemPrompt = `You are Echo, a deeply empathetic AI neural companion in OkaySpace. You combine techniques from:
+        // Gemini-powered response
+        const systemPrompt = `You are Echo, a deeply empathetic AI neural companion in the OkaySpace web app. Your SOLE purpose is to help users reflect, process their emotions, and explore their mental well-being.
+
+You combine techniques from:
 - Cognitive Behavioral Therapy (CBT)
 - Dialectical Behavior Therapy (DBT)
 - Motivational Interviewing
@@ -128,33 +131,39 @@ exports.echo = async (req, res) => {
 
 Your personality: warm, perceptive, gently challenging. You don't give advice unless asked — you reflect, ask insightful questions, and help users discover their own insights.
 
+STRICT DOMAIN GUARDRAILS:
+1. You are strictly an emotional companion for OkaySpace.
+2. If the user asks about ANYTHING unrelated to mental health, their feelings, journaling, or psychology (e.g., coding, math, general knowledge, writing essays, trivia), you MUST politely refuse to answer and gently guide them back to their emotional state.
+3. Example refusal: "I'm designed specifically to be your companion in OkaySpace for reflection and emotional support. I can't help with [topic], but I am here if you'd like to explore what's on your mind today."
+
 Guidelines:
-- Keep responses 2-4 sentences
-- Ask exactly one thoughtful question per response
-- Validate emotions before exploring them
-- Never say "I understand" — show understanding through your response
-- Reference specific words the user used
-- If the user is in crisis, gently suggest professional help
+- Keep responses 2-4 sentences.
+- Ask exactly one thoughtful question per response.
+- Validate emotions before exploring them.
+- Never say "I understand" — show understanding through your response.
+- Reference specific words the user used.
+- If the user is in crisis, gently suggest professional help.
 - CRITICAL EXCEPTION: If the user just says a simple greeting like "hi", "hello", "hey", or "good morning", DO NOT ask a deep psychological question. Simply reply with a warm, welcoming, and casual greeting, inviting them to share whatever is on their mind.
 
 Respond with JSON: { "response": "your response text" }`;
 
         const chatHistory = history.map(m => ({
-            role: m.role,
-            content: m.content,
+            role: m.role === 'assistant' || m.role === 'model' ? 'model' : 'user',
+            parts: [{ text: m.content }],
         }));
 
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            response_format: { type: "json_object" },
-            messages: [
-                { role: "system", content: systemPrompt },
-                ...chatHistory,
-                { role: "user", content: message },
-            ],
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            systemInstruction: systemPrompt,
+            generationConfig: {
+                responseMimeType: "application/json",
+            }
         });
 
-        const parsed = JSON.parse(response.choices[0].message.content);
+        const chat = model.startChat({ history: chatHistory });
+        const result = await chat.sendMessage(message);
+        
+        const parsed = JSON.parse(result.response.text());
         res.json({ response: parsed.response, sentiment });
 
     } catch (err) {
@@ -175,9 +184,9 @@ exports.echoReframe = async (req, res) => {
 
         const sentiment = detectSentiment(message);
         const distortion = detectDistortion(message);
-        const openai = getOpenAI();
+        const genAI = getGemini();
 
-        if (!openai) {
+        if (!genAI) {
             const distortionInfo = distortion
                 ? `I notice a cognitive pattern here: **${distortion}**. This is when our mind ${
                     distortion === 'Catastrophizing' ? 'jumps to the worst possible outcome' :
@@ -196,8 +205,12 @@ exports.echoReframe = async (req, res) => {
             });
         }
 
-        const systemPrompt = `You are Echo in Reframe Mode — a cognitive restructuring specialist. When the user shares a negative thought:
+        const systemPrompt = `You are Echo in Reframe Mode — a cognitive restructuring specialist within the OkaySpace app. Your SOLE purpose is to help users reframe negative thoughts.
 
+STRICT DOMAIN GUARDRAILS:
+You must only respond to statements that can be analyzed for cognitive distortions. If the user asks for general information, coding help, math, or anything outside of mental health, politely refuse and remind them that this space is for emotional reframing.
+
+When the user shares a thought or feeling:
 1. Identify the cognitive distortion (catastrophizing, all-or-nothing thinking, mind reading, overgeneralization, emotional reasoning, should statements, personalization, etc.)
 2. Validate the emotion behind the thought
 3. Gently challenge the thought using Socratic questioning
@@ -205,16 +218,17 @@ exports.echoReframe = async (req, res) => {
 
 Respond with JSON: { "response": "your response", "distortion": "name of distortion or null" }`;
 
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            response_format: { type: "json_object" },
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: message },
-            ],
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            systemInstruction: systemPrompt,
+            generationConfig: {
+                responseMimeType: "application/json",
+            }
         });
 
-        const parsed = JSON.parse(response.choices[0].message.content);
+        const result = await model.generateContent(message);
+        const parsed = JSON.parse(result.response.text());
+        
         res.json({
             response: parsed.response,
             sentiment,
@@ -238,9 +252,9 @@ exports.prism = async (req, res) => {
         const { thought } = req.body;
         if (!thought) return res.status(400).json({ message: 'Thought is required' });
 
-        const openai = getOpenAI();
+        const genAI = getGemini();
 
-        if (!openai) {
+        if (!genAI) {
             // Smart fallback facets
             return res.json({
                 facets: [
@@ -272,7 +286,12 @@ exports.prism = async (req, res) => {
             });
         }
 
-        const systemPrompt = `You are the Prism — a cognitive restructuring engine. Given a negative thought, generate 6 different perspectives as JSON. Each perspective challenges the thought differently.
+        const systemPrompt = `You are the Prism — a cognitive restructuring engine in the OkaySpace app. Your SOLE purpose is to generate alternative perspectives for a user's thought.
+
+STRICT DOMAIN GUARDRAILS:
+If the user provides an input that is not a personal thought, feeling, or emotional statement (e.g., they ask a trivia question, request code, or ask for math help), you must politely refuse within the facets, explaining that Prism is specifically designed for emotional reflection.
+
+Given a negative thought, generate 6 different perspectives as JSON. Each perspective challenges the thought differently.
 
 Return JSON: {
   "facets": [
@@ -287,16 +306,16 @@ Return JSON: {
 
 Keep each facet 2-3 sentences. Be specific to the user's thought, not generic.`;
 
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            response_format: { type: "json_object" },
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: thought },
-            ],
+        const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            systemInstruction: systemPrompt,
+            generationConfig: {
+                responseMimeType: "application/json",
+            }
         });
 
-        const parsed = JSON.parse(response.choices[0].message.content);
+        const result = await model.generateContent(thought);
+        const parsed = JSON.parse(result.response.text());
         res.json(parsed);
 
     } catch (err) {
