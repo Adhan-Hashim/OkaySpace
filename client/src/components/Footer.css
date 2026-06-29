@@ -1,6 +1,6 @@
 .dark-footer {
   width: 100%;
-  margin-top: 120px; /* Space for overlapping logo */
+  margin-top: 40px; /* Reduced to avoid large white gap */
   background-color: #1A201D; /* Dark off-black/green */
   border-radius: 48px 48px 0 0;
   position: relative;
@@ -26,26 +26,23 @@
   top: 0; left: 0; right: 0; bottom: 0;
   opacity: 0.05;
   border-radius: 48px 48px 0 0;
-  background-image: radial-gradient(circle at center, transparent 0, transparent 2px, #fff 3px, #fff 4px);
-  background-size: 60px 60px;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 11px);
   pointer-events: none;
 }
 
 .dark-footer-logo-wrapper {
   position: absolute;
-  top: -150px;
+  top: -120px; /* Halfway out */
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
 }
 
 .dark-footer-logo {
-  height: 180px;
+  height: 140px; /* Reduced from 180px */
   object-fit: contain;
-  /* Dark logo needs to be inverted or brightened to be seen on dark bg, but wait, the top half is on light bg, bottom half is on dark bg! */
-  /* Actually, the OkaySpace logo is dark green. The top half will look fine on light. The bottom half might disappear if the footer is dark! */
-  /* We can add a subtle white glow behind the logo to make it pop on both backgrounds */
-  filter: drop-shadow(0 0 16px rgba(255,255,255,0.8));
+  /* Removed harsh white glow, replaced with subtle thin outline so it's visible on dark */
+  filter: drop-shadow(1px 1px 0 rgba(255,255,255,0.25)) drop-shadow(-1px -1px 0 rgba(255,255,255,0.25));
 }
 
 .dark-footer-content {
