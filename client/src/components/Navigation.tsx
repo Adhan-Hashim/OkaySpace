@@ -16,9 +16,11 @@ export default function Navigation() {
   const { user, logout } = useContext(AuthContext);
 
   const handleGoogleLogin = () => {
-    // In development this points to localhost:5000, in prod it should point to Render URL
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-    window.location.href = `${apiUrl}/api/auth/google`;
+    // In development this points to localhost:5000/api, in prod it should point to Render URL
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    // Strip trailing /api if it exists to safely build the url
+    const baseUrl = apiUrl.replace(/\/api\/?$/, '');
+    window.location.href = `${baseUrl}/api/auth/google`;
   };
 
   return (
