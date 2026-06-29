@@ -1,9 +1,3 @@
-.gc-footer-container {
-  width: 100%;
-  padding-top: 2rem;
-  background-color: var(--bg-warm);
-}
-
 .gc-footer {
   width: 100%;
   background-color: #2D2D2D; /* Dark charcoal */
@@ -14,25 +8,25 @@
   min-height: 500px;
   display: flex;
   font-family: 'DM Sans', sans-serif;
+  margin-top: -40px; /* Pulls it up slightly over the home view to eliminate white gaps */
+  z-index: 10;
 }
-
-/* Background topographic pattern or subtle texture can go here if needed */
 
 .gc-footer-content {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 40px 60px;
+  padding: 80px 40px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   position: relative;
   z-index: 10;
-  pointer-events: none; /* Let clicks pass through empty areas to social icons if needed */
+  pointer-events: none;
 }
 
 .gc-footer-left,
 .gc-footer-right {
-  pointer-events: auto; /* Re-enable clicks */
+  pointer-events: auto;
 }
 
 /* LEFT SIDE */
@@ -42,32 +36,57 @@
   justify-content: space-between;
 }
 
-.gc-logo-container {
+.gc-brand-huge {
   margin-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.gc-logo {
-  height: 120px;
-  object-fit: contain;
-  /* Since logo is dark green, we need to make it bright white for this design */
-  filter: brightness(0) invert(1);
+.gc-brand-huge h1 {
+  font-size: clamp(4.5rem, 8vw, 7rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin: 0;
+  color: #fff;
+}
+
+.gc-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.gc-small-logo-badge {
+  background: var(--bg-warm);
+  color: #2D2D2D;
+  font-weight: 800;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  border-bottom-left-radius: 10px; /* Funky shape like Groom Club's small logo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .gc-newsletter {
   max-width: 400px;
+  margin-top: 2rem;
 }
 
 .gc-newsletter-title {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
+  color: #fff;
 }
 
 .gc-input-group {
   display: flex;
   background: #fff;
-  border-radius: 12px;
-  padding: 6px;
+  border-radius: 16px;
+  padding: 8px;
   align-items: center;
 }
 
@@ -75,20 +94,24 @@
   flex: 1;
   border: none;
   background: transparent;
-  padding: 10px 16px;
-  font-size: 1rem;
+  padding: 12px 16px;
+  font-size: 1.1rem;
   color: #333;
   outline: none;
   font-family: 'DM Sans', sans-serif;
+}
+
+.gc-input::placeholder {
+  color: #999;
 }
 
 .gc-submit-btn {
   background: #2D2D2D;
   color: #fff;
   border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,19 +126,26 @@
 
 /* RIGHT SIDE */
 .gc-footer-right {
-  padding-left: 100px;
+  padding-left: 120px; /* Push it inward */
+  padding-top: 20px;
 }
 
 .gc-nav-title {
+  font-family: 'DM Sans', sans-serif;
   font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
+  font-weight: 400;
+  margin-bottom: 2.5rem;
+  color: #fff;
+}
+
+.gc-nav-title b {
+  font-weight: 700;
 }
 
 .gc-nav-links {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .gc-nav-links button,
@@ -124,19 +154,19 @@
   border: none;
   padding: 0;
   font-family: inherit;
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   cursor: pointer;
   text-align: left;
-  transition: color 0.2s ease, padding-left 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
   width: fit-content;
 }
 
 .gc-nav-links button:hover,
 .gc-nav-links a:hover {
   color: #fff;
-  padding-left: 8px;
+  transform: translateX(5px);
 }
 
 /* BOTTOM RIGHT CUTOUT */
@@ -144,14 +174,14 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 55%;
-  height: 85%;
+  width: 65%; /* Make it wider so it's shallower */
+  height: 60%; /* Keep it lower so it doesn't hit the links */
   z-index: 5;
 }
 
 .gc-curve-svg {
   position: absolute;
-  bottom: -2px; /* Fix any sub-pixel gap */
+  bottom: -2px;
   right: -2px;
   width: 100%;
   height: 100%;
@@ -160,14 +190,11 @@
 
 .gc-cutout-content {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 50%;
+  bottom: 40px;
+  right: 80px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 20%; /* Push content away from the curve edge */
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .gc-socials {
@@ -176,19 +203,19 @@
 }
 
 .gc-social-btn {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background: rgba(45, 45, 45, 0.1); /* Very light dark grey on warm bg */
+  background: rgba(45, 45, 45, 0.05);
   color: #2D2D2D;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   transition: background 0.2s ease, transform 0.2s ease;
-  border: 1px solid rgba(45, 45, 45, 0.2);
+  border: 1px solid rgba(45, 45, 45, 0.15);
 }
 
 .gc-social-btn:hover {
@@ -201,16 +228,17 @@
   .gc-footer-content {
     grid-template-columns: 1fr;
     gap: 4rem;
+    padding: 60px 20px;
   }
   .gc-footer-right {
     padding-left: 0;
   }
   .gc-footer-cutout {
     width: 100%;
-    height: 300px;
-    z-index: 0;
+    height: 250px;
   }
-  .gc-footer-content {
-    z-index: 10;
+  .gc-cutout-content {
+    right: 40px;
+    bottom: 30px;
   }
 }
