@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import PrismScene from '../components/PrismScene';
 import ThoughtInput from '../components/ThoughtInput';
 import PerspectivePanel from '../components/PerspectivePanel';
-import axios from 'axios';
+import api from '../api';
 
 const PERSPECTIVE_NAMES = [
   'Your Future Self',
@@ -33,7 +33,7 @@ export default function PrismModule({ onBack }) {
     setPhase('loading');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/ai/refract', { thought });
+      const res = await api.post('/ai/refract', { thought });
       const data = res.data;
 
       const mapped = PERSPECTIVE_NAMES.map((name, i) => ({

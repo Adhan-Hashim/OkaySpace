@@ -1,22 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import api from '../api';
 
 export default function SettingsView() {
   const handleExport = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/ai/export', { // Note: Auth routes might be under a different path, e.g. /api/auth/export
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'okayspace-export.json';
-        a.click();
-      }
+      const res = await api.get('/auth/export');
+      const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'okayspace-export.json';
+      a.click();
     } catch (err) {
       console.error('Export failed', err);
     }
@@ -25,12 +20,8 @@ export default function SettingsView() {
   const handleDelete = async () => {
     if (window.confirm('Are you sure? This will permanently delete your account and all data. This action cannot be undone.')) {
       try {
-        const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/ai/delete', {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.ok) {
+        const res = await api.delete('/auth/delete');
+        if (res.status === 200) {
           localStorage.removeItem('token');
           window.location.reload();
         }

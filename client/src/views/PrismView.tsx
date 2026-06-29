@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../store/useStore';
+import api from '../api';
 
 const FACET_TYPES = [
   { key: 'evidence_for', label: 'Evidence For', icon: '✓', className: 'facet-evidence-for' },
@@ -36,12 +37,9 @@ export default function PrismView() {
     incrementInteraction();
 
     try {
-      const res = await fetch('http://localhost:5000/api/ai/prism', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ thought }),
-      });
-      const data = await res.json();
+      const res = await api.post('/ai/prism', { thought });
+      
+      const data = res.data;
       setPrismFacets(data.facets || []);
     } catch {
       // Fallback facets

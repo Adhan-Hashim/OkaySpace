@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../store/useStore';
+import api from '../api';
 
 const ECHO_GREETING = {
   role: 'ai',
@@ -46,23 +47,19 @@ export default function EchoView() {
 
     try {
       const endpoint = echoMode === 'reframe'
-        ? 'http://localhost:5000/api/ai/echo-reframe'
-        : 'http://localhost:5000/api/ai/echo';
+        ? '/ai/echo-reframe'
+        : '/ai/echo';
 
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const res = await api.post(endpoint, {
           message: text,
           history: echoMessages.slice(-10).map((m) => ({
             role: m.role === 'user' ? 'user' : 'assistant',
             content: m.text,
           })),
           mode: echoMode,
-        }),
       });
 
-      const data = await res.json();
+      const data = res.data;
 
       addEchoMessage({
         role: 'ai',

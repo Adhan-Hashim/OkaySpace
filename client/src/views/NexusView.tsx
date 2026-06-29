@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 import useStore from '../store/useStore';
 
-const socket = io('http://localhost:5000', { autoConnect: false });
+const socketUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/api\/?$/, '');
+const socket = io(socketUrl, { autoConnect: false });
 
 const AI_PROMPTS = [
   "What's something that made you smile recently?",

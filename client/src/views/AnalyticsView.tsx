@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import api from '../api';
 
 export default function AnalyticsView() {
   const [data, setData] = useState({ timeline: [], distortions: {} });
@@ -8,14 +9,8 @@ export default function AnalyticsView() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/cbt/analytics', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.ok) {
-          const json = await res.json();
-          setData(json);
-        }
+        const res = await api.get('/cbt/analytics');
+        setData(res.data);
       } catch (err) {
         console.error('Failed to fetch analytics', err);
       }

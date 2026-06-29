@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 export default function ReflectModule({ onBack }) {
   const [entry, setEntry] = useState('');
@@ -16,7 +16,7 @@ export default function ReflectModule({ onBack }) {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/ai/reflect', { text: entry });
+      const res = await api.post('/ai/reflect', { text: entry });
       
       const newEntry = {
         id: Date.now(),
