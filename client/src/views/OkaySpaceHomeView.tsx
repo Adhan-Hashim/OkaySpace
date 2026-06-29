@@ -1,40 +1,75 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import useStore from '../store/useStore';
+import bgHome from '../assets/bg-home.png';
+import './OkaySpaceHomeView.css';
+
+const fade = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit:    { opacity: 0 },
+  transition: { duration: 0.8, ease: 'easeOut' },
+};
+
+const FEATURES = [
+  { id: 'echo', title: 'Echo', desc: 'AI Companion for listening and reframing.' },
+  { id: 'prism', title: 'Prism', desc: 'Refract a difficult thought through six perspectives.' },
+  { id: 'meditations', title: 'Meditations', desc: 'Science-backed breathing and guided audio.' },
+  { id: 'nexus', title: 'Nexus', desc: 'Connect anonymously with another soul.' },
+];
 
 export default function OkaySpaceHomeView() {
+  const setCurrentView = useStore((s) => s.setCurrentView);
+
   return (
-    <div className="view-container">
-      <motion.div 
-        className="home-hero"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="hero-text">
-          <h1 className="hero-title">OKAYSPACE</h1>
-          
-          <div style={{ marginTop: '2rem' }}>
-            <h2 className="heading-sm" style={{ marginBottom: '1rem', color: 'var(--accent)' }}>About Us</h2>
-            <p className="text-body" style={{ fontSize: '1.25rem', maxWidth: '400px' }}>
-              OkaySpace is a digital sanctuary that celebrates contemporary mindfulness and mental wellbeing across a wide range of interactive disciplines.
-            </p>
-          </div>
-          
-          <div style={{ marginTop: '3rem', display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>Get Started</button>
-            <button className="btn btn-ghost" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>Learn More</button>
-          </div>
+    <motion.div className="home-page-nature" {...fade}>
+      {/* Background Image Container */}
+      <div className="home-bg" style={{ backgroundImage: `url(${bgHome})` }}>
+        {/* Gradient Overlay for text readability */}
+        <div className="home-overlay"></div>
+
+        {/* Top Minimalist Nav / Eyebrow */}
+        <div className="home-top-bar">
+          <span>sanctuary</span>
+          <span>mindfulness</span>
+          <span>connection</span>
         </div>
 
-        <motion.div 
-          className="hero-image-container"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <img src="/hero_editorial.png" alt="Editorial Abstract Illustration" />
-        </motion.div>
-      </motion.div>
-    </div>
+        {/* Central Typography Section */}
+        <div className="home-center-content">
+          <div className="home-date-left t-organic">10</div>
+          
+          <div className="home-title-wrapper">
+            <div className="home-location">A safe space for you</div>
+            <h1 className="home-title t-organic">
+              OKAY<br/>SPACE
+            </h1>
+            <p className="home-quote t-serif">
+              You don't have to be okay to come here.<br/>
+              You just have to be willing to try.
+            </p>
+          </div>
+
+          <div className="home-date-right t-organic">06</div>
+        </div>
+
+        {/* Features Glass Panels at the bottom */}
+        <div className="home-features-container">
+           {FEATURES.map((f, i) => (
+             <motion.div 
+                key={f.id} 
+                className="glass-panel home-feature-card"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + (i * 0.1), duration: 0.6 }}
+                onClick={() => setCurrentView(f.id)}
+             >
+                <h3 className="t-organic">{f.title}</h3>
+                <p>{f.desc}</p>
+             </motion.div>
+           ))}
+        </div>
+      </div>
+    </motion.div>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import OkaySpaceHomeView from './views/OkaySpaceHomeView';
 import EchoView from './views/EchoView';
 import MeditationsView from './views/MeditationsView';
@@ -12,18 +13,22 @@ import useStore from './store/useStore';
 import { AuthProvider } from './context/AuthContext';
 
 const VIEW_COMPONENTS = {
-  'home': OkaySpaceHomeView,
-  'echo': EchoView,
+  'home':        OkaySpaceHomeView,
+  'echo':        EchoView,
   'meditations': MeditationsView,
-  'prism': PrismView,
-  'nexus': NexusView,
-  'cortex': AnalyticsView,
-  'settings': SettingsView,
+  'prism':       PrismView,
+  'nexus':       NexusView,
+  'cortex':      AnalyticsView,
+  'settings':    SettingsView,
 };
+
+// Views that should not show the footer (immersive full-screen experiences)
+const NO_FOOTER_VIEWS = ['echo', 'nexus'];
 
 function App() {
   const activeView = useStore((s) => s.activeView || 'home');
   const ActiveComponent = VIEW_COMPONENTS[activeView] || OkaySpaceHomeView;
+  const showFooter = !NO_FOOTER_VIEWS.includes(activeView);
 
   return (
     <AuthProvider>
@@ -36,6 +41,7 @@ function App() {
             </AnimatePresence>
           </MotionConfig>
         </main>
+        {showFooter && <Footer />}
       </div>
     </AuthProvider>
   );

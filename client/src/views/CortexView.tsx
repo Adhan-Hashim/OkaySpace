@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import useStore, { EMOTION_COLORS, EMOTION_LABELS } from '../store/useStore';
+import bgForest from '../assets/bg-forest.png';
 
 export default function CortexView() {
   const neuralNodes = useStore((s) => s.neuralNodes);
@@ -115,22 +116,45 @@ export default function CortexView() {
     .sort(([, a], [, b]) => b - a);
 
   return (
-    <div className="view-container cortex-container" id="cortex-view">
+    <div
+      className="cortex-page-nature"
+      id="cortex-view"
+      style={{
+        backgroundImage: `url(${bgForest})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        minHeight: '100vh',
+        width: '100vw',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: 'calc(-1 * var(--nav-h))',
+        paddingTop: 'calc(var(--nav-h) + var(--sp-6))',
+        paddingLeft: 'var(--sp-8)',
+        paddingRight: 'var(--sp-8)',
+        paddingBottom: 'var(--sp-6)',
+      }}
+    >
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(248, 250, 248, 0.4)', pointerEvents: 'none', zIndex: 0 }} />
+
+      <div style={{ maxWidth: '1000px', margin: '0 auto', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
+
       {/* Header */}
       <motion.div
         className="view-header"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        style={{ flexShrink: 0 }}
+        style={{ flexShrink: 0, background: 'rgba(255,255,255,0.4)', padding: 'var(--sp-4)', borderRadius: 'var(--r-xl)', marginBottom: 'var(--sp-6)' }}
       >
         <div>
-          <h1 className="heading-xl" id="cortex-title">Cortex</h1>
-          <p className="text-caption" style={{ marginTop: '4px' }}>
+          <h1 className="heading-xl t-organic" id="cortex-title" style={{ color: 'var(--primary-dark)' }}>Cortex</h1>
+          <p className="text-caption" style={{ marginTop: '4px', color: 'var(--primary-dark)' }}>
             Emotional Intelligence Dashboard • Session Analytics
           </p>
         </div>
-        <div className="text-mono" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+        <div className="text-mono" style={{ fontSize: '0.75rem', color: 'var(--primary-dark)' }}>
           Session: {analytics.sessionMinutes}m
         </div>
       </motion.div>
@@ -142,32 +166,32 @@ export default function CortexView() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <div className="cortex-stat-card glass-subtle">
-          <span className="stat-label">Neural Nodes</span>
+        <div className="cortex-stat-card glass-panel" style={{ padding: 'var(--sp-5)' }}>
+          <span className="stat-label" style={{ color: 'var(--primary-dark)' }}>Neural Nodes</span>
           <span className="stat-value" style={{ color: 'var(--primary)' }}>
             {analytics.totalNodes}
           </span>
-          <span className="stat-change positive">
+          <span className="stat-change positive" style={{ color: 'var(--primary-dark)' }}>
             {analytics.totalNodes > 0 ? `+${analytics.totalNodes} this session` : 'Start exploring'}
           </span>
         </div>
 
-        <div className="cortex-stat-card glass-subtle">
-          <span className="stat-label">Dominant Emotion</span>
+        <div className="cortex-stat-card glass-panel" style={{ padding: 'var(--sp-5)' }}>
+          <span className="stat-label" style={{ color: 'var(--primary-dark)' }}>Dominant Emotion</span>
           <span className="stat-value" style={{ color: EMOTION_COLORS[analytics.dominantEmotion] }}>
             {EMOTION_LABELS[analytics.dominantEmotion]}
           </span>
-          <span className="stat-change">
+          <span className="stat-change" style={{ color: 'var(--primary-dark)' }}>
             {analytics.emotionCounts[analytics.dominantEmotion] || 0} occurrences
           </span>
         </div>
 
-        <div className="cortex-stat-card glass-subtle">
-          <span className="stat-label">Interactions</span>
+        <div className="cortex-stat-card glass-panel" style={{ padding: 'var(--sp-5)' }}>
+          <span className="stat-label" style={{ color: 'var(--primary-dark)' }}>Interactions</span>
           <span className="stat-value" style={{ color: 'var(--accent)' }}>
             {interactionCount}
           </span>
-          <span className="stat-change positive">
+          <span className="stat-change positive" style={{ color: 'var(--primary-dark)' }}>
             {analytics.echoCount > 0 ? `${analytics.echoCount} Echo messages` : 'Across all modules'}
           </span>
         </div>
@@ -175,12 +199,13 @@ export default function CortexView() {
 
       {/* Emotion Timeline */}
       <motion.div
-        className="cortex-timeline glass-subtle"
+        className="cortex-timeline glass-panel"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
+        style={{ padding: 'var(--sp-6)', marginTop: 'var(--sp-6)' }}
       >
-        <h3 className="heading-sm" style={{ marginBottom: '1rem' }}>Emotion Timeline</h3>
+        <h3 className="heading-sm" style={{ marginBottom: '1rem', color: 'var(--primary-dark)' }}>Emotion Timeline</h3>
         {analytics.timeline.length > 0 ? (
           <div className="timeline-bar">
             {analytics.timeline.map((entry, i) => (
@@ -205,13 +230,13 @@ export default function CortexView() {
       {/* Emotion Breakdown */}
       {emotionEntries.length > 0 && (
         <motion.div
-          className="glass-subtle"
+          className="glass-panel"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          style={{ padding: 'var(--space-lg)' }}
+          style={{ padding: 'var(--sp-6)', marginTop: 'var(--sp-6)' }}
         >
-          <h3 className="heading-sm" style={{ marginBottom: '1rem' }}>Emotion Spectrum</h3>
+          <h3 className="heading-sm" style={{ marginBottom: '1rem', color: 'var(--primary-dark)' }}>Emotion Spectrum</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
             {emotionEntries.map(([emotion, count]) => {
               const percentage = (count / analytics.totalNodes) * 100;
@@ -254,21 +279,24 @@ export default function CortexView() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
+        style={{ marginTop: 'var(--sp-6)', display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)' }}
       >
-        <h3 className="heading-sm">Neural Insights</h3>
+        <h3 className="heading-sm" style={{ color: 'var(--primary-dark)' }}>Neural Insights</h3>
         {analytics.insights.map((insight, i) => (
           <motion.div
             key={i}
-            className="cortex-insight glass-subtle"
+            className="cortex-insight glass-panel"
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 + i * 0.1 }}
+            style={{ padding: 'var(--sp-4)', display: 'flex', alignItems: 'flex-start', gap: 'var(--sp-3)' }}
           >
-            <span className="insight-icon">{insight.icon}</span>
-            <span className="insight-text">{insight.text}</span>
+            <span className="insight-icon" style={{ fontSize: '1.2rem' }}>{insight.icon}</span>
+            <span className="insight-text" style={{ fontSize: '0.9rem', color: 'var(--primary-dark)', lineHeight: 1.5 }}>{insight.text}</span>
           </motion.div>
         ))}
       </motion.div>
+      </div>
     </div>
   );
 }

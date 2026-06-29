@@ -30,7 +30,9 @@ export const EMOTION_LABELS = {
 const useStore = create((set, get) => ({
   // ---- Navigation ----
   activeView: 'home',
-  setActiveView: (view) => set({ activeView: view }),
+  currentView: 'home',
+  setActiveView: (view) => set({ activeView: view, currentView: view }),
+  setCurrentView: (view) => set({ activeView: view, currentView: view }),
 
   // ---- Emotional State ----
   currentEmotion: 'neutral',
