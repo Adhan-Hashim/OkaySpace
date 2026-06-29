@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../store/useStore';
+import { playAmbient, stopAmbient, setAmbientVolume } from '../modules/ambientAudio';
 
 const BREATHING_PATTERNS = {
   box: {
@@ -53,16 +54,16 @@ const BREATHING_PATTERNS = {
   },
 };
 
-// Web Audio API generative tones
+// Web Audio API generative tones (Guide)
 function createAudioContext() {
   try {
-    return new (window.AudioContext || window.webkitAudioContext)();
+    return new (window.AudioContext || (window as any).webkitAudioContext)();
   } catch {
     return null;
   }
 }
 
-function playTone(audioCtx, frequency, duration, volume = 0.05) {
+function playTone(audioCtx: AudioContext | null, frequency: number, duration: number, volume = 0.05) {
   if (!audioCtx) return;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
@@ -89,8 +90,15 @@ export default function ResonanceView() {
   const [countdown, setCountdown] = useState(0);
   const [cycles, setCycles] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(false);
-  const intervalRef = useRef(null);
-  const audioCtxRef = useRef(null);
+  
+  // New features state
+  const [ambientType, setAmbientType] = useState<'none' | 'space' | 'ocean' | 'binaural'>('none');
+  const [guideVolume, setGuideVolume] = useState(0.05);
+  const [ambientVolume, setAmbientVol] = useState(0.2);
+  const [showSettings, setShowSettings] = useState(false);
+
+  const intervalRef = useRef<number | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
 
   const pattern = BREATHING_PATTERNS[breathingPattern];
   const phase = pattern.phases[phaseIndex];
@@ -105,7 +113,11 @@ export default function ResonanceView() {
     if (soundEnabled && !audioCtxRef.current) {
       audioCtxRef.current = createAudioContext();
     }
-  }, [pattern, soundEnabled, setBreathingActive]);
+    
+    if (soundEnabled && ambientType !== 'none') {
+      playAmbient(ambientType, ambientVolume);
+    }
+  }, [pattern, soundEnabled, ambientType, ambientVolume, setBreathingActive]);
 
   const stop = useCallback(() => {
     setRunning(false);
@@ -113,6 +125,8 @@ export default function ResonanceView() {
     setPhaseIndex(0);
     setCountdown(pattern.phases[0].duration);
     if (intervalRef.current) clearInterval(intervalRef.current);
+    
+    stopAmbient();
 
     if (cycles > 0) {
       addNeuralNode({
@@ -124,6 +138,11 @@ export default function ResonanceView() {
       setEmotion('calm', 0.7);
     }
   }, [pattern, cycles, addNeuralNode, setEmotion, setBreathingActive]);
+
+  // Update ambient volume instantly
+  useEffect(() => {
+    if (running && soundEnabled) setAmbientVolume(ambientVolume);
+  }, [ambientVolume, running, soundEnabled]);
 
   useEffect(() => {
     if (!running) return;
@@ -139,7 +158,12 @@ export default function ResonanceView() {
             if (soundEnabled && audioCtxRef.current) {
               const freq = pattern.phases[next].className === 'inhale' ? 396 :
                 pattern.phases[next].className === 'hold' ? 528 : 639;
-              playTone(audioCtxRef.current, freq, pattern.phases[next].duration, 0.03);
+              playTone(audioCtxRef.current, freq, pattern.phases[next].duration, guideVolume);
+            }
+
+            // Haptic feedback
+            if (typeof navigator !== 'undefined' && navigator.vibrate) {
+              navigator.vibrate(pattern.phases[next].className === 'hold' ? 10 : 30);
             }
 
             return next;
@@ -195,16 +219,90 @@ export default function ResonanceView() {
             AI-Adaptive Breathing • {pattern.name}
           </p>
         </div>
-        <button
-          className={`btn btn-ghost btn-icon`}
-          onClick={() => setSoundEnabled(!soundEnabled)}
-          title={soundEnabled ? 'Mute' : 'Enable sound'}
-          id="resonance-sound-toggle"
-          style={{ fontSize: '1rem' }}
-        >
-          {soundEnabled ? '🔊' : '🔇'}
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            className={`btn btn-ghost btn-icon ${soundEnabled ? 'active' : ''}`}
+            onClick={() => {
+              setSoundEnabled(!soundEnabled);
+              if (running && soundEnabled) stopAmbient();
+              if (running && !soundEnabled && ambientType !== 'none') playAmbient(ambientType, ambientVolume);
+            }}
+            title={soundEnabled ? 'Mute' : 'Enable sound'}
+            id="resonance-sound-toggle"
+            style={{ fontSize: '1rem', color: soundEnabled ? pattern.color : 'var(--text-muted)' }}
+          >
+            {soundEnabled ? '🔊' : '🔇'}
+          </button>
+          {!running && (
+            <button
+              className="btn btn-ghost btn-icon"
+              onClick={() => setShowSettings(!showSettings)}
+              title="Settings"
+              style={{ fontSize: '1rem', color: showSettings ? pattern.color : 'var(--text-muted)' }}
+            >
+              ⚙️
+            </button>
+          )}
+        </div>
       </motion.div>
+
+      {/* Settings Panel */}
+      <AnimatePresence>
+        {!running && showSettings && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            style={{ overflow: 'hidden', padding: '0 2rem' }}
+          >
+            <div style={{ background: 'var(--surface-hover)', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              
+              <div>
+                <label className="text-caption" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Ambient Soundscape</label>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {['none', 'space', 'ocean', 'binaural'].map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setAmbientType(t as any)}
+                      className={`btn ${ambientType === t ? 'btn-primary' : 'btn-ghost'}`}
+                      style={{ fontSize: '0.78rem', textTransform: 'capitalize' }}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {soundEnabled && ambientType !== 'none' && (
+                <div>
+                  <label className="text-caption" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Ambience Volume</label>
+                  <input 
+                    type="range" 
+                    min="0" max="0.5" step="0.01" 
+                    value={ambientVolume} 
+                    onChange={(e) => setAmbientVol(parseFloat(e.target.value))}
+                    style={{ width: '100%', accentColor: pattern.color }}
+                  />
+                </div>
+              )}
+
+              {soundEnabled && (
+                <div>
+                  <label className="text-caption" style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>Guide Tones Volume</label>
+                  <input 
+                    type="range" 
+                    min="0" max="0.2" step="0.01" 
+                    value={guideVolume} 
+                    onChange={(e) => setGuideVolume(parseFloat(e.target.value))}
+                    style={{ width: '100%', accentColor: pattern.color }}
+                  />
+                </div>
+              )}
+
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Nebula Visualization */}
       <motion.div
