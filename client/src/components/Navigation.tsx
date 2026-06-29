@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 const MODULES = [
   { id: 'echo', label: 'Echo' },
   { id: 'prism', label: 'Prism' },
-  { id: 'resonance', label: 'Resonance' },
+  { id: 'meditations', label: 'Meditations' },
   { id: 'nexus', label: 'Nexus' },
 ];
 

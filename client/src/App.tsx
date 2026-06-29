@@ -3,7 +3,7 @@ import { AnimatePresence, MotionConfig } from 'framer-motion';
 import Navigation from './components/Navigation';
 import OkaySpaceHomeView from './views/OkaySpaceHomeView';
 import EchoView from './views/EchoView';
-import ResonanceView from './views/ResonanceView';
+import MeditationsView from './views/MeditationsView';
 import PrismView from './views/PrismView';
 import NexusView from './views/NexusView';
 import AnalyticsView from './views/AnalyticsView';
@@ -14,7 +14,7 @@ import { AuthProvider } from './context/AuthContext';
 const VIEW_COMPONENTS = {
   'home': OkaySpaceHomeView,
   'echo': EchoView,
-  'resonance': ResonanceView,
+  'meditations': MeditationsView,
   'prism': PrismView,
   'nexus': NexusView,
   'cortex': AnalyticsView,
