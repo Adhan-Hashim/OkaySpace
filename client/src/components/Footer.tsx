@@ -1,5 +1,6 @@
 import React from 'react';
 import useStore from '../store/useStore';
+import logo from '../assets/logo.png';
 import './Footer.css'; // We will create this
 
 export default function Footer() {
@@ -10,7 +11,7 @@ export default function Footer() {
       <div className="creative-footer-inner">
         <div className="creative-footer-top">
           <div className="creative-footer-brand">
-            <img src="/src/assets/logo.png" alt="OkaySpace Logo" style={{ height: '60px', objectFit: 'contain', marginBottom: '1rem', mixBlendMode: 'multiply' }} />
+            <img src={logo} alt="OkaySpace Logo" style={{ height: '60px', objectFit: 'contain', marginBottom: '1rem', mixBlendMode: 'multiply' }} />
             <p className="t-italic t-serif" style={{ fontSize: '1.2rem', color: 'var(--text)', maxWidth: '300px' }}>
               Alam selalu menjadi tempat yang nyaman untuk menyembuhkan diri yang lelah.
             </p>

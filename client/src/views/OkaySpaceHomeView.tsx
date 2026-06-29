@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import useStore from '../store/useStore';
 import bgHome from '../assets/bg-home.png';
+import logo from '../assets/logo.png';
 import './OkaySpaceHomeView.css';
 
 const fade = {
@@ -41,7 +42,7 @@ export default function OkaySpaceHomeView() {
           
           <div className="home-title-wrapper">
             <div className="home-location">A safe space for you</div>
-            <img src="/src/assets/logo.png" alt="OkaySpace Logo" style={{ width: '100%', maxWidth: '300px', marginBottom: '1.5rem', mixBlendMode: 'multiply' }} />
+            <img src={logo} alt="OkaySpace Logo" style={{ width: '100%', maxWidth: '300px', marginBottom: '1.5rem', mixBlendMode: 'multiply' }} />
             <p className="home-quote t-serif">
               You don't have to be okay to come here.<br/>
               You just have to be willing to try.

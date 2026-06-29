@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import useStore from '../store/useStore';
+import logo from '../assets/logo.png';
 
 const MODULES = [
   { id: 'home',        label: 'About',       emoji: '🌿' },
@@ -25,7 +26,7 @@ export default function Navigation() {
         <div className="nav-inner">
           {/* Logo */}
           <div className="nav-logo" onClick={() => go('home')} role="button" tabIndex={0} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-            <img src="/src/assets/logo.png" alt="OkaySpace Logo" style={{ height: '36px', objectFit: 'contain' }} />
+            <img src={logo} alt="OkaySpace Logo" style={{ height: '36px', objectFit: 'contain' }} />
           </div>
 
           {/* Desktop Links */}
