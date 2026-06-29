@@ -5,12 +5,12 @@ import api from '../api';
 import bgLake from '../assets/bg-lake.png';
 
 const FACET_TYPES = [
-  { key: 'evidence_for',      label: 'Evidence For',             icon: '✓', className: 'facet-evidence-for',    color: '#68D391', bg: '#F0FFF4' },
-  { key: 'evidence_against',  label: 'Evidence Against',         icon: '✗', className: 'facet-evidence-against', color: '#F6AD55', bg: '#FFFAF0' },
-  { key: 'compassionate',     label: 'Compassionate Reframe',    icon: '💛', className: 'facet-compassionate',   color: '#F6E05E', bg: '#FFFFF0' },
-  { key: 'future_self',       label: 'Future Self Perspective',  icon: '🔭', className: 'facet-future-self',     color: '#76E4F7', bg: '#E8FCFF' },
-  { key: 'stoic',             label: 'Stoic Perspective',        icon: '🏛️', className: 'facet-stoic',           color: '#B794F4', bg: '#FAF5FF' },
-  { key: 'reframe',           label: 'Healthier Version',        icon: '✨', className: 'facet-reframe',         color: '#7FB69D', bg: '#F0F7F4' },
+  { key: 'evidence_for',      label: 'Evidence For',             icon: '', className: 'facet-evidence-for',    color: '#68D391', bg: '#F0FFF4' },
+  { key: 'evidence_against',  label: 'Evidence Against',         icon: '', className: 'facet-evidence-against', color: '#F6AD55', bg: '#FFFAF0' },
+  { key: 'compassionate',     label: 'Compassionate Reframe',    icon: '', className: 'facet-compassionate',   color: '#F6E05E', bg: '#FFFFF0' },
+  { key: 'future_self',       label: 'Future Self Perspective',  icon: '', className: 'facet-future-self',     color: '#76E4F7', bg: '#E8FCFF' },
+  { key: 'stoic',             label: 'Stoic Perspective',        icon: '', className: 'facet-stoic',           color: '#B794F4', bg: '#FAF5FF' },
+  { key: 'reframe',           label: 'Healthier Version',        icon: '', className: 'facet-reframe',         color: '#7FB69D', bg: '#F0F7F4' },
 ];
 
 // Crystal prism SVG illustration
@@ -129,7 +129,7 @@ export default function PrismView() {
       {/* Header */}
       <div className="view-header" style={{ background: 'rgba(255,255,255,0.4)', padding: 'var(--sp-4)', borderRadius: 'var(--r-xl)', marginBottom: 'var(--sp-6)' }}>
         <div className="view-header-left">
-          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}>🔮 &nbsp;Thought Work</div>
+          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}> &nbsp;Thought Work</div>
           <h1 className="view-title t-organic" id="prism-title" style={{ color: 'var(--primary-dark)' }}>Prism</h1>
           <p className="view-subtitle" style={{ color: 'var(--primary-dark)' }}>Refract a difficult thought through six healing perspectives</p>
         </div>
@@ -185,7 +185,7 @@ export default function PrismView() {
                   disabled={!input.trim()}
                   id="prism-submit"
                 >
-                  🔮 &nbsp;Refract
+                   &nbsp;Refract
                 </button>
               </div>
             </div>
@@ -299,8 +299,8 @@ export default function PrismView() {
 
             {/* Action footer */}
             <div style={{ display: 'flex', gap: 'var(--sp-4)', marginTop: 'var(--sp-8)', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button className="btn btn-primary" onClick={clearPrism}>🔮 Try Another Thought</button>
-              <button className="btn btn-secondary">💬 Continue in Echo</button>
+              <button className="btn btn-primary" onClick={clearPrism}> Try Another Thought</button>
+              <button className="btn btn-secondary"> Continue in Echo</button>
             </div>
           </motion.div>
         )}

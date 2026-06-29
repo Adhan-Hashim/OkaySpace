@@ -85,7 +85,7 @@ export default function NexusView() {
       setMessages([{ id: Date.now(), text: 'Neural link established. You are now connected anonymously.', system: true }]);
       setTimeout(() => {
         const prompt = AI_PROMPTS[Math.floor(Math.random() * AI_PROMPTS.length)];
-        setMessages((prev) => [...prev, { id: Date.now(), text: `💡 "${prompt}"`, system: true }]);
+        setMessages((prev) => [...prev, { id: Date.now(), text: ` "${prompt}"`, system: true }]);
       }, 5000);
     });
     socket.on('receive_message', ({ text }) => setMessages((prev) => [...prev, { id: Date.now(), text, self: false }]));
@@ -159,7 +159,7 @@ export default function NexusView() {
       {/* Header */}
       <div className="view-header" style={{ width: '100%', maxWidth: 720, background: 'rgba(255,255,255,0.4)', padding: 'var(--sp-4)', borderRadius: 'var(--r-xl)', marginBottom: 'var(--sp-6)' }}>
         <div className="view-header-left">
-          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}>🌌 &nbsp;Human Connection</div>
+          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}> &nbsp;Human Connection</div>
           <h1 className="view-title t-organic" id="nexus-title" style={{ color: 'var(--primary-dark)' }}>Nexus</h1>
           <p className="view-subtitle" style={{ color: 'var(--primary-dark)' }}>Anonymous, AI-moderated peer connection</p>
         </div>
@@ -210,18 +210,18 @@ export default function NexusView() {
 
                 {/* Privacy badges */}
                 <div style={{ display: 'flex', gap: 'var(--sp-3)', flexWrap: 'wrap', justifyContent: 'center' }}>
-                  {['🔒 100% Anonymous', '🤖 AI Moderated', '⏱ 10 min sessions', '🚫 No data stored'].map((b) => (
+                  {[' 100% Anonymous', ' AI Moderated', '⏱ 10 min sessions', ' No data stored'].map((b) => (
                     <div key={b} className="pill pill-green" style={{ fontSize: '0.75rem' }}>{b}</div>
                   ))}
                 </div>
 
                 <div style={{ display: 'flex', gap: 'var(--sp-4)', flexWrap: 'wrap', justifyContent: 'center' }}>
                   <button className="btn btn-primary btn-lg" onClick={sendPing} id="nexus-seek">
-                    🔍 &nbsp;Seek Connection
+                     &nbsp;Seek Connection
                   </button>
                   {activePings.length > 0 && (
                     <button className="btn btn-secondary btn-lg" onClick={() => answerPing(activePings[0])} id="nexus-answer">
-                      🤝 &nbsp;Answer Signal ({activePings.length})
+                       &nbsp;Answer Signal ({activePings.length})
                     </button>
                   )}
                 </div>
@@ -243,7 +243,7 @@ export default function NexusView() {
                 </div>
                 {activePings.length > 0 && (
                   <button className="btn btn-secondary" onClick={() => answerPing(activePings[0])}>
-                    🤝 &nbsp;Answer Signal ({activePings.length})
+                     &nbsp;Answer Signal ({activePings.length})
                   </button>
                 )}
               </>

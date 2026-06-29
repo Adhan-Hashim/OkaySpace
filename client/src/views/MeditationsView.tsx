@@ -21,7 +21,7 @@ const MEDITATION_COLORS = [
   'linear-gradient(135deg, #C8ECEE, #D4EDE5)',
   'linear-gradient(135deg, #FFF0F0, #FFE4E8)',
 ];
-const MEDITATION_EMOJIS = ['🌊', '🌙', '🌿', '🌅', '❄️', '🔥'];
+const MEDITATION_EMOJIS = ['', '', '', '', '', ''];
 
 function createAudioContext() {
   try { return new (window.AudioContext || (window as any).webkitAudioContext)(); } catch { return null; }
@@ -217,7 +217,7 @@ export default function MeditationsView() {
       {/* Header */}
       <div className="view-header" style={{ background: 'rgba(255,255,255,0.4)', padding: 'var(--sp-4)', borderRadius: 'var(--r-xl)', marginBottom: 'var(--sp-6)' }}>
         <div className="view-header-left">
-          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}>🌸 &nbsp;Breathe & Reflect</div>
+          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}> &nbsp;Breathe & Reflect</div>
           <h1 className="view-title t-organic" style={{ color: 'var(--primary-dark)' }}>Meditations</h1>
           <p className="view-subtitle" style={{ color: 'var(--primary-dark)' }}>
             {activeTab === 'breathing' ? `${pattern.name} · ${pattern.desc}` : 'Guided audio & visualization sessions'}
@@ -230,7 +230,7 @@ export default function MeditationsView() {
             title={soundEnabled ? 'Mute' : 'Enable sound'}
             style={{ fontSize: '1rem' }}
           >
-            {soundEnabled ? '🔊' : '🔇'}
+            {soundEnabled ? '' : ''}
           </button>
           {!running && !meditationRunning && (
             <button
@@ -238,7 +238,7 @@ export default function MeditationsView() {
               onClick={() => setShowSettings(!showSettings)}
               style={{ fontSize: '1rem' }}
             >
-              ⚙️
+              
             </button>
           )}
         </div>
@@ -261,7 +261,7 @@ export default function MeditationsView() {
                     <button key={t} onClick={() => setAmbientType(t as any)}
                       className={`btn btn-sm ${ambientType === t ? 'btn-primary' : 'btn-ghost'}`}
                       style={{ textTransform: 'capitalize' }}>
-                      {t === 'none' ? '🔇 None' : t === 'space' ? '🌌 Space' : t === 'ocean' ? '🌊 Ocean' : '🎵 Binaural'}
+                      {t === 'none' ? ' None' : t === 'space' ? ' Space' : t === 'ocean' ? ' Ocean' : ' Binaural'}
                     </button>
                   ))}
                 </div>
@@ -283,10 +283,10 @@ export default function MeditationsView() {
       {!running && !meditationRunning && (
         <div className="med-tabs glass-panel" style={{ padding: 'var(--sp-2)' }}>
           <button className={`med-tab${activeTab === 'breathing' ? ' active' : ''}`} onClick={() => setActiveTab('breathing')}>
-            🌬️ Breathing
+             Breathing
           </button>
           <button className={`med-tab${activeTab === 'guided' ? ' active' : ''}`} onClick={() => setActiveTab('guided')}>
-            🎧 Guided Series
+             Guided Series
           </button>
         </div>
       )}
@@ -318,7 +318,7 @@ export default function MeditationsView() {
             <div style={{ display: 'flex', gap: 'var(--sp-4)' }}>
               {!running ? (
                 <button className="btn btn-primary btn-lg" onClick={startBreathing}>
-                  🌬️ &nbsp;Begin Session
+                   &nbsp;Begin Session
                 </button>
               ) : (
                 <button className="btn btn-secondary btn-lg" onClick={stopBreathing}>
@@ -330,7 +330,7 @@ export default function MeditationsView() {
             {/* Tips */}
             {!running && (
               <div className="glass-panel" style={{ padding: 'var(--sp-5) var(--sp-6)', maxWidth: '480px', marginTop: 'var(--sp-6)' }}>
-                <div className="t-label" style={{ marginBottom: 'var(--sp-3)', color: 'var(--primary-dark)' }}>💡 Why this works</div>
+                <div className="t-label" style={{ marginBottom: 'var(--sp-3)', color: 'var(--primary-dark)' }}> Why this works</div>
                 <p style={{ fontSize: '0.85rem', color: 'var(--primary-dark)', lineHeight: 1.7 }}>
                   {pattern.name === 'Box Breathing' && 'Box breathing (4-4-4-4) is used by Navy SEALs to achieve instant calm. It balances CO₂ and O₂, slowing your heart rate and cortisol levels.'}
                   {pattern.name === '4-7-8 Relaxing' && 'The 4-7-8 method activates your parasympathetic nervous system. The long 8-count exhale stimulates the vagus nerve, reducing anxiety within minutes.'}
@@ -361,7 +361,7 @@ export default function MeditationsView() {
                     </div>
                     <div className="meditation-card-body">
                       <div className="meditation-card-title">{m.title}</div>
-                      <div className="meditation-card-meta">⏱ {m.duration} &nbsp;·&nbsp; ✦ Best for: {m.bestFor}</div>
+                      <div className="meditation-card-meta">⏱ {m.duration} &nbsp;·&nbsp;  Best for: {m.bestFor}</div>
                       <button className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--sp-2)' }} onClick={() => startGuided(m)}>
                         ▶ &nbsp;Play Audio Session
                       </button>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 const MOODS = [
-  { level: 5, label: 'Great', emoji: '✨' },
-  { level: 4, label: 'Good', emoji: '😊' },
-  { level: 3, label: 'Neutral', emoji: '😐' },
-  { level: 2, label: 'Low', emoji: '😔' },
-  { level: 1, label: 'Struggling', emoji: '🌧️' },
+  { level: 5, label: 'Great', emoji: '' },
+  { level: 4, label: 'Good', emoji: '' },
+  { level: 3, label: 'Neutral', emoji: '' },
+  { level: 2, label: 'Low', emoji: '' },
+  { level: 1, label: 'Struggling', emoji: '' },
 ];
 
 const MOOD_COLORS = {

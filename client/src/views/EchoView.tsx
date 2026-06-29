@@ -11,7 +11,7 @@ const ECHO_GREETING = {
 
 const REFRAME_GREETING = {
   role: 'ai',
-  text: "🔄 Reframe Mode is active.\n\nShare a negative or distressing thought, and I'll help you examine it through cognitive behavioral therapy — identifying the distortion and guiding you toward a healthier perspective.",
+  text: " Reframe Mode is active.\n\nShare a negative or distressing thought, and I'll help you examine it through cognitive behavioral therapy — identifying the distortion and guiding you toward a healthier perspective.",
 };
 
 // Echo AI avatar SVG
@@ -150,7 +150,7 @@ export default function EchoView() {
       {/* Header row */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--sp-4)' }}>
         <div className="view-header-left" style={{ marginBottom: 0 }}>
-          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)', background: 'rgba(255,255,255,0.5)' }}>💬 &nbsp;AI Companion</div>
+          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)', background: 'rgba(255,255,255,0.5)' }}> &nbsp;AI Companion</div>
           <h1 className="view-title t-organic" style={{ color: 'var(--primary-dark)', textShadow: '0 2px 4px rgba(255,255,255,0.5)' }}>Echo</h1>
         </div>
         {/* Mode switcher */}
@@ -160,14 +160,14 @@ export default function EchoView() {
             onClick={() => handleModeSwitch('companion')}
             id="echo-mode-companion"
           >
-            💬 Companion
+             Companion
           </button>
           <button
             className={`echo-mode-btn${echoMode === 'reframe' ? ' active' : ''}`}
             onClick={() => handleModeSwitch('reframe')}
             id="echo-mode-reframe"
           >
-            🔄 Reframe
+             Reframe
           </button>
         </div>
       </div>

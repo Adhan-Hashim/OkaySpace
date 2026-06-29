@@ -64,7 +64,7 @@ export default function SettingsView() {
       {/* Header */}
       <div className="view-header" style={{ marginBottom: 'var(--sp-6)', background: 'rgba(255,255,255,0.4)', padding: 'var(--sp-4)', borderRadius: 'var(--r-xl)' }}>
         <div className="view-header-left">
-          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}>⚙️ &nbsp;Settings</div>
+          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}> &nbsp;Settings</div>
           <h1 className="view-title t-organic" style={{ color: 'var(--primary-dark)' }}>Settings & Privacy</h1>
           <p className="view-subtitle" style={{ color: 'var(--primary-dark)' }}>Your data, your rules. Always.</p>
         </div>
@@ -75,7 +75,7 @@ export default function SettingsView() {
         borderRadius: 'var(--r-xl)', padding: 'var(--sp-6) var(--sp-8)',
         display: 'flex', gap: 'var(--sp-5)', alignItems: 'center', marginBottom: 'var(--sp-6)'
       }}>
-        <div style={{ fontSize: '2.2rem', flexShrink: 0 }}>🔒</div>
+        <div style={{ fontSize: '2.2rem', flexShrink: 0 }}></div>
         <div>
           <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.1rem', fontWeight: 700, color: 'var(--primary-dark)', marginBottom: 'var(--sp-1)' }}>
             Privacy-first by design
@@ -90,7 +90,7 @@ export default function SettingsView() {
       {/* Data Portability */}
       <motion.div className="settings-card glass-panel" {...stagger(1)} style={{ marginBottom: 'var(--sp-6)' }}>
         <div className="settings-card-header" style={{ padding: 'var(--sp-5)', borderBottom: '1px solid rgba(255,255,255,0.4)' }}>
-          <div className="settings-card-icon">📦</div>
+          <div className="settings-card-icon"></div>
           <div>
             <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--primary-dark)' }}>Data Portability</div>
             <div style={{ fontSize: '0.78rem', color: 'var(--primary-dark)' }}>Download a copy of your data</div>
@@ -113,7 +113,7 @@ export default function SettingsView() {
       {/* Preferences */}
       <motion.div className="settings-card glass-panel" {...stagger(2)} style={{ marginBottom: 'var(--sp-6)' }}>
         <div className="settings-card-header" style={{ padding: 'var(--sp-5)', borderBottom: '1px solid rgba(255,255,255,0.4)' }}>
-          <div className="settings-card-icon">🎨</div>
+          <div className="settings-card-icon"></div>
           <div>
             <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--primary-dark)' }}>Preferences</div>
             <div style={{ fontSize: '0.78rem', color: 'var(--primary-dark)' }}>Customize your experience</div>
@@ -157,7 +157,7 @@ export default function SettingsView() {
       {/* About */}
       <motion.div className="settings-card glass-panel" {...stagger(3)} style={{ marginBottom: 'var(--sp-6)' }}>
         <div className="settings-card-header" style={{ padding: 'var(--sp-5)', borderBottom: '1px solid rgba(255,255,255,0.4)' }}>
-          <div className="settings-card-icon">🌿</div>
+          <div className="settings-card-icon"></div>
           <div>
             <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--primary-dark)' }}>About OkaySpace</div>
             <div style={{ fontSize: '0.78rem', color: 'var(--primary-dark)' }}>Version & credits</div>
@@ -178,7 +178,7 @@ export default function SettingsView() {
             ))}
           </div>
           <div style={{ marginTop: 'var(--sp-4)', padding: 'var(--sp-4)', background: 'rgba(255,255,255,0.4)', borderRadius: 'var(--r-lg)', fontSize: '0.8rem', color: 'var(--primary-dark)', lineHeight: 1.7 }}>
-            ⚠️ OkaySpace is a wellness support tool, not a replacement for professional mental health care. If you're in crisis, please reach out to a qualified mental health professional.
+             OkaySpace is a wellness support tool, not a replacement for professional mental health care. If you're in crisis, please reach out to a qualified mental health professional.
           </div>
         </div>
       </motion.div>
@@ -186,7 +186,7 @@ export default function SettingsView() {
       {/* Danger Zone */}
       <motion.div className="settings-card glass-panel" {...stagger(4)}>
         <div className="settings-card-header" style={{ padding: 'var(--sp-5)', borderBottom: '1px solid rgba(255,255,255,0.4)' }}>
-          <div className="settings-card-icon" style={{ background: 'rgba(229,115,115,0.12)' }}>⚠️</div>
+          <div className="settings-card-icon" style={{ background: 'rgba(229,115,115,0.12)' }}></div>
           <div>
             <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--danger)' }}>Danger Zone</div>
             <div style={{ fontSize: '0.78rem', color: 'var(--primary-dark)' }}>Irreversible actions</div>
@@ -198,7 +198,7 @@ export default function SettingsView() {
             This action is <strong>immediate and irreversible.</strong> We cannot recover your data after deletion.
           </p>
           <button className="btn btn-danger" onClick={handleDelete}>
-            🗑 &nbsp;Permanently Delete My Account
+             &nbsp;Permanently Delete My Account
           </button>
         </div>
       </motion.div>

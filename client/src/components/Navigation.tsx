@@ -3,11 +3,11 @@ import useStore from '../store/useStore';
 import logo from '../assets/logo.png';
 
 const MODULES = [
-  { id: 'home',        label: 'About',       emoji: '🌿' },
-  { id: 'echo',        label: 'Echo',         emoji: '💬' },
-  { id: 'prism',       label: 'Prism',        emoji: '🔮' },
-  { id: 'meditations', label: 'Meditations',  emoji: '🌸' },
-  { id: 'nexus',       label: 'Nexus',        emoji: '🌌' },
+  { id: 'home',        label: 'About' },
+  { id: 'echo',        label: 'Echo' },
+  { id: 'prism',       label: 'Prism' },
+  { id: 'meditations', label: 'Meditations' },
+  { id: 'nexus',       label: 'Nexus' },
 ];
 
 export default function Navigation() {
@@ -38,7 +38,6 @@ export default function Navigation() {
                 onClick={() => go(m.id)}
                 id={`nav-${m.id}`}
               >
-                <span>{m.emoji}</span>
                 {m.label}
               </button>
             ))}
@@ -51,14 +50,14 @@ export default function Navigation() {
               onClick={() => go('echo')}
               style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              <span>✦</span> Open App
+              Open App
             </button>
             <button
               className="mobile-menu-btn"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? '✕' : '☰'}
+              {mobileOpen ? '' : ''}
             </button>
           </div>
         </div>
@@ -73,7 +72,6 @@ export default function Navigation() {
               className={`nav-link${currentView === m.id ? ' active' : ''}`}
               onClick={() => go(m.id)}
             >
-              <span>{m.emoji}</span>
               {m.label}
             </button>
           ))}

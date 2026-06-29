@@ -11,10 +11,10 @@ const stagger = (i: number) => ({
 });
 
 const STAT_CARDS = [
-  { icon: '💬', label: 'Echo Sessions',   key: 'echoSessions',   fallback: 0,   unit: '',  change: '+2 this week' },
-  { icon: '🔮', label: 'Thoughts Reframed', key: 'prismCount',   fallback: 0,   unit: '',  change: '+1 today' },
-  { icon: '🌬️', label: 'Breath Sessions', key: 'breathCount',    fallback: 0,   unit: '',  change: 'Keep going!' },
-  { icon: '🤝', label: 'Nexus Connects',  key: 'nexusCount',     fallback: 0,   unit: '',  change: 'Stay connected' },
+  { icon: '', label: 'Echo Sessions',   key: 'echoSessions',   fallback: 0,   unit: '',  change: '+2 this week' },
+  { icon: '', label: 'Thoughts Reframed', key: 'prismCount',   fallback: 0,   unit: '',  change: '+1 today' },
+  { icon: '', label: 'Breath Sessions', key: 'breathCount',    fallback: 0,   unit: '',  change: 'Keep going!' },
+  { icon: '', label: 'Nexus Connects',  key: 'nexusCount',     fallback: 0,   unit: '',  change: 'Stay connected' },
 ];
 
 // Custom chart tooltip
@@ -86,7 +86,7 @@ export default function AnalyticsView() {
       {/* Header */}
       <div className="view-header" style={{ background: 'rgba(255,255,255,0.4)', padding: 'var(--sp-4)', borderRadius: 'var(--r-xl)', marginBottom: 'var(--sp-6)' }}>
         <div className="view-header-left">
-          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}>📊 &nbsp;Insights</div>
+          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}> &nbsp;Insights</div>
           <h1 className="view-title t-organic" style={{ color: 'var(--primary-dark)' }}>Your Wellness Story</h1>
           <p className="view-subtitle" style={{ color: 'var(--primary-dark)' }}>Patterns, progress, and emotional insights over time</p>
         </div>
@@ -125,7 +125,7 @@ export default function AnalyticsView() {
 
         {data.timeline.length === 0 && !loading ? (
           <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontSize: '0.9rem', flexDirection: 'column', gap: 'var(--sp-3)' }}>
-            <span style={{ fontSize: '2rem' }}>📊</span>
+            <span style={{ fontSize: '2rem' }}></span>
             <span>Start using Echo or Prism to see your emotional timeline</span>
           </div>
         ) : (
@@ -159,7 +159,7 @@ export default function AnalyticsView() {
 
         {Object.entries(data.distortions).length === 0 ? (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 100, color: 'var(--text-muted)', fontSize: '0.9rem', flexDirection: 'column', gap: 'var(--sp-3)' }}>
-            <span style={{ fontSize: '2rem' }}>🔮</span>
+            <span style={{ fontSize: '2rem' }}></span>
             <span>Use Echo's Reframe Mode to identify cognitive distortions</span>
           </div>
         ) : (
@@ -180,7 +180,7 @@ export default function AnalyticsView() {
         borderRadius: 'var(--r-xl)', padding: 'var(--sp-8)',
         display: 'flex', gap: 'var(--sp-6)', alignItems: 'flex-start',
       }}>
-        <div style={{ fontSize: '2rem', flexShrink: 0 }}>🌱</div>
+        <div style={{ fontSize: '2rem', flexShrink: 0 }}></div>
         <div>
           <div className="t-label" style={{ marginBottom: 'var(--sp-2)', color: 'var(--primary-dark)' }}>
             Your growth tip

@@ -51,7 +51,7 @@ export default function CortexView() {
       const calmCount = recentEmotions.filter((e) => ['calm', 'peace', 'joy', 'hope', 'gratitude'].includes(e)).length;
       if (calmCount >= 3) {
         insights.push({
-          icon: '🌟',
+          icon: '',
           text: 'Your recent emotional trajectory shows a positive trend. Keep nurturing these states.',
           type: 'positive',
         });
@@ -69,7 +69,7 @@ export default function CortexView() {
 
     if (sourceCounts.echo > 3) {
       insights.push({
-        icon: '🤖',
+        icon: '',
         text: `You've had ${sourceCounts.echo} conversations with Echo. Regular reflection builds emotional intelligence.`,
         type: 'info',
       });
@@ -77,7 +77,7 @@ export default function CortexView() {
 
     if (sourceCounts.prism > 0) {
       insights.push({
-        icon: '🔮',
+        icon: '',
         text: `${sourceCounts.prism} thoughts refracted through the Prism. Cognitive reframing is one of the most effective CBT techniques.`,
         type: 'info',
       });
@@ -93,7 +93,7 @@ export default function CortexView() {
 
     if (insights.length === 0) {
       insights.push({
-        icon: '✨',
+        icon: '',
         text: 'Start exploring the modules to build your neural map. Each interaction adds a new data point to your emotional constellation.',
         type: 'info',
       });

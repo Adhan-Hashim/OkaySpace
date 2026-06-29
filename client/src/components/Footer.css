@@ -1,219 +1,140 @@
-.z-footer {
+.ss-footer-wrapper {
   width: 100%;
-  background-color: #12221A; /* Deep, intense nature green to match OkaySpace while retaining the solid Zettlor vibe */
-  color: #fff;
-  font-family: 'DM Sans', sans-serif;
+  padding: 4rem 2rem;
+  background-color: #F8F3E6; /* Cream paper background */
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  overflow: hidden;
+}
+
+.ss-footer {
+  width: 100%;
+  max-width: 1100px;
+  background-color: #DE4C3A; /* Watercolor red from reference */
+  
+  /* Organic watercolor blob shape */
+  border-radius: 30px 60px 25px 50px / 50px 20px 60px 30px;
+  
+  padding: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
-  z-index: 10;
-  padding-top: 4rem;
-  margin-top: -20px; /* Pulls it up slightly over the home view to eliminate white gaps */
+  
+  /* Subtle painted edge shadow */
+  box-shadow: 
+    inset 0 0 40px rgba(0,0,0,0.1),
+    0 15px 30px rgba(222, 76, 58, 0.2);
+    
+  color: #FCE8CA; /* Soft cream text color */
 }
 
-/* MASSIVE TITLE */
-.z-huge-title {
-  font-size: 19vw; /* Scales massively across the screen like Zettlor */
-  font-weight: 900;
-  line-height: 0.8;
-  letter-spacing: -0.05em;
-  text-transform: uppercase;
-  color: #fff;
-  width: 100%;
-  text-align: center;
-  /* Use a condensed impactful font stack */
-  font-family: 'Impact', 'Oswald', 'DM Sans', sans-serif; 
+/* Add a subtle watercolor texture overlay using pseudo element */
+.ss-footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  pointer-events: none;
 }
 
-/* NEWSLETTER PILL */
-.z-newsletter-container {
-  width: 100%;
-  max-width: 900px;
-  margin: 4rem auto 2rem;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.z-newsletter-pill {
-  width: 100%;
-  display: flex;
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 100px;
-  padding: 8px;
-  align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.z-newsletter-pill input {
+.ss-left {
   flex: 1;
-  background: transparent;
-  border: none;
-  padding: 15px 30px;
-  font-size: 1.25rem;
-  color: #fff;
-  outline: none;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.z-newsletter-pill input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.z-newsletter-pill button {
-  background-color: #fff;
-  color: #12221A; /* Matches footer background */
-  border: none;
-  border-radius: 100px;
-  padding: 15px 40px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.z-newsletter-pill button:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
-}
-
-.z-newsletter-container p {
-  margin-top: 1.5rem;
-  font-size: 1rem;
-  color: #fff;
-  opacity: 0.9;
-}
-
-/* SOCIALS */
-.z-socials {
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
 }
 
-.z-socials a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.1rem;
-  transition: opacity 0.2s ease;
+.ss-character {
+  height: 250px;
+  object-fit: contain;
+  /* Rotate and invert to match the white/cream look on red */
+  transform: rotate(-10deg) scale(1.1);
+  filter: brightness(0) invert(1) sepia(100%) saturate(300%) hue-rotate(330deg) brightness(1.2); /* Tint it cream! */
+  opacity: 0.9;
 }
 
-.z-socials a:hover {
-  opacity: 0.7;
-}
-
-/* LINKS GRID */
-.z-links-grid {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 40px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  margin-bottom: 5rem;
-}
-
-.z-links-col {
+.ss-center {
+  flex: 2;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-  padding-top: 1rem;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
 }
 
-.z-col-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
+.ss-title {
+  font-family: 'Chewy', cursive, sans-serif;
+  font-size: 4.5rem;
+  font-weight: 400;
   letter-spacing: 0.05em;
-  margin-bottom: 1.5rem;
-  opacity: 0.7;
-}
-
-.z-links-col a,
-.z-links-col button {
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: inherit;
-  font-size: 1rem;
-  color: #fff;
-  text-decoration: none;
-  text-align: left;
-  margin-bottom: 0.75rem;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.z-links-col a:hover,
-.z-links-col button:hover {
-  opacity: 0.7;
-}
-
-/* MARQUEE */
-.z-marquee-container {
-  width: 100%;
-  background-color: #fff;
-  color: #12221A;
-  padding: 1.5rem 0;
-  overflow: hidden;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-}
-
-.z-marquee-track {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  font-size: 1.5rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  animation: marquee 30s linear infinite;
-}
-
-.z-marquee-dot {
-  color: #FA5032; /* Small pop of that Zettlor orange for the dot! */
-  font-size: 2rem;
+  margin: 0;
   line-height: 1;
+  text-align: center;
+  text-shadow: 2px 2px 0px rgba(180, 50, 40, 0.5); /* slight cutout shadow effect */
 }
 
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+.ss-subtitle {
+  font-family: 'Chewy', cursive, sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  margin: 0;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.ss-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.ss-contact {
+  text-align: right;
+  margin-top: 80px; /* Push it down like the reference */
+}
+
+.ss-contact p {
+  font-family: 'Patrick Hand', 'Comic Sans MS', cursive, sans-serif;
+  font-size: 1.2rem;
+  margin: 0.3rem 0;
+  opacity: 0.95;
 }
 
 @media (max-width: 900px) {
-  .z-huge-title {
-    font-size: 24vw; /* Slightly larger relative size on mobile */
-  }
-  
-  .z-links-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-  }
-  
-  .z-newsletter-pill {
+  .ss-footer {
     flex-direction: column;
-    background: transparent;
-    border: none;
+    padding: 3rem 1.5rem;
+    border-radius: 20px 40px 20px 30px / 30px 20px 40px 20px;
   }
   
-  .z-newsletter-pill input {
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 100px;
-    width: 100%;
-    margin-bottom: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  .ss-character {
+    height: 180px;
+    margin-bottom: 2rem;
   }
   
-  .z-newsletter-pill button {
-    width: 100%;
+  .ss-title {
+    font-size: 3rem;
+  }
+  
+  .ss-subtitle {
+    font-size: 2rem;
+  }
+  
+  .ss-contact {
+    margin-top: 3rem;
+    text-align: center;
   }
 }
 
