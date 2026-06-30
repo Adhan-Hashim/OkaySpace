@@ -53,6 +53,14 @@ const useStore = create((set) => ({
   echoMessages: [],
   echoMode: 'companion', // companion | reframe
   echoIsTyping: false,
+  echoMemories: (() => {
+    try {
+      const saved = localStorage.getItem('okayspace_echo_memories');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  })(),
   addEchoMessage: (message) => set((state) => ({
     echoMessages: [...state.echoMessages, {
       id: Date.now(),
@@ -60,6 +68,20 @@ const useStore = create((set) => ({
       ...message,
     }],
   })),
+  addEchoMemory: (memory) => set((state) => {
+    const newMem = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      ...memory,
+    };
+    const updated = [...state.echoMemories, newMem].slice(-100);
+    try {
+      localStorage.setItem('okayspace_echo_memories', JSON.stringify(updated));
+    } catch (e) {
+      console.warn("localStorage persistence failed:", e);
+    }
+    return { echoMemories: updated };
+  }),
   setEchoMode: (mode) => set({ echoMode: mode }),
   setEchoTyping: (typing) => set({ echoIsTyping: typing }),
 

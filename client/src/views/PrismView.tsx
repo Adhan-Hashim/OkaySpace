@@ -99,7 +99,7 @@ export default function PrismView() {
 
   return (
     <motion.div
-      className="vd-page-bg"
+      className="vd-page-bg vd-page-wrapper"
       id="prism-view"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -112,10 +112,6 @@ export default function PrismView() {
         display: 'flex',
         flexDirection: 'column',
         marginTop: 'calc(-1 * var(--nav-h))',
-        paddingTop: 'calc(var(--nav-h) + var(--sp-12))',
-        paddingLeft: 'var(--sp-8)',
-        paddingRight: 'var(--sp-8)',
-        paddingBottom: 'var(--sp-12)',
         backgroundColor: '#ffffff',
       }}
     >

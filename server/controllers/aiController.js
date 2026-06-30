@@ -77,7 +77,7 @@ function detectDistortion(text) {
 }
 
 // Helper to generate highly responsive rule-based and sentiment fallback responses
-function getResponsiveFallback(text, sentiment, webcamEmotion) {
+function getResponsiveFallback(text, sentiment, webcamEmotion, memories) {
     const lower = (text || '').toLowerCase().trim();
 
     let prefix = '';
@@ -93,6 +93,10 @@ function getResponsiveFallback(text, sentiment, webcamEmotion) {
             disgusted: "Your expression suggests a bit of aversion or distaste right now. "
         };
         prefix = descriptions[webcamEmotion] || '';
+    }
+
+    if (memories && memories.length > 0) {
+        prefix += `Reflecting back on what you shared earlier about "${memories[0].user}"... `;
     }
 
     // 1. Crisis / Self-Harm
@@ -183,7 +187,7 @@ function getResponsiveFallback(text, sentiment, webcamEmotion) {
 // =============== ECHO — AI Companion ===============
 
 exports.echo = async (req, res) => {
-    const { message, history = [], mode, webcamEmotion } = req.body;
+    const { message, history = [], mode, webcamEmotion, memories = [] } = req.body;
     try {
         if (!message) return res.status(400).json({ message: 'Message is required' });
 
@@ -191,7 +195,7 @@ exports.echo = async (req, res) => {
         const genAI = getGemini();
 
         if (!genAI) {
-            const response = getResponsiveFallback(message, sentiment, webcamEmotion);
+            const response = getResponsiveFallback(message, sentiment, webcamEmotion, memories);
             return res.json({ response, sentiment });
         }
 
@@ -227,6 +231,13 @@ Respond with JSON: { "response": "your response text" }`;
             finalSystemPrompt += `\n\nCRITICAL CONTEXT: The user's device camera has detected that they are currently showing a "${webcamEmotion}" facial expression. You should gently incorporate this observation into your response (e.g., noting if their facial expression matches their words, or commenting on their apparent mood in a supportive, empathetic manner).`;
         }
 
+        if (memories && memories.length > 0) {
+            finalSystemPrompt += `\n\nRELEVANT PAST CONVERSATION MEMORIES (from client-side semantic vector search):
+${memories.map(m => `- On ${new Date(m.timestamp).toLocaleDateString()}, the user said: "${m.user}" and Echo replied: "${m.assistant}"`).join('\n')}
+
+Gently reference or recall these memories in your response only if it is natural and helpful to the user's current topic. Do not force it, but let it show that you remember them over time.`;
+        }
+
         const chatHistory = history.map(m => ({
             role: m.role === 'assistant' || m.role === 'model' ? 'model' : 'user',
             parts: [{ text: m.content }],
@@ -254,7 +265,7 @@ Respond with JSON: { "response": "your response text" }`;
     } catch (err) {
         console.error('Echo error:', err);
         const sentiment = detectSentiment(message || '');
-        const response = getResponsiveFallback(message, sentiment, webcamEmotion);
+        const response = getResponsiveFallback(message, sentiment, webcamEmotion, memories);
         res.json({ response, sentiment });
     }
 };
@@ -450,5 +461,31 @@ exports.sentiment = async (req, res) => {
     } catch (err) {
         console.error('Sentiment error:', err);
         res.json({ sentiment: { emotion: 'neutral', intensity: 0.5 }, distortion: null });
+    }
+};
+
+// =============== EMBED — Text Embeddings ===============
+
+exports.embed = async (req, res) => {
+    try {
+        const { text } = req.body;
+        if (!text) return res.status(400).json({ message: 'Text is required' });
+
+        const genAI = getGemini();
+        if (!genAI) {
+            // Self-healing dummy vector (768 dimensions for text-embedding-004)
+            const dummy = Array.from({ length: 768 }, () => Math.random() - 0.5);
+            return res.json({ embedding: dummy });
+        }
+
+        const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
+        const result = await model.embedContent(text);
+        const embedding = result.embedding.values;
+
+        res.json({ embedding });
+    } catch (err) {
+        console.error('Embed error:', err);
+        const dummy = Array.from({ length: 768 }, () => Math.random() - 0.5);
+        res.json({ embedding: dummy });
     }
 };

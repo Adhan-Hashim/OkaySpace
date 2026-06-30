@@ -31,4 +31,20 @@ describe('AI Controller API Endpoints', () => {
       expect(res.body.distortion).toBe('Catastrophizing');
     });
   });
+
+  describe('POST /api/ai/embed', () => {
+    it('should return 400 if text is missing', async () => {
+      const res = await request(app).post('/api/ai/embed').send({});
+      expect(res.statusCode).toEqual(400);
+      expect(res.body.message).toBe('Text is required');
+    });
+
+    it('should return a 768-dimensional embedding vector', async () => {
+      const res = await request(app).post('/api/ai/embed').send({ text: 'I am meditating.' });
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveProperty('embedding');
+      expect(Array.isArray(res.body.embedding)).toBe(true);
+      expect(res.body.embedding.length).toBe(768);
+    });
+  });
 });

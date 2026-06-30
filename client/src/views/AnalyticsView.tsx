@@ -57,7 +57,7 @@ export default function AnalyticsView() {
 
   return (
     <motion.div
-      className="analytics-page-nature"
+      className="analytics-page-nature vd-page-wrapper"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
@@ -73,10 +73,6 @@ export default function AnalyticsView() {
         display: 'flex',
         flexDirection: 'column',
         marginTop: 'calc(-1 * var(--nav-h))',
-        paddingTop: 'calc(var(--nav-h) + var(--sp-6))',
-        paddingLeft: 'var(--sp-8)',
-        paddingRight: 'var(--sp-8)',
-        paddingBottom: 'var(--sp-6)',
       }}
     >
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(248, 250, 248, 0.4)', pointerEvents: 'none', zIndex: 0 }} />

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../store/useStore';
 import api from '../api';
 import bgLake from '../assets/bg-lake.png';
+import { querySemanticMemory } from '../modules/vectorDb';
 
 const ECHO_GREETING = {
   role: 'ai',
@@ -44,6 +45,8 @@ export default function EchoView() {
   const addNeuralNode = useStore((s) => s.addNeuralNode);
   const setEmotion = useStore((s) => s.setEmotion);
   const incrementInteraction = useStore((s) => s.incrementInteraction);
+  const echoMemories = useStore((s: any) => s.echoMemories);
+  const addEchoMemory = useStore((s: any) => s.addEchoMemory);
 
   const [input, setInput] = useState('');
   const [showGreeting, setShowGreeting] = useState(true);
@@ -356,6 +359,20 @@ export default function EchoView() {
     setShowGreeting(false);
     setEchoTyping(true);
 
+    let embedding: number[] | null = null;
+    let matchingMemories: any[] = [];
+    try {
+      const embedRes = await api.post('/ai/embed', { text });
+      if (embedRes.data && embedRes.data.embedding) {
+        embedding = embedRes.data.embedding;
+        if (echoMemories && echoMemories.length > 0) {
+          matchingMemories = querySemanticMemory(embedding, echoMemories, 2, 0.70);
+        }
+      }
+    } catch (e) {
+      console.error("Embedding generation failed:", e);
+    }
+
     try {
       const endpoint = echoMode === 'reframe' ? '/ai/echo-reframe' : '/ai/echo';
       const res = await api.post(endpoint, {
@@ -366,6 +383,7 @@ export default function EchoView() {
         })),
         mode: echoMode,
         webcamEmotion: cameraActive && detectedEmotion ? detectedEmotion : undefined,
+        memories: matchingMemories,
       });
 
       const data = res.data;
@@ -375,6 +393,15 @@ export default function EchoView() {
         setEmotion(data.sentiment.emotion, data.sentiment.intensity);
         addNeuralNode({ emotion: data.sentiment.emotion, text: text.slice(0, 100), source: 'echo', intensity: data.sentiment.intensity });
       }
+
+      // Save to local vector memory index
+      if (embedding) {
+        addEchoMemory({
+          user: text,
+          assistant: data.response,
+          embedding: embedding
+        });
+      }
     } catch {
       const fallbacks = [
         "I hear you. That's a meaningful observation. Can you tell me more about what's behind that feeling?",
@@ -383,7 +410,7 @@ export default function EchoView() {
         "That's interesting. If your closest friend shared this thought, what would you say to them?",
         "I can sense this is important to you. What values does this connect to for you?",
       ];
-      // Prepended with webcam observation in local fallback
+      // Prepended with webcam observation or local memories in local fallback
       let prefix = '';
       if (cameraActive && detectedEmotion) {
         const descriptions: any = {
@@ -399,14 +426,27 @@ export default function EchoView() {
         prefix = descriptions[detectedEmotion] || '';
       }
       
+      if (matchingMemories && matchingMemories.length > 0) {
+        prefix += `Reflecting back on what you shared earlier about "${matchingMemories[0].user}"... `;
+      }
+      
       const fallbackText = prefix + fallbacks[Math.floor(Math.random() * fallbacks.length)];
       addEchoMessage({ role: 'ai', text: fallbackText, sentiment: { emotion: 'neutral', intensity: 0.5 } });
       setEmotion('neutral', 0.5);
       addNeuralNode({ emotion: 'neutral', text: text.slice(0, 100), source: 'echo', intensity: 0.5 });
+
+      // Even in offline fallback, index the dummy vector so vector db shape is maintained
+      if (embedding) {
+        addEchoMemory({
+          user: text,
+          assistant: fallbackText,
+          embedding: embedding
+        });
+      }
     }
 
     setEchoTyping(false);
-  }, [input, echoIsTyping, echoMode, echoMessages, addEchoMessage, setEchoTyping, addNeuralNode, setEmotion, incrementInteraction, cameraActive, detectedEmotion]);
+  }, [input, echoIsTyping, echoMode, echoMessages, addEchoMessage, setEchoTyping, addNeuralNode, setEmotion, incrementInteraction, cameraActive, detectedEmotion, echoMemories, addEchoMemory]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -424,7 +464,7 @@ export default function EchoView() {
 
   return (
     <motion.div
-      className="vd-page-bg"
+      className="vd-page-bg vd-page-wrapper"
       id="echo-view"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -437,10 +477,6 @@ export default function EchoView() {
         display: 'flex',
         flexDirection: 'column',
         marginTop: 'calc(-1 * var(--nav-h))',
-        paddingTop: 'calc(var(--nav-h) + var(--sp-12))',
-        paddingLeft: 'var(--sp-8)',
-        paddingRight: 'var(--sp-8)',
-        paddingBottom: 'var(--sp-12)',
         backgroundColor: '#ffffff',
       }}
     >

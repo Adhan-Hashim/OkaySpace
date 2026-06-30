@@ -164,12 +164,26 @@ p { color: var(--text-secondary); line-height: 1.7; }
   min-height: 100vh; /* Guarantee the page content covers the initial viewport so the footer only reveals on scroll */
 }
 
+:root {
+  --footer-h: 80vh;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --footer-h: auto;
+  }
+  .footer-fixed-container {
+    position: relative !important;
+    height: auto !important;
+  }
+}
+
 .footer-fixed-container {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 80vh;
+  height: var(--footer-h);
   z-index: 1;
 }
 
@@ -2190,6 +2204,31 @@ textarea.input {
   }
   .echo-camera-sidebar {
     width: 100% !important;
+    margin-bottom: var(--sp-4) !important;
+  }
+}
+
+/* Mobile view wrapper padding */
+.vd-page-wrapper {
+  padding-top: calc(var(--nav-h) + var(--sp-12)) !important;
+  padding-left: var(--sp-8) !important;
+  padding-right: var(--sp-8) !important;
+  padding-bottom: var(--sp-12) !important;
+}
+
+@media (max-width: 768px) {
+  .vd-page-wrapper {
+    padding-top: calc(var(--nav-h) + var(--sp-4)) !important;
+    padding-left: var(--sp-4) !important;
+    padding-right: var(--sp-4) !important;
+    padding-bottom: var(--sp-6) !important;
+  }
+  
+  /* Fix header row wrapping on mobile */
+  .vd-page-wrapper .vd-title-large {
+    font-size: 2rem !important;
+  }
+  .vd-page-wrapper .view-header-left {
     margin-bottom: var(--sp-4) !important;
   }
 }

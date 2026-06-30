@@ -117,7 +117,7 @@ export default function CortexView() {
 
   return (
     <div
-      className="cortex-page-nature"
+      className="cortex-page-nature vd-page-wrapper"
       id="cortex-view"
       style={{
         backgroundImage: `url(${bgForest})`,
@@ -130,10 +130,6 @@ export default function CortexView() {
         display: 'flex',
         flexDirection: 'column',
         marginTop: 'calc(-1 * var(--nav-h))',
-        paddingTop: 'calc(var(--nav-h) + var(--sp-6))',
-        paddingLeft: 'var(--sp-8)',
-        paddingRight: 'var(--sp-8)',
-        paddingBottom: 'var(--sp-6)',
       }}
     >
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(248, 250, 248, 0.4)', pointerEvents: 'none', zIndex: 0 }} />
