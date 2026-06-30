@@ -1,6 +1,7 @@
 import React from 'react';
+import bgPhoto from '../assets/footer-photo-bg.png';
 import logo from '../assets/logo.png';
-import malayalamLogo from '../assets/malayalam-logo.png';
+import malayalamLogo from '../assets/malayalam-logo.svg';
 import './Footer.css';
 
 export default function Footer() {
