@@ -81,7 +81,7 @@ export default function EchoView() {
       const faceapi = await import('@vladmandic/face-api');
       const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
       await Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
       ]);
       setModelsLoaded(true);
@@ -102,7 +102,7 @@ export default function EchoView() {
         try {
           const detection = await faceapi.detectSingleFace(
             videoRef.current,
-            new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 })
+            new faceapi.SsdMobilenetv1Options({ minConfidence: 0.4 })
           ).withFaceExpressions();
 
           if (detection && detection.expressions) {
