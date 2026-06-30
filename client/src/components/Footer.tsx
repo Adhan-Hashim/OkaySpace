@@ -17,7 +17,7 @@ export default function Footer() {
 
         <div className="ss-right">
           <div className="ss-contact">
-            <p>OkaySpace | instagram @chattipathal</p>
+            <p>instagram @chattipathal</p>
             <p>hello@okayspace.com | okayspace.com</p>
           </div>
         </div>
