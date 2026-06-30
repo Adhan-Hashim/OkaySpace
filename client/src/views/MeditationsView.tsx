@@ -28,6 +28,9 @@ function createAudioContext() {
 }
 function playTone(ac: AudioContext | null, freq: number, dur: number, vol = 0.05) {
   if (!ac) return;
+  if (ac.state === 'suspended') {
+    ac.resume().catch(() => {});
+  }
   const osc = ac.createOscillator(); const gain = ac.createGain();
   osc.connect(gain); gain.connect(ac.destination);
   osc.type = 'sine'; osc.frequency.setValueAtTime(freq, ac.currentTime);
@@ -127,8 +130,13 @@ export default function MeditationsView() {
   const startBreathing = useCallback(() => {
     setRunning(true); setBreathingActive(true);
     setPhaseIndex(0); setCountdown(pattern.phases[0].d); setCycles(0);
-    if (soundEnabled && !audioCtxRef.current) audioCtxRef.current = createAudioContext();
-    if (soundEnabled && ambientType !== 'none') playAmbient(ambientType, ambientVolume);
+    if (soundEnabled) {
+      if (!audioCtxRef.current) audioCtxRef.current = createAudioContext();
+      if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume().catch(() => {});
+      }
+      if (ambientType !== 'none') playAmbient(ambientType, ambientVolume);
+    }
   }, [pattern, soundEnabled, ambientType, ambientVolume, setBreathingActive]);
 
   const stopBreathing = useCallback(() => {
@@ -142,9 +150,26 @@ export default function MeditationsView() {
     }
   }, [pattern, cycles, addNeuralNode, setEmotion, setBreathingActive]);
 
+  // Handle live sound toggling/ambient changes during active sessions
   useEffect(() => {
-    if (running && soundEnabled) setAmbientVolume(ambientVolume);
-  }, [ambientVolume, running, soundEnabled]);
+    if (running || meditationRunning) {
+      if (soundEnabled && ambientType !== 'none') {
+        playAmbient(ambientType, ambientVolume);
+        if (running && !audioCtxRef.current) {
+          audioCtxRef.current = createAudioContext();
+        }
+        if (running && audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
+          audioCtxRef.current.resume().catch(() => {});
+        }
+      } else {
+        stopAmbient();
+      }
+    }
+  }, [soundEnabled, ambientType, running, meditationRunning]);
+
+  useEffect(() => {
+    if (soundEnabled) setAmbientVolume(ambientVolume);
+  }, [ambientVolume, soundEnabled]);
 
   useEffect(() => {
     if (!running) return;

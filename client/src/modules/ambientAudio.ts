@@ -31,6 +31,9 @@ export function stopAmbient() {
 export function playAmbient(type: 'space' | 'ocean' | 'binaural', volume: number) {
   stopAmbient();
   const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume().catch(() => {});
+  }
   
   if (!masterGain) {
     masterGain = ctx.createGain();

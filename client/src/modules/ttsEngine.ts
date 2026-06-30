@@ -26,6 +26,7 @@ export function initTTS() {
 
 export function stopTTS() {
   if (typeof window !== 'undefined' && window.speechSynthesis) {
+    try { window.speechSynthesis.resume(); } catch (e) {}
     window.speechSynthesis.cancel();
     isPlaying = false;
   }
@@ -36,6 +37,8 @@ export function speakStep(text: string, onEnd?: () => void) {
     if (onEnd) setTimeout(onEnd, 2000); // Mock delay if no TTS
     return;
   }
+
+  try { window.speechSynthesis.resume(); } catch (e) {}
 
   const utterance = new SpeechSynthesisUtterance(text);
   if (preferredVoice) {
