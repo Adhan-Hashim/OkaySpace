@@ -62,6 +62,27 @@ export default function EchoView() {
   const streamRef = useRef<MediaStream | null>(null);
   const detectIntervalRef = useRef<any>(null);
 
+  // Sync current input value to ref to avoid stale closures in the frame interval
+  const inputRef = useRef(input);
+  useEffect(() => {
+    inputRef.current = input;
+  }, [input]);
+
+  // Extract explicit local text sentiment bias
+  const getTextBias = (text: string): 'sad' | 'anxious' | 'angry' | null => {
+    const lower = text.toLowerCase().trim();
+    if (/\b(cry|crying|sad|sadness|grief|hurt|pain|tears|broken|lonely|heavy|depressed|unhappy|weep|weeping|sobbing|sob|cried|worst|terrible|bad)\b/.test(lower)) {
+      return 'sad';
+    }
+    if (/\b(scared|afraid|anxious|anxiety|panic|worry|worried|fear|nervous|tense|stressed|pressure)\b/.test(lower)) {
+      return 'anxious';
+    }
+    if (/\b(angry|mad|furious|annoyed|hate|irritated|frustrated|pissed)\b/.test(lower)) {
+      return 'angry';
+    }
+    return null;
+  };
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [echoMessages, echoIsTyping]);
@@ -113,7 +134,7 @@ export default function EchoView() {
             let emotion = dominant[0];
             let confidence = Math.round(dominant[1] * 100);
 
-            // Apply crying/grimace correction heuristic using 68-point facial landmarks
+            // Multimodal Fusion: Cross-reference face expression, physical landmarks, and draft text sentiment
             if (detection.landmarks) {
               const positions = detection.landmarks.positions;
               // Inner eyebrow landmarks (indices 21 and 22)
@@ -122,6 +143,9 @@ export default function EchoView() {
               // Inner eye corners (indices 39 and 42)
               const leftEyeInner = positions[39];
               const rightEyeInner = positions[42];
+              // Outer eyebrow corners (indices 17 and 26)
+              const leftEyebrowOuter = positions[17];
+              const rightEyebrowOuter = positions[26];
 
               if (leftEyebrowInner && rightEyebrowInner && leftEyeInner && rightEyeInner) {
                 const eyebrowDist = Math.sqrt(
@@ -135,14 +159,27 @@ export default function EchoView() {
 
                 const furrowRatio = eyebrowDist / eyeDist;
 
-                // Furrowed eyebrows (drawn together - ratio < 0.85) indicates stress/sadness/pain.
-                // Override false-positive "happy" smiles (which often happen during crying/grimacing) to "sad".
-                if (emotion === 'happy' && furrowRatio < 0.85) {
+                // Crying patterns pull inner eyebrows upward and together (Y is inverted: smaller Y = higher)
+                const innerEyebrowsLifted = 
+                  (leftEyebrowInner.y < leftEyebrowOuter.y + 1) && 
+                  (rightEyebrowInner.y < rightEyebrowOuter.y + 1);
+
+                // Fetch real-time text bias
+                const textBias = getTextBias(inputRef.current);
+
+                // Override false-positive happy or neutral expressions when distressed features are present
+                const isDistressed = furrowRatio < 0.88 || innerEyebrowsLifted || textBias === 'sad';
+
+                if (emotion === 'happy' && isDistressed) {
                   emotion = 'sad';
-                  confidence = Math.max(confidence - 15, 75);
-                } else if (emotion === 'neutral' && furrowRatio < 0.78) {
+                  confidence = Math.max(confidence - 10, 80);
+                } else if (emotion === 'neutral' && (furrowRatio < 0.82 || textBias === 'sad')) {
                   emotion = 'sad';
                   confidence = 80;
+                } else if (textBias && textBias !== emotion && confidence < 60) {
+                  // Direct sensor override if camera confidence is low and user is typing sad/anxious text
+                  emotion = textBias;
+                  confidence = 75;
                 }
               }
             }
