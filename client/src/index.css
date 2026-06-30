@@ -2173,4 +2173,23 @@ textarea.input {
   background-color: #e5e5e5 !important;
   color: #999999 !important;
   cursor: not-allowed !important;
+}
+
+/* Echo Camera Layout Split */
+.echo-layout-row {
+  display: flex !important;
+  gap: var(--sp-6) !important;
+  flex: 1 !important;
+  width: 100% !important;
+  position: relative !important;
+}
+
+@media (max-width: 768px) {
+  .echo-layout-row {
+    flex-direction: column !important;
+  }
+  .echo-camera-sidebar {
+    width: 100% !important;
+    margin-bottom: var(--sp-4) !important;
+  }
 }

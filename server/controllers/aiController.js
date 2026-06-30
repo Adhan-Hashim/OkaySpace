@@ -77,8 +77,23 @@ function detectDistortion(text) {
 }
 
 // Helper to generate highly responsive rule-based and sentiment fallback responses
-function getResponsiveFallback(text, sentiment) {
+function getResponsiveFallback(text, sentiment, webcamEmotion) {
     const lower = (text || '').toLowerCase().trim();
+
+    let prefix = '';
+    if (webcamEmotion) {
+        const descriptions = {
+            angry: "I can see a bit of frustration or tension on your face right now. ",
+            sad: "I notice a hint of sadness in your expression. ",
+            sadness: "I notice a hint of sadness in your expression. ",
+            happy: "I notice a warm smile on your face. ",
+            joy: "I notice a warm smile on your face. ",
+            surprised: "You look a bit surprised on camera. ",
+            fearful: "I notice some apprehension or worry in your expression. ",
+            disgusted: "Your expression suggests a bit of aversion or distaste right now. "
+        };
+        prefix = descriptions[webcamEmotion] || '';
+    }
 
     // 1. Crisis / Self-Harm
     if (/\b(suicide|suicidal|kill myself|hurt myself|end my life|want to die|going to die|wanna die|die|death|cutting)\b/.test(lower)) {
@@ -87,37 +102,37 @@ function getResponsiveFallback(text, sentiment) {
 
     // 2. Greetings
     if (/\b(hi|hello|hey|good morning|good evening|yo|hola)\b/.test(lower)) {
-        return "Hello! I'm Echo, your neural companion. I'm here to listen. What's on your mind today?";
+        return prefix + "Hello! I'm Echo, your neural companion. I'm here to listen. What's on your mind today?";
     }
 
     // 3. Presence Checks
     if (/\b(are you there|you there|anybody there|hello\?|are you online)\b/.test(lower) || lower.endsWith('you there?')) {
-        return "Yes, I'm right here. I'm always ready to listen. Tell me, what's occupying your thoughts?";
+        return prefix + "Yes, I'm right here. I'm always ready to listen. Tell me, what's occupying your thoughts?";
     }
 
     // 4. Identity Checks
     if (/\b(who are you|what are you|your name|what is echo)\b/.test(lower)) {
-        return "I'm Echo — your neural companion. I'm here to help you reflect on your thoughts and feelings without any judgment. How are you doing?";
+        return prefix + "I'm Echo — your neural companion. I'm here to help you reflect on your thoughts and feelings without any judgment. How are you doing?";
     }
 
     // 5. Relationship triggers (talking about someone else)
     if (/\b(he|she|him|her|friend|mother|father|parents|brother|sister|boyfriend|girlfriend|husband|wife|boss|coworker|them)\b/.test(lower)) {
-        return "It sounds like this relationship is weighing on you. Can you tell me more about what is happening between you and them?";
+        return prefix + "It sounds like this relationship is weighing on you. Can you tell me more about what is happening between you and them?";
     }
 
     // 6. Question words
     if (/\b(why|how|what is|tell me why)\b/.test(lower)) {
-        return "That's a deep question. Sometimes exploring the 'why' helps us see things in a new light. What answers are you hoping to find?";
+        return prefix + "That's a deep question. Sometimes exploring the 'why' helps us see things in a new light. What answers are you hoping to find?";
     }
 
     // 7. Affirmations
     if (/\b(yes|yeah|indeed|ok|okay|sure|absolutely|correct)\b/.test(lower)) {
-        return "I understand. Let's explore that further — what specific thoughts or feelings does that bring up for you?";
+        return prefix + "I understand. Let's explore that further — what specific thoughts or feelings does that bring up for you?";
     }
 
     // 8. Negations
     if (/\b(no|nope|never|not really|don't think so)\b/.test(lower)) {
-        return "I hear you. If that doesn't feel right, let's step back. What feels more true to your experience right now?";
+        return prefix + "I hear you. If that doesn't feel right, let's step back. What feels more true to your experience right now?";
     }
 
     // 9. Default sentiment-based pools
@@ -162,13 +177,13 @@ function getResponsiveFallback(text, sentiment) {
     };
 
     const pool = responses[sentiment.emotion] || responses.neutral;
-    return pool[Math.floor(Math.random() * pool.length)];
+    return prefix + pool[Math.floor(Math.random() * pool.length)];
 }
 
 // =============== ECHO — AI Companion ===============
 
 exports.echo = async (req, res) => {
-    const { message, history = [], mode } = req.body;
+    const { message, history = [], mode, webcamEmotion } = req.body;
     try {
         if (!message) return res.status(400).json({ message: 'Message is required' });
 
@@ -176,7 +191,7 @@ exports.echo = async (req, res) => {
         const genAI = getGemini();
 
         if (!genAI) {
-            const response = getResponsiveFallback(message, sentiment);
+            const response = getResponsiveFallback(message, sentiment, webcamEmotion);
             return res.json({ response, sentiment });
         }
 
@@ -207,6 +222,11 @@ Guidelines:
 
 Respond with JSON: { "response": "your response text" }`;
 
+        let finalSystemPrompt = systemPrompt;
+        if (webcamEmotion) {
+            finalSystemPrompt += `\n\nCRITICAL CONTEXT: The user's device camera has detected that they are currently showing a "${webcamEmotion}" facial expression. You should gently incorporate this observation into your response (e.g., noting if their facial expression matches their words, or commenting on their apparent mood in a supportive, empathetic manner).`;
+        }
+
         const chatHistory = history.map(m => ({
             role: m.role === 'assistant' || m.role === 'model' ? 'model' : 'user',
             parts: [{ text: m.content }],
@@ -214,7 +234,7 @@ Respond with JSON: { "response": "your response text" }`;
 
         const model = genAI.getGenerativeModel({
             model: "gemini-1.5-flash",
-            systemInstruction: systemPrompt,
+            systemInstruction: finalSystemPrompt,
             generationConfig: {
                 responseMimeType: "application/json",
             }
@@ -234,7 +254,7 @@ Respond with JSON: { "response": "your response text" }`;
     } catch (err) {
         console.error('Echo error:', err);
         const sentiment = detectSentiment(message || '');
-        const response = getResponsiveFallback(message, sentiment);
+        const response = getResponsiveFallback(message, sentiment, webcamEmotion);
         res.json({ response, sentiment });
     }
 };
