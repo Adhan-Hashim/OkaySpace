@@ -129,21 +129,28 @@
 }
 
 @media (max-width: 900px) {
-  .ss-footer-wrapper, .ss-footer {
+  .ss-footer-wrapper, 
+  .ss-footer, 
+  .ss-left, 
+  .ss-center, 
+  .ss-right,
+  .ss-footer-content {
     height: auto !important;
+    min-height: 0 !important;
   }
   
   .ss-footer {
     padding: 3rem 1.5rem;
-    min-height: 85vh; /* Ensure the background photo is expansive */
+    min-height: 85vh !important; /* Ensure the background photo is expansive */
     background-position: center bottom; /* Anchor the photo to the bottom on mobile */
+    overflow: hidden; /* Force background to contain all elements */
   }
 
   .ss-footer-content {
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
+    justify-content: space-evenly;
+    gap: 3rem;
   }
   
   .ss-left {
