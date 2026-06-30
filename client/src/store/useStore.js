@@ -27,7 +27,7 @@ export const EMOTION_LABELS = {
   peace: 'Peace',
 };
 
-const useStore = create((set, get) => ({
+const useStore = create((set) => ({
   // ---- Navigation ----
   activeView: 'home',
   currentView: 'home',
@@ -76,7 +76,7 @@ const useStore = create((set, get) => ({
   breathingPattern: 'box',
   breathingActive: false,
   setBreathingPattern: (pattern) => set({ breathingPattern: pattern }),
-  setBreathingActive: (active) => set({ breathingActive: active }),
+  setBreathingActive: (isActive) => set({ breathingActive: isActive }),
 
   // ---- Session Stats ----
   sessionStart: new Date().toISOString(),
