@@ -57,7 +57,6 @@
   max-width: 600px; /* Much larger for the new Malayalam logo */
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.1));
   margin-top: -150px; /* Push the logo much higher up into the sky */
 }
 
