@@ -13,12 +13,11 @@ export default function Footer() {
 
         <div className="ss-center">
           <h1 className="ss-title">OKAYSPACE</h1>
-          <h2 className="ss-subtitle">PORTFOLIO</h2>
         </div>
 
         <div className="ss-right">
           <div className="ss-contact">
-            <p>OkaySpace | instagram @okayspace</p>
+            <p>OkaySpace | instagram @chattipathal</p>
             <p>hello@okayspace.com | okayspace.com</p>
           </div>
         </div>
