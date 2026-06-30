@@ -9,14 +9,15 @@
 
 .ss-footer {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1400px; /* Much wider */
   position: relative;
+  z-index: 1; /* Restored to ensure the watercolor background is visible */
   color: white;
-  min-height: 350px;
+  min-height: 200px; /* Less height */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 3rem 4rem;
+  padding: 1.5rem 4rem;
 }
 
 .ss-footer::before {
@@ -41,7 +42,7 @@
 }
 
 .ss-character {
-  height: 250px;
+  height: 140px; /* Scaled down for shorter footer */
   object-fit: contain;
   /* Rotate slightly to match the whimsical feel */
   transform: rotate(-10deg) scale(1.1);
@@ -61,7 +62,7 @@
 
 .ss-title {
   font-family: 'Chewy', cursive, sans-serif;
-  font-size: 4.5rem;
+  font-size: 3.5rem; /* Scaled down slightly */
   font-weight: 400;
   letter-spacing: 0.05em;
   margin: 0;
@@ -94,7 +95,7 @@
 
 .ss-contact {
   text-align: right;
-  margin-top: 80px; /* Push it down like the reference */
+  margin-top: 0; /* Removed extra top margin */
 }
 
 .ss-contact p {
