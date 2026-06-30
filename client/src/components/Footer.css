@@ -1,7 +1,7 @@
 .ss-footer-wrapper {
   width: 100%;
   padding: 4rem 2rem;
-  background-color: transparent; /* Remove color separation */
+  background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,8 +76,8 @@
   margin: 0;
   line-height: 1;
   text-align: center;
+  color: white !important;
   text-shadow: 2px 2px 0px rgba(180, 50, 40, 0.5); /* slight cutout shadow effect */
-  color: var(--primary-dark) !important; /* Force to UI color */
 }
 
 .ss-subtitle {
@@ -111,7 +111,7 @@
   font-size: 1.2rem;
   margin: 0.3rem 0;
   opacity: 0.95;
-  color: var(--primary-dark) !important; /* Force to UI color */
+  color: white !important;
 }
 
 @media (max-width: 900px) {
