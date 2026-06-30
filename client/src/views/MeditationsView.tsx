@@ -187,227 +187,264 @@ export default function MeditationsView() {
 
   return (
     <motion.div
-      className="meditations-page-nature"
+      className="vd-page-bg"
       id="meditations-view"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.45 }}
       style={{
-        backgroundImage: `url(${bgForest})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
         minHeight: '100vh',
         width: '100vw',
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
         marginTop: 'calc(-1 * var(--nav-h))',
-        paddingTop: 'calc(var(--nav-h) + var(--sp-6))',
+        paddingTop: 'calc(var(--nav-h) + var(--sp-12))',
         paddingLeft: 'var(--sp-8)',
         paddingRight: 'var(--sp-8)',
-        paddingBottom: 'var(--sp-6)',
+        paddingBottom: 'var(--sp-12)',
+        backgroundColor: '#ffffff',
       }}
     >
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(248, 250, 248, 0.4)', pointerEvents: 'none', zIndex: 0 }} />
-
-      <div style={{ maxWidth: '1000px', margin: '0 auto', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%', flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
       
-      {/* Header */}
-      <div className="view-header" style={{ background: 'rgba(255,255,255,0.4)', padding: 'var(--sp-4)', borderRadius: 'var(--r-xl)', marginBottom: 'var(--sp-6)' }}>
-        <div className="view-header-left">
-          <div className="view-eyebrow" style={{ color: 'var(--primary-dark)' }}> &nbsp;Breathe & Reflect</div>
-          <h1 className="view-title t-organic" style={{ color: 'var(--primary-dark)' }}>Meditations</h1>
-          <p className="view-subtitle" style={{ color: 'var(--primary-dark)' }}>
-            {activeTab === 'breathing' ? `${pattern.name} · ${pattern.desc}` : 'Guided audio & visualization sessions'}
-          </p>
-        </div>
-        <div style={{ display: 'flex', gap: 'var(--sp-3)', alignItems: 'center' }}>
-          <button
-            className={`btn btn-icon ${soundEnabled ? 'btn-primary' : 'btn-ghost'}`}
-            onClick={() => { setSoundEnabled(!soundEnabled); if (soundEnabled) stopAmbient(); }}
-            title={soundEnabled ? 'Mute' : 'Enable sound'}
-            style={{ fontSize: '1rem' }}
-          >
-            {soundEnabled ? '' : ''}
-          </button>
-          {!running && !meditationRunning && (
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--sp-8)', borderBottom: '2px solid #000000', paddingBottom: 'var(--sp-4)' }}>
+          <div className="view-header-left">
+            <h1 className="vd-title-large">MEDITATIONS</h1>
+            <p className="vd-subtitle">
+              {activeTab === 'breathing' ? `${pattern.name} · ${pattern.desc}` : 'Guided audio & visualization sessions'}
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--sp-3)', alignItems: 'center' }}>
             <button
-              className={`btn btn-icon btn-ghost ${showSettings ? 'btn-primary' : ''}`}
-              onClick={() => setShowSettings(!showSettings)}
-              style={{ fontSize: '1rem' }}
+              className={soundEnabled ? 'vd-btn-pill' : 'vd-btn-pill-secondary'}
+              onClick={() => { setSoundEnabled(!soundEnabled); if (soundEnabled) stopAmbient(); }}
+              title={soundEnabled ? 'Mute' : 'Enable sound'}
+              style={{ minHeight: '40px', height: '40px', padding: '0 1rem', fontSize: '0.85rem' }}
             >
-              
+              {soundEnabled ? '🔊 SOUND ON' : '🔇 SOUND OFF'}
             </button>
-          )}
+            {!running && !meditationRunning && (
+              <button
+                className={showSettings ? 'vd-btn-pill' : 'vd-btn-pill-secondary'}
+                onClick={() => setShowSettings(!showSettings)}
+                style={{ minHeight: '40px', height: '40px', padding: '0 1rem', fontSize: '0.85rem' }}
+              >
+                SETTINGS
+              </button>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Settings panel */}
-      <AnimatePresence>
-        {showSettings && !running && !meditationRunning && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            style={{ overflow: 'hidden', marginBottom: 'var(--sp-4)' }}
-          >
-            <div className="med-settings-panel glass-panel" style={{ padding: 'var(--sp-5)' }}>
-              <div>
-                <div className="t-label" style={{ marginBottom: 'var(--sp-3)' }}>Ambient Soundscape</div>
-                <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
-                  {['none', 'space', 'ocean', 'binaural'].map((t) => (
-                    <button key={t} onClick={() => setAmbientType(t as any)}
-                      className={`btn btn-sm ${ambientType === t ? 'btn-primary' : 'btn-ghost'}`}
-                      style={{ textTransform: 'capitalize' }}>
-                      {t === 'none' ? ' None' : t === 'space' ? ' Space' : t === 'ocean' ? ' Ocean' : ' Binaural'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {soundEnabled && ambientType !== 'none' && (
+        {/* Settings panel */}
+        <AnimatePresence>
+          {showSettings && !running && !meditationRunning && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              style={{ overflow: 'hidden', marginBottom: 'var(--sp-6)' }}
+            >
+              <div className="vd-card-flat" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)' }}>
                 <div>
-                  <div className="t-label" style={{ marginBottom: 'var(--sp-2)' }}>Ambient Volume</div>
-                  <input type="range" min="0" max="0.5" step="0.01" value={ambientVolume}
-                    onChange={(e) => setAmbientVol(parseFloat(e.target.value))}
-                    style={{ width: '100%', accentColor: 'var(--primary)' }} />
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Tabs */}
-      {!running && !meditationRunning && (
-        <div className="med-tabs glass-panel" style={{ padding: 'var(--sp-2)' }}>
-          <button className={`med-tab${activeTab === 'breathing' ? ' active' : ''}`} onClick={() => setActiveTab('breathing')}>
-             Breathing
-          </button>
-          <button className={`med-tab${activeTab === 'guided' ? ' active' : ''}`} onClick={() => setActiveTab('guided')}>
-             Guided Series
-          </button>
-        </div>
-      )}
-
-      {/* ── BREATHING TAB ── */}
-      <AnimatePresence mode="wait">
-        {activeTab === 'breathing' && !meditationRunning && (
-          <motion.div key="breathing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, gap: 'var(--sp-6)' }}>
-
-            <BreathingOrb running={running} phase={phase} pattern={pattern} countdown={countdown} cycles={cycles} />
-
-            {/* Pattern selector (only when stopped) */}
-            {!running && (
-              <motion.div className="breathing-patterns" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                {Object.entries(BREATHING_PATTERNS).map(([key, p]) => (
-                  <button key={key}
-                    className={`btn btn-sm ${breathingPattern === key ? 'btn-primary' : 'btn-ghost'}`}
-                    onClick={() => setBreathingPattern(key)}
-                    style={breathingPattern === key ? {} : { borderColor: p.color, color: p.color }}
-                  >
-                    {p.name}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-
-            {/* Start / Stop */}
-            <div style={{ display: 'flex', gap: 'var(--sp-4)' }}>
-              {!running ? (
-                <button className="btn btn-primary btn-lg" onClick={startBreathing}>
-                   &nbsp;Begin Session
-                </button>
-              ) : (
-                <button className="btn btn-secondary btn-lg" onClick={stopBreathing}>
-                  ⏹ &nbsp;End Session
-                </button>
-              )}
-            </div>
-
-            {/* Tips */}
-            {!running && (
-              <div className="glass-panel" style={{ padding: 'var(--sp-5) var(--sp-6)', maxWidth: '480px', marginTop: 'var(--sp-6)' }}>
-                <div className="t-label" style={{ marginBottom: 'var(--sp-3)', color: 'var(--primary-dark)' }}> Why this works</div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--primary-dark)', lineHeight: 1.7 }}>
-                  {pattern.name === 'Box Breathing' && 'Box breathing (4-4-4-4) is used by Navy SEALs to achieve instant calm. It balances CO₂ and O₂, slowing your heart rate and cortisol levels.'}
-                  {pattern.name === '4-7-8 Relaxing' && 'The 4-7-8 method activates your parasympathetic nervous system. The long 8-count exhale stimulates the vagus nerve, reducing anxiety within minutes.'}
-                  {pattern.name === 'Coherent' && 'Coherent breathing (5-5) synchronizes your heart rate and breath, creating optimal heart rate variability (HRV) — a key marker of resilience.'}
-                  {pattern.name === 'Energizing' && 'Rapid 2-2 breathing oxygenates the blood quickly, mimicking the physiological effect of mild exercise. Perfect for low-energy moments.'}
-                  {pattern.name === 'Extended Exhale' && 'An exhale twice as long as the inhale maximally stimulates the vagus nerve, quickly shifting your autonomic nervous system from stress to rest.'}
-                </p>
-              </div>
-            )}
-          </motion.div>
-        )}
-
-        {/* ── GUIDED TAB ── */}
-        {activeTab === 'guided' && !running && (
-          <motion.div key="guided" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ flex: 1 }}>
-            {!meditationRunning ? (
-              <div className="guided-grid">
-                {GUIDED_MEDITATIONS.map((m, i) => (
-                  <motion.div
-                    key={m.id}
-                    className="meditation-card"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.07 }}
-                  >
-                    <div className="meditation-card-header" style={{ background: MEDITATION_COLORS[i % MEDITATION_COLORS.length] }}>
-                      <span style={{ fontSize: '3rem' }}>{MEDITATION_EMOJIS[i % MEDITATION_EMOJIS.length]}</span>
-                    </div>
-                    <div className="meditation-card-body">
-                      <div className="meditation-card-title">{m.title}</div>
-                      <div className="meditation-card-meta">⏱ {m.duration} &nbsp;·&nbsp;  Best for: {m.bestFor}</div>
-                      <button className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--sp-2)' }} onClick={() => startGuided(m)}>
-                        ▶ &nbsp;Play Audio Session
+                  <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', color: '#000000', marginBottom: 'var(--sp-2)' }}>Ambient Soundscape</div>
+                  <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
+                    {['none', 'space', 'ocean', 'binaural'].map((t) => (
+                      <button key={t} onClick={() => setAmbientType(t as any)}
+                        className={ambientType === t ? 'vd-btn-pill' : 'vd-btn-pill-secondary'}
+                        style={{ minHeight: '35px', height: '35px', padding: '0 1rem', fontSize: '0.8rem' }}>
+                        {t === 'none' ? 'None' : t}
                       </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            ) : (
-              /* Active guided session */
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, padding: 'var(--sp-8) 0' }}>
-                <div className="meditation-session-card">
-                  <div style={{ fontSize: '3rem' }}>{MEDITATION_EMOJIS[GUIDED_MEDITATIONS.indexOf(activeMeditation!) % MEDITATION_EMOJIS.length]}</div>
-                  <div>
-                    <div className="t-label" style={{ marginBottom: 'var(--sp-2)', textAlign: 'center' }}>Now Playing</div>
-                    <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem', color: 'var(--text)', textAlign: 'center' }}>{activeMeditation?.title}</h2>
-                  </div>
-                  <div style={{
-                    background: 'var(--bg)', borderRadius: 'var(--r-xl)',
-                    padding: 'var(--sp-8)', width: '100%',
-                    border: '1px solid var(--border-light)', minHeight: '120px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <p className="meditation-step-text">
-                      {activeStepIndex >= 0 ? activeMeditation?.steps[activeStepIndex] : 'Starting your session...'}
-                    </p>
-                  </div>
-                  {/* Progress dots */}
-                  <div style={{ display: 'flex', gap: 'var(--sp-2)', justifyContent: 'center' }}>
-                    {activeMeditation?.steps.map((_, i) => (
-                      <div key={i} style={{
-                        width: i === activeStepIndex ? 20 : 8,
-                        height: 8, borderRadius: 'var(--r-full)',
-                        background: i <= activeStepIndex ? 'var(--primary)' : 'var(--border)',
-                        transition: 'all 0.3s ease',
-                      }} />
                     ))}
                   </div>
-                  <button className="btn btn-secondary" onClick={stopGuided} style={{ width: '100%' }}>
-                    ⏹ &nbsp;End Session
-                  </button>
+                </div>
+                {soundEnabled && ambientType !== 'none' && (
+                  <div>
+                    <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', color: '#000000', marginBottom: 'var(--sp-2)' }}>Ambient Volume</div>
+                    <input type="range" min="0" max="0.5" step="0.01" value={ambientVolume}
+                      onChange={(e) => setAmbientVol(parseFloat(e.target.value))}
+                      style={{ width: '100%', accentColor: '#000000' }} />
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Tabs */}
+        {!running && !meditationRunning && (
+          <div style={{ display: 'flex', gap: 'var(--sp-3)', marginBottom: 'var(--sp-8)' }}>
+            <button className={activeTab === 'breathing' ? 'vd-btn-pill' : 'vd-btn-pill-secondary'} onClick={() => setActiveTab('breathing')}>
+              Breathing
+            </button>
+            <button className={activeTab === 'guided' ? 'vd-btn-pill' : 'vd-btn-pill-secondary'} onClick={() => setActiveTab('guided')}>
+              Guided Series
+            </button>
+          </div>
+        )}
+
+        {/* ── BREATHING TAB ── */}
+        <AnimatePresence mode="wait">
+          {activeTab === 'breathing' && !meditationRunning && (
+            <motion.div key="breathing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, gap: 'var(--sp-8)' }}>
+
+              {/* Breathing orb wrapper */}
+              <div className="breathing-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--sp-6)' }}>
+                <div style={{
+                  width: '280px',
+                  height: '280px',
+                  borderRadius: '50%',
+                  border: '3px solid #000000',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  backgroundColor: '#ffffff',
+                  transform: running ? (phase?.name === 'Inhale' ? 'scale(1.15)' : phase?.name === 'Hold' ? 'scale(1.1)' : 'scale(0.9)') : 'scale(1)',
+                  transition: `transform ${phase?.d || 4}s cubic-bezier(0.4, 0, 0.2, 1)`,
+                }}>
+                  <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '1.4rem', color: '#000000', textTransform: 'uppercase' }}>
+                    {running ? phase?.name : 'Ready'}
+                  </div>
+                  <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '3rem', color: '#000000', marginTop: 'var(--sp-2)' }}>
+                    {running ? countdown : '—'}
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.9rem', color: '#666666', marginBottom: 'var(--sp-2)' }}>
+                    {running ? `Cycle ${cycles + 1}  ·  ${pattern.phases.map((p: any) => p.d).join('-')} pattern` : pattern.desc}
+                  </div>
+                  <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '1.1rem', textTransform: 'uppercase', color: '#000000' }}>
+                    {pattern.name}
+                  </div>
                 </div>
               </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+              {/* Pattern selector (only when stopped) */}
+              {!running && (
+                <motion.div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap', justifyContent: 'center' }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  {Object.entries(BREATHING_PATTERNS).map(([key, p]) => (
+                    <button key={key}
+                      className={breathingPattern === key ? 'vd-btn-pill' : 'vd-btn-pill-secondary'}
+                      onClick={() => setBreathingPattern(key)}
+                      style={{ minHeight: '38px', height: '38px', padding: '0 1rem', fontSize: '0.8rem' }}
+                    >
+                      {p.name}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+
+              {/* Start / Stop */}
+              <div style={{ display: 'flex', gap: 'var(--sp-4)' }}>
+                {!running ? (
+                  <button className="vd-btn-pill" onClick={startBreathing}>
+                    Begin Session
+                  </button>
+                ) : (
+                  <button className="vd-btn-pill" onClick={stopBreathing} style={{ backgroundColor: '#ff3b30', borderColor: '#ff3b30' }}>
+                    ⏹ End Session
+                  </button>
+                )}
+              </div>
+
+              {/* Tips */}
+              {!running && (
+                <div className="vd-card-flat" style={{ maxWidth: '500px', width: '100%', marginTop: 'var(--sp-4)' }}>
+                  <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', color: '#000000', marginBottom: 'var(--sp-2)' }}>Why this works</div>
+                  <p style={{ fontSize: '0.9rem', color: '#333333', lineHeight: 1.7 }}>
+                    {pattern.name === 'Box Breathing' && 'Box breathing (4-4-4-4) is used by Navy SEALs to achieve instant calm. It balances CO₂ and O₂, slowing your heart rate and cortisol levels.'}
+                    {pattern.name === '4-7-8 Relaxing' && 'The 4-7-8 method activates your parasympathetic nervous system. The long 8-count exhale stimulates the vagus nerve, reducing anxiety within minutes.'}
+                    {pattern.name === 'Coherent' && 'Coherent breathing (5-5) synchronizes your heart rate and breath, creating optimal heart rate variability (HRV) — a key marker of resilience.'}
+                    {pattern.name === 'Energizing' && 'Rapid 2-2 breathing oxygenates the blood quickly, mimicking the physiological effect of mild exercise. Perfect for low-energy moments.'}
+                    {pattern.name === 'Extended Exhale' && 'An exhale twice as long as the inhale maximally stimulates the vagus nerve, quickly shifting your autonomic nervous system from stress to rest.'}
+                  </p>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* ── GUIDED TAB ── */}
+          {activeTab === 'guided' && !running && (
+            <motion.div key="guided" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ flex: 1 }}>
+              {!meditationRunning ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 'var(--sp-6)' }}>
+                  {GUIDED_MEDITATIONS.map((m, i) => (
+                    <motion.div
+                      key={m.id}
+                      className="vd-card-flat"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.07 }}
+                      style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}
+                    >
+                      <div>
+                        <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '1.25rem', color: '#000000', marginBottom: 'var(--sp-2)' }}>
+                          {m.title}
+                        </div>
+                        <div style={{ fontSize: '0.85rem', color: '#666666', fontWeight: 500, marginBottom: 'var(--sp-4)' }}>
+                          ⏱ {m.duration}  ·  Best for: {m.bestFor}
+                        </div>
+                      </div>
+                      <button className="vd-btn-pill" style={{ width: '100%', minHeight: '40px', height: '40px', fontSize: '0.85rem' }} onClick={() => startGuided(m)}>
+                        ▶ Play Audio Session
+                      </button>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                /* Active guided session */
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, padding: 'var(--sp-8) 0' }}>
+                  <div className="vd-card-flat" style={{ maxWidth: '500px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--sp-6)' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', color: '#666666', marginBottom: 'var(--sp-1)' }}>Now Playing</div>
+                      <h2 style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: '1.6rem', color: '#000000' }}>{activeMeditation?.title}</h2>
+                    </div>
+                    
+                    <div style={{
+                      backgroundColor: '#f9fafb',
+                      border: '1.5px solid #000000',
+                      borderRadius: '12px',
+                      padding: 'var(--sp-6)',
+                      width: '100%',
+                      minHeight: '120px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                    }}>
+                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', lineHeight: 1.6, color: '#000000', fontWeight: 500 }}>
+                        {activeStepIndex >= 0 ? activeMeditation?.steps[activeStepIndex] : 'Starting your session...'}
+                      </p>
+                    </div>
+
+                    {/* Progress dots */}
+                    <div style={{ display: 'flex', gap: 'var(--sp-2)', justifyContent: 'center' }}>
+                      {activeMeditation?.steps.map((_, i) => (
+                        <div key={i} style={{
+                          width: i === activeStepIndex ? 24 : 8,
+                          height: 8,
+                          borderRadius: 'var(--r-full)',
+                          background: i <= activeStepIndex ? '#000000' : '#e5e7eb',
+                          transition: 'all 0.3s ease',
+                        }} />
+                      ))}
+                    </div>
+                    
+                    <button className="vd-btn-pill" onClick={stopGuided} style={{ width: '100%', backgroundColor: '#ff3b30', borderColor: '#ff3b30' }}>
+                      ⏹ End Session
+                    </button>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

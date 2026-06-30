@@ -1948,3 +1948,229 @@ textarea.input {
   box-shadow: 0 0 0 3px rgba(127,182,157,0.18);
 }
 .input-field::placeholder { color: var(--text-light); }
+
+/* ==========================================================================
+   VOLDOGFOOD-INSPIRED DESIGN SYSTEM OVERRIDES (Non-About pages)
+   Minimalist · High-Contrast · Stark Black & White · Clean Typography
+   ========================================================================== */
+
+.vd-page-bg {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+}
+
+.vd-page-bg::before,
+.vd-page-bg::after,
+.vd-page-bg .home-overlay,
+.vd-page-bg .home-overlay::before {
+  display: none !important;
+}
+
+.vd-title-large {
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 3rem !important;
+  color: #000000 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.1 !important;
+  margin: 0 !important;
+}
+
+.vd-subtitle {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 1.1rem !important;
+  color: #666666 !important;
+  font-weight: 500 !important;
+  margin-top: var(--sp-2) !important;
+}
+
+/* Stark buttons */
+.vd-btn-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  border-radius: var(--r-full) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  padding: 0.75rem 2rem !important;
+  min-height: 50px !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+.vd-btn-pill:hover {
+  background-color: #333333 !important;
+  border-color: #333333 !important;
+  transform: translateY(-1px) !important;
+}
+.vd-btn-pill:active {
+  transform: translateY(1px) !important;
+}
+.vd-btn-pill:disabled {
+  background-color: #e5e5e5 !important;
+  border-color: #e5e5e5 !important;
+  color: #999999 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.vd-btn-pill-secondary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  border-radius: var(--r-full) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  padding: 0.75rem 2rem !important;
+  min-height: 50px !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+.vd-btn-pill-secondary:hover {
+  background-color: #f3f4f6 !important;
+  transform: translateY(-1px) !important;
+}
+.vd-btn-pill-secondary:active {
+  transform: translateY(1px) !important;
+}
+
+/* Clean border layout card */
+.vd-card-flat {
+  background-color: #ffffff !important;
+  border: 1.5px solid #000000 !important;
+  border-radius: var(--r-lg) !important;
+  padding: var(--sp-6) !important;
+  box-shadow: none !important;
+  transition: transform 0.2s ease !important;
+}
+
+/* Accordion styled list item */
+.vd-accordion-item {
+  border-bottom: 1.5px solid #000000 !important;
+  padding: var(--sp-5) 0 !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  width: 100% !important;
+}
+.vd-accordion-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+.vd-accordion-title {
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  color: #000000 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
+}
+.vd-accordion-icon {
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  color: #000000 !important;
+  transition: transform 0.2s ease !important;
+}
+.vd-accordion-content {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.7 !important;
+  color: #333333 !important;
+  padding-top: var(--sp-4) !important;
+  padding-right: var(--sp-8) !important;
+}
+
+/* High-contrast chat design */
+.vd-chat-user-bubble {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 24px 24px 4px 24px !important;
+  padding: 1rem 1.25rem !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  max-width: 80% !important;
+  align-self: flex-end !important;
+  word-break: break-word !important;
+}
+
+.vd-chat-ai-bubble {
+  background-color: #f3f4f6 !important;
+  color: #000000 !important;
+  border-radius: 24px 24px 24px 4px !important;
+  padding: 1rem 1.25rem !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  max-width: 80% !important;
+  align-self: flex-start !important;
+  word-break: break-word !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.vd-chat-input-row {
+  display: flex !important;
+  align-items: center !important;
+  border: 2px solid #000000 !important;
+  border-radius: var(--r-full) !important;
+  background-color: #ffffff !important;
+  padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-5) !important;
+  width: 100% !important;
+  transition: box-shadow 0.2s ease !important;
+}
+.vd-chat-input-row:focus-within {
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+.vd-chat-textarea {
+  flex: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 1rem !important;
+  color: #000000 !important;
+  resize: none !important;
+  max-height: 120px !important;
+  padding: 4px 0 !important;
+}
+.vd-chat-textarea::placeholder {
+  color: #999999 !important;
+}
+
+.vd-chat-send-btn {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 42px !important;
+  height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, transform 0.15s ease !important;
+  font-size: 1.2rem !important;
+  font-weight: bold !important;
+}
+.vd-chat-send-btn:hover:not(:disabled) {
+  background-color: #333333 !important;
+}
+.vd-chat-send-btn:disabled {
+  background-color: #e5e5e5 !important;
+  color: #999999 !important;
+  cursor: not-allowed !important;
+}
