@@ -170,7 +170,14 @@ p { color: var(--text-secondary); line-height: 1.7; }
 
 @media (max-width: 900px) {
   :root {
-    --footer-h: 100vh;
+    --footer-h: 0px !important; /* No margin on main-content */
+  }
+  
+  .footer-fixed-container {
+    position: relative !important;
+    height: auto !important;
+    width: 100% !important;
+    display: block !important;
   }
 }
 
