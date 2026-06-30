@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: calc(var(--nav-h) + 2rem) var(--sp-8) var(--sp-8);
+  padding: calc(var(--nav-h) + 2rem) var(--sp-8) 0; /* Changed bottom padding to 0 to push boxes further down */
 }
 
 .home-overlay {
