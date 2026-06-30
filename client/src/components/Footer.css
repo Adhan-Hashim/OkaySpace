@@ -129,10 +129,6 @@
 }
 
 @media (max-width: 900px) {
-  .ss-footer-wrapper, .ss-footer {
-    height: auto !important;
-  }
-  
   .ss-footer {
     padding: 2rem 1rem;
     background-position: center bottom; /* Anchor the photo to the bottom on mobile */
