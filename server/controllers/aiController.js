@@ -65,8 +65,8 @@ function detectDistortion(text) {
 // =============== ECHO — AI Companion ===============
 
 exports.echo = async (req, res) => {
+    const { message, history = [], mode } = req.body;
     try {
-        const { message, history = [], mode } = req.body;
         if (!message) return res.status(400).json({ message: 'Message is required' });
 
         const sentiment = detectSentiment(message);
@@ -219,8 +219,8 @@ Respond with JSON: { "response": "your response text" }`;
 // =============== ECHO REFRAME — Cognitive Restructuring ===============
 
 exports.echoReframe = async (req, res) => {
+    const { message, history = [] } = req.body;
     try {
-        const { message, history = [] } = req.body;
         if (!message) return res.status(400).json({ message: 'Message is required' });
 
         const sentiment = detectSentiment(message);
