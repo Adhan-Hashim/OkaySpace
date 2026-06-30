@@ -67,7 +67,7 @@ function getResponsiveFallback(text, sentiment) {
     const lower = (text || '').toLowerCase().trim();
 
     // 1. Crisis / Self-Harm
-    if (/\b(suicide|kill myself|hurt myself|end my life|want to die|cutting)\b/.test(lower)) {
+    if (/\b(suicide|suicidal|kill myself|hurt myself|end my life|want to die|going to die|wanna die|die|death|cutting)\b/.test(lower)) {
         return "It sounds like you're going through an incredibly difficult time. Please know you are not alone. If you're in distress, please reach out to a professional counselor or contact a local crisis support helpline immediately. I am here to support you, but professional care is vital right now.";
     }
 
