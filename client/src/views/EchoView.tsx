@@ -82,6 +82,7 @@ export default function EchoView() {
       const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
       await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
         faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
       ]);
       setModelsLoaded(true);
@@ -103,13 +104,51 @@ export default function EchoView() {
           const detection = await faceapi.detectSingleFace(
             videoRef.current,
             new faceapi.SsdMobilenetv1Options({ minConfidence: 0.4 })
-          ).withFaceExpressions();
+          ).withFaceLandmarks().withFaceExpressions();
 
           if (detection && detection.expressions) {
             const expressions = detection.expressions;
             const dominant = Object.entries(expressions).reduce((a: any, b: any) => a[1] > b[1] ? a : b);
-            setDetectedEmotion(dominant[0]);
-            setDetectedConfidence(Math.round(dominant[1] * 100));
+            
+            let emotion = dominant[0];
+            let confidence = Math.round(dominant[1] * 100);
+
+            // Apply crying/grimace correction heuristic using 68-point facial landmarks
+            if (detection.landmarks) {
+              const positions = detection.landmarks.positions;
+              // Inner eyebrow landmarks (indices 21 and 22)
+              const leftEyebrowInner = positions[21];
+              const rightEyebrowInner = positions[22];
+              // Inner eye corners (indices 39 and 42)
+              const leftEyeInner = positions[39];
+              const rightEyeInner = positions[42];
+
+              if (leftEyebrowInner && rightEyebrowInner && leftEyeInner && rightEyeInner) {
+                const eyebrowDist = Math.sqrt(
+                  Math.pow(leftEyebrowInner.x - rightEyebrowInner.x, 2) +
+                  Math.pow(leftEyebrowInner.y - rightEyebrowInner.y, 2)
+                );
+                const eyeDist = Math.sqrt(
+                  Math.pow(leftEyeInner.x - rightEyeInner.x, 2) +
+                  Math.pow(leftEyeInner.y - rightEyeInner.y, 2)
+                );
+
+                const furrowRatio = eyebrowDist / eyeDist;
+
+                // Furrowed eyebrows (drawn together - ratio < 0.85) indicates stress/sadness/pain.
+                // Override false-positive "happy" smiles (which often happen during crying/grimacing) to "sad".
+                if (emotion === 'happy' && furrowRatio < 0.85) {
+                  emotion = 'sad';
+                  confidence = Math.max(confidence - 15, 75);
+                } else if (emotion === 'neutral' && furrowRatio < 0.78) {
+                  emotion = 'sad';
+                  confidence = 80;
+                }
+              }
+            }
+
+            setDetectedEmotion(emotion);
+            setDetectedConfidence(confidence);
           }
         } catch (e) {
           console.error("Face detection frame error:", e);
