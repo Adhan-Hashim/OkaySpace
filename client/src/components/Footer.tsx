@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/logo.png';
+import character from '../assets/character.png';
 import './Footer.css';
 
 export default function Footer() {
@@ -8,7 +8,7 @@ export default function Footer() {
       <footer className="ss-footer">
         
         <div className="ss-left">
-          <img src={logo} alt="OkaySpace Character" className="ss-character" />
+          <img src={character} alt="OkaySpace Character" className="ss-character" />
         </div>
 
         <div className="ss-center">
