@@ -62,6 +62,95 @@ function detectDistortion(text) {
     return null;
 }
 
+// Helper to generate highly responsive rule-based and sentiment fallback responses
+function getResponsiveFallback(text, sentiment) {
+    const lower = (text || '').toLowerCase().trim();
+
+    // 1. Crisis / Self-Harm
+    if (/\b(suicide|kill myself|hurt myself|end my life|want to die|cutting)\b/.test(lower)) {
+        return "It sounds like you're going through an incredibly difficult time. Please know you are not alone. If you're in distress, please reach out to a professional counselor or contact a local crisis support helpline immediately. I am here to support you, but professional care is vital right now.";
+    }
+
+    // 2. Greetings
+    if (/\b(hi|hello|hey|good morning|good evening|yo|hola)\b/.test(lower)) {
+        return "Hello! I'm Echo, your neural companion. I'm here to listen. What's on your mind today?";
+    }
+
+    // 3. Presence Checks
+    if (/\b(are you there|you there|anybody there|hello\?|are you online)\b/.test(lower) || lower.endsWith('you there?')) {
+        return "Yes, I'm right here. I'm always ready to listen. Tell me, what's occupying your thoughts?";
+    }
+
+    // 4. Identity Checks
+    if (/\b(who are you|what are you|your name|what is echo)\b/.test(lower)) {
+        return "I'm Echo — your neural companion. I'm here to help you reflect on your thoughts and feelings without any judgment. How are you doing?";
+    }
+
+    // 5. Relationship triggers (talking about someone else)
+    if (/\b(he|she|him|her|friend|mother|father|parents|brother|sister|boyfriend|girlfriend|husband|wife|boss|coworker|them)\b/.test(lower)) {
+        return "It sounds like this relationship is weighing on you. Can you tell me more about what is happening between you and them?";
+    }
+
+    // 6. Question words
+    if (/\b(why|how|what is|tell me why)\b/.test(lower)) {
+        return "That's a deep question. Sometimes exploring the 'why' helps us see things in a new light. What answers are you hoping to find?";
+    }
+
+    // 7. Affirmations
+    if (/\b(yes|yeah|indeed|ok|okay|sure|absolutely|correct)\b/.test(lower)) {
+        return "I understand. Let's explore that further — what specific thoughts or feelings does that bring up for you?";
+    }
+
+    // 8. Negations
+    if (/\b(no|nope|never|not really|don't think so)\b/.test(lower)) {
+        return "I hear you. If that doesn't feel right, let's step back. What feels more true to your experience right now?";
+    }
+
+    // 9. Default sentiment-based pools
+    const responses = {
+        sadness: [
+            "I can feel the weight in your words. Sadness is a signal that something important to you is being affected. What feels most heavy right now?",
+            "It takes courage to sit with sadness rather than push it away. I'm here with you in this space. What's beneath the surface?",
+            "Your sadness is valid. It shows the depth of your capacity to feel. Would you like to explore what might help lighten this?",
+        ],
+        anxiety: [
+            "I notice the tension in what you're sharing. Let's slow down together. What is the single most pressing worry right now?",
+            "Anxiety often tries to protect us by imagining worst-case scenarios. What's the story your mind is telling you?",
+            "When everything feels urgent, nothing gets processed. Let's take this one piece at a time. What's the first thread to pull?",
+        ],
+        anger: [
+            "Anger is a powerful emotion — it often means a boundary has been crossed. What feels violated or unfair to you?",
+            "I hear the intensity in your words. Anger can be a messenger. What is it trying to tell you?",
+            "It's okay to feel angry. Let's channel that energy — what change would make this situation feel more just?",
+        ],
+        joy: [
+            "That brightness in your words is beautiful. What sparked this feeling, and how can you create more of it?",
+            "I love seeing this energy! Joy is worth savoring. Take a moment to really sit with this good feeling.",
+            "What a wonderful state to be in. Notice this moment — it's data for your mind that good things happen too.",
+        ],
+        calm: [
+            "There's a groundedness in your words. This calm is a powerful state — it's where your clearest thinking happens.",
+            "I can sense your equilibrium. From this centered place, what feels most true to you right now?",
+        ],
+        hope: [
+            "I can feel the forward momentum in your words. Hope is the mind's way of saying 'there's a path.' What direction do you want to move in?",
+            "That spark of hope is powerful. Let's nurture it — what would the next small step look like?",
+        ],
+        neutral: [
+            "Thank you for sharing. I'm curious to understand more — what's the feeling underneath these words?",
+            "I hear you. Sometimes the most important conversations start from a neutral place. What would you like to explore?",
+            "Tell me more. I want to understand not just what you're thinking, but what you're feeling about it.",
+        ],
+        confusion: [
+            "Confusion can actually be a sign of growth — it means your old framework isn't fitting anymore. What feels most unclear?",
+            "Let's untangle this together. If you had to name just one thing that feels confusing, what would it be?",
+        ],
+    };
+
+    const pool = responses[sentiment.emotion] || responses.neutral;
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
 // =============== ECHO — AI Companion ===============
 
 exports.echo = async (req, res) => {
@@ -73,50 +162,7 @@ exports.echo = async (req, res) => {
         const genAI = getGemini();
 
         if (!genAI) {
-            // Smart mock responses based on sentiment
-            const responses = {
-                sadness: [
-                    "I can feel the weight in your words. Sadness is a signal that something important to you is being affected. What feels most heavy right now?",
-                    "It takes courage to sit with sadness rather than push it away. I'm here with you in this space. What's beneath the surface?",
-                    "Your sadness is valid. It shows the depth of your capacity to feel. Would you like to explore what might help lighten this?",
-                ],
-                anxiety: [
-                    "I notice the tension in what you're sharing. Let's slow down together. What is the single most pressing worry right now?",
-                    "Anxiety often tries to protect us by imagining worst-case scenarios. What's the story your mind is telling you?",
-                    "When everything feels urgent, nothing gets processed. Let's take this one piece at a time. What's the first thread to pull?",
-                ],
-                anger: [
-                    "Anger is a powerful emotion — it often means a boundary has been crossed. What feels violated or unfair to you?",
-                    "I hear the intensity in your words. Anger can be a messenger. What is it trying to tell you?",
-                    "It's okay to feel angry. Let's channel that energy — what change would make this situation feel more just?",
-                ],
-                joy: [
-                    "That brightness in your words is beautiful. What sparked this feeling, and how can you create more of it?",
-                    "I love seeing this energy! Joy is worth savoring. Take a moment to really sit with this good feeling.",
-                    "What a wonderful state to be in. Notice this moment — it's data for your mind that good things happen too.",
-                ],
-                calm: [
-                    "There's a groundedness in your words. This calm is a powerful state — it's where your clearest thinking happens.",
-                    "I can sense your equilibrium. From this centered place, what feels most true to you right now?",
-                ],
-                hope: [
-                    "I can feel the forward momentum in your words. Hope is the mind's way of saying 'there's a path.' What direction do you want to move in?",
-                    "That spark of hope is powerful. Let's nurture it — what would the next small step look like?",
-                ],
-                neutral: [
-                    "Thank you for sharing. I'm curious to understand more — what's the feeling underneath these words?",
-                    "I hear you. Sometimes the most important conversations start from a neutral place. What would you like to explore?",
-                    "Tell me more. I want to understand not just what you're thinking, but what you're feeling about it.",
-                ],
-                confusion: [
-                    "Confusion can actually be a sign of growth — it means your old framework isn't fitting anymore. What feels most unclear?",
-                    "Let's untangle this together. If you had to name just one thing that feels confusing, what would it be?",
-                ],
-            };
-
-            const pool = responses[sentiment.emotion] || responses.neutral;
-            const response = pool[Math.floor(Math.random() * pool.length)];
-
+            const response = getResponsiveFallback(message, sentiment);
             return res.json({ response, sentiment });
         }
 
@@ -168,50 +214,8 @@ Respond with JSON: { "response": "your response text" }`;
 
     } catch (err) {
         console.error('Echo error:', err);
-        const responses = {
-            sadness: [
-                "I can feel the weight in your words. Sadness is a signal that something important to you is being affected. What feels most heavy right now?",
-                "It takes courage to sit with sadness rather than push it away. I'm here with you in this space. What's beneath the surface?",
-                "Your sadness is valid. It shows the depth of your capacity to feel. Would you like to explore what might help lighten this?",
-            ],
-            anxiety: [
-                "I notice the tension in what you're sharing. Let's slow down together. What is the single most pressing worry right now?",
-                "Anxiety often tries to protect us by imagining worst-case scenarios. What's the story your mind is telling you?",
-                "When everything feels urgent, nothing gets processed. Let's take this one piece at a time. What's the first thread to pull?",
-            ],
-            anger: [
-                "Anger is a powerful emotion — it often means a boundary has been crossed. What feels violated or unfair to you?",
-                "I hear the intensity in your words. Anger can be a messenger. What is it trying to tell you?",
-                "It's okay to feel angry. Let's channel that energy — what change would make this situation feel more just?",
-            ],
-            joy: [
-                "That brightness in your words is beautiful. What sparked this feeling, and how can you create more of it?",
-                "I love seeing this energy! Joy is worth savoring. Take a moment to really sit with this good feeling.",
-                "What a wonderful state to be in. Notice this moment — it's data for your mind that good things happen too.",
-            ],
-            calm: [
-                "There's a groundedness in your words. This calm is a powerful state — it's where your clearest thinking happens.",
-                "I can sense your equilibrium. From this centered place, what feels most true to you right now?",
-            ],
-            hope: [
-                "I can feel the forward momentum in your words. Hope is the mind's way of saying 'there's a path.' What direction do you want to move in?",
-                "That spark of hope is powerful. Let's nurture it — what would the next small step look like?",
-            ],
-            neutral: [
-                "Thank you for sharing. I'm curious to understand more — what's the feeling underneath these words?",
-                "I hear you. Sometimes the most important conversations start from a neutral place. What would you like to explore?",
-                "Tell me more. I want to understand not just what you're thinking, but what you're feeling about it.",
-            ],
-            confusion: [
-                "Confusion can actually be a sign of growth — it means your old framework isn't fitting anymore. What feels most unclear?",
-                "Let's untangle this together. If you had to name just one thing that feels confusing, what would it be?",
-            ],
-        };
-
         const sentiment = detectSentiment(message || '');
-        const pool = responses[sentiment.emotion] || responses.neutral;
-        const response = pool[Math.floor(Math.random() * pool.length)];
-
+        const response = getResponsiveFallback(message, sentiment);
         res.json({ response, sentiment });
     }
 };
