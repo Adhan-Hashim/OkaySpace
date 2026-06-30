@@ -238,7 +238,7 @@ export default function MeditationsView() {
               {activeTab === 'breathing' ? `${pattern.name} · ${pattern.desc}` : 'Guided audio & visualization sessions'}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: 'var(--sp-3)', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 'var(--sp-3)', alignItems: 'center', flexWrap: 'wrap' }}>
             <button
               className={soundEnabled ? 'vd-btn-pill' : 'vd-btn-pill-secondary'}
               onClick={() => { setSoundEnabled(!soundEnabled); if (soundEnabled) stopAmbient(); }}

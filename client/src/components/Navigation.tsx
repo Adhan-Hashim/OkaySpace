@@ -26,7 +26,7 @@ export default function Navigation() {
         <div className="nav-inner">
           {/* Logo */}
           <div className="nav-logo" onClick={() => go('home')} role="button" tabIndex={0} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-            <img src={logo} alt="OkaySpace Logo" style={{ height: '100px', margin: '-30px 0', mixBlendMode: 'multiply', objectFit: 'contain' }} />
+            <img src={logo} alt="OkaySpace Logo" className="nav-logo-img" />
           </div>
 
           {/* Desktop Links */}

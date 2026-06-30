@@ -489,7 +489,7 @@ export default function EchoView() {
             <p className="vd-subtitle">AI Companion for listening and reframing</p>
           </div>
           {/* Mode switcher & Camera Toggle */}
-          <div style={{ display: 'flex', gap: 'var(--sp-2)', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 'var(--sp-2)', alignItems: 'center', flexWrap: 'wrap' }}>
             <button
               className={cameraActive ? 'vd-btn-pill' : 'vd-btn-pill-secondary'}
               onClick={() => setCameraActive(!cameraActive)}
@@ -631,7 +631,7 @@ export default function EchoView() {
                   ↑
                 </button>
               </div>
-              <div style={{ textAlign: 'center', fontSize: '0.75rem', color: '#666666', marginTop: 'var(--sp-2)', fontWeight: 500 }}>
+              <div className="hide-on-mobile" style={{ textAlign: 'center', fontSize: '0.75rem', color: '#666666', marginTop: 'var(--sp-2)', fontWeight: 500 }}>
                 Press Enter to send  ·  Shift + Enter for new line
               </div>
             </div>
