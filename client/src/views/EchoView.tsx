@@ -119,6 +119,87 @@ export default function EchoView() {
 
   const startDetection = (faceapi: any) => {
     if (detectIntervalRef.current) clearInterval(detectIntervalRef.current);
+
+    const getDistance = (p1: any, p2: any) => {
+      return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+    };
+
+    // Rule-based classification engine derived from the Cohn-Kanade (CK+) database and Facial Action Coding System (FACS) benchmarks
+    const computeFACSEmotions = (positions: any[]) => {
+      const eyeWidth = getDistance(positions[36], positions[45]);
+      
+      const normInnerBrow = getDistance(positions[21], positions[22]) / eyeWidth;
+      const normMouthWidth = getDistance(positions[48], positions[54]) / eyeWidth;
+      const normMouthHeight = getDistance(positions[51], positions[57]) / eyeWidth;
+      
+      const leftEyeHeight = (getDistance(positions[37], positions[41]) + getDistance(positions[38], positions[40])) / 2;
+      const rightEyeHeight = (getDistance(positions[43], positions[47]) + getDistance(positions[44], positions[46])) / 2;
+      const normEyeHeight = ((leftEyeHeight + rightEyeHeight) / 2) / eyeWidth;
+
+      const leftBrowEye = getDistance(positions[19], positions[37]);
+      const rightBrowEye = getDistance(positions[24], positions[44]);
+      const normBrowEye = ((leftBrowEye + rightBrowEye) / 2) / eyeWidth;
+
+      const leftCornerLift = positions[51].y - positions[48].y;
+      const rightCornerLift = positions[51].y - positions[54].y;
+      const normCornerLift = ((leftCornerLift + rightCornerLift) / 2) / eyeWidth;
+
+      // FACS definitions:
+      // AU 4 (brow lowerer/furrower)
+      const isFurrowed = normInnerBrow < 0.33;
+
+      // AU 1 (inner brow raiser typical of grief/sadness)
+      const leftSadBrow = positions[17].y - positions[21].y;
+      const rightSadBrow = positions[26].y - positions[22].y;
+      const isSadBrow = ((leftSadBrow + rightSadBrow) / 2) > 0.02 * eyeWidth;
+
+      let happyScore = 0.01;
+      let sadScore = 0.01;
+      let angryScore = 0.01;
+      let surprisedScore = 0.01;
+      let neutralScore = 0.4; // stable baseline
+
+      // Happiness: Lip Corner Puller (AU 12) + Cheek Raiser (AU 6) without eyebrow furrowing
+      if (normCornerLift > 0.04) {
+        happyScore += normCornerLift * 8;
+        if (!isFurrowed) happyScore += 0.3;
+      }
+
+      // Sadness: Lip Corner Depressor (AU 15) + Brow Lowerer (AU 4) + Inner Brow Raiser (AU 1)
+      if (normCornerLift < -0.01) {
+        sadScore += Math.abs(normCornerLift) * 6;
+      }
+      if (isFurrowed) {
+        sadScore += 0.35;
+        angryScore += 0.3;
+      }
+      if (isSadBrow) {
+        sadScore += 0.45;
+      }
+
+      // Anger: Brow Lowerer (AU 4) + Lid Tightener (AU 7) + low brow height
+      if (isFurrowed && normBrowEye < 0.28) {
+        angryScore += (0.28 - normBrowEye) * 10 + 0.4;
+      }
+
+      // Surprise: Inner/Outer Brow Raiser (AU 1+2) + Upper Lid Raiser (AU 5) + Jaw Drop (AU 26)
+      if (normBrowEye > 0.33) {
+        surprisedScore += (normBrowEye - 0.33) * 8;
+      }
+      if (normMouthHeight > 0.16) {
+        surprisedScore += 0.4;
+      }
+
+      const total = happyScore + sadScore + angryScore + surprisedScore + neutralScore;
+      return {
+        happy: happyScore / total,
+        sad: sadScore / total,
+        angry: angryScore / total,
+        surprised: surprisedScore / total,
+        neutral: neutralScore / total
+      };
+    };
+
     detectIntervalRef.current = setInterval(async () => {
       if (videoRef.current && videoRef.current.readyState === 4) {
         try {
@@ -129,47 +210,54 @@ export default function EchoView() {
 
           if (detection && detection.expressions) {
             const expressions = detection.expressions;
-            const dominant = Object.entries(expressions).reduce((a: any, b: any) => a[1] > b[1] ? a : b);
+            const positions = detection.landmarks ? detection.landmarks.positions : null;
             
-            let emotion = dominant[0];
-            let confidence = Math.round(dominant[1] * 100);
+            let emotion = 'neutral';
+            let confidence = 50;
 
-            // Multimodal Fusion: Cross-reference face expression, physical landmarks, and draft text sentiment
-            if (detection.landmarks) {
-              const positions = detection.landmarks.positions;
-              // Inner eyebrow landmarks (indices 21 and 22)
+            if (positions) {
+              const facs = computeFACSEmotions(positions);
+              
+              // Blended Ensemble Classifier: 60% Neural Network weight, 40% rule-based FACS model
+              const combinedHappy = ((expressions.happy || 0) * 0.6) + (facs.happy * 0.4);
+              const combinedSad = ((expressions.sad || 0) * 0.6) + (facs.sad * 0.4);
+              const combinedAngry = ((expressions.angry || 0) * 0.6) + (facs.angry * 0.4);
+              const combinedSurprised = ((expressions.surprised || 0) * 0.6) + (facs.surprised * 0.4);
+              const combinedNeutral = ((expressions.neutral || 0) * 0.6) + (facs.neutral * 0.4);
+
+              const combinedScores: any = {
+                happy: combinedHappy,
+                sad: combinedSad,
+                angry: combinedAngry,
+                surprised: combinedSurprised,
+                neutral: combinedNeutral
+              };
+
+              const sortedCombined = Object.entries(combinedScores).reduce((a: any, b: any) => a[1] > b[1] ? a : b);
+              emotion = sortedCombined[0];
+              confidence = Math.round(sortedCombined[1] * 100);
+
+              // Multimodal overrides based on landmarks & text bias
               const leftEyebrowInner = positions[21];
               const rightEyebrowInner = positions[22];
-              // Inner eye corners (indices 39 and 42)
               const leftEyeInner = positions[39];
               const rightEyeInner = positions[42];
-              // Outer eyebrow corners (indices 17 and 26)
               const leftEyebrowOuter = positions[17];
               const rightEyebrowOuter = positions[26];
 
               if (leftEyebrowInner && rightEyebrowInner && leftEyeInner && rightEyeInner) {
-                const eyebrowDist = Math.sqrt(
-                  Math.pow(leftEyebrowInner.x - rightEyebrowInner.x, 2) +
-                  Math.pow(leftEyebrowInner.y - rightEyebrowInner.y, 2)
-                );
-                const eyeDist = Math.sqrt(
-                  Math.pow(leftEyeInner.x - rightEyeInner.x, 2) +
-                  Math.pow(leftEyeInner.y - rightEyeInner.y, 2)
-                );
-
+                const eyebrowDist = getDistance(leftEyebrowInner, rightEyebrowInner);
+                const eyeDist = getDistance(leftEyeInner, rightEyeInner);
                 const furrowRatio = eyebrowDist / eyeDist;
 
-                // Crying patterns pull inner eyebrows upward and together (Y is inverted: smaller Y = higher)
                 const innerEyebrowsLifted = 
                   (leftEyebrowInner.y < leftEyebrowOuter.y + 1) && 
                   (rightEyebrowInner.y < rightEyebrowOuter.y + 1);
 
-                // Fetch real-time text bias
                 const textBias = getTextBias(inputRef.current);
-
-                // Override false-positive happy or neutral expressions when distressed features are present
                 const isDistressed = furrowRatio < 0.88 || innerEyebrowsLifted || textBias === 'sad';
 
+                // Override false positive happy expressions when distressed markers are active
                 if (emotion === 'happy' && isDistressed) {
                   emotion = 'sad';
                   confidence = Math.max(confidence - 10, 80);
@@ -177,11 +265,15 @@ export default function EchoView() {
                   emotion = 'sad';
                   confidence = 80;
                 } else if (textBias && textBias !== emotion && confidence < 60) {
-                  // Direct sensor override if camera confidence is low and user is typing sad/anxious text
                   emotion = textBias;
                   confidence = 75;
                 }
               }
+            } else {
+              // Fallback to pure neural net if landmarks fail to register
+              const dominant = Object.entries(expressions).reduce((a: any, b: any) => a[1] > b[1] ? a : b);
+              emotion = dominant[0];
+              confidence = Math.round(dominant[1] * 100);
             }
 
             setDetectedEmotion(emotion);
