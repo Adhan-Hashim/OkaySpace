@@ -2,7 +2,6 @@ import React from 'react';
 import bgPhoto from '../assets/footer-photo-bg.png';
 import logo from '../assets/logo.png';
 import malayalamLogo from '../assets/malayalam-logo.png';
-import { Instagram } from 'lucide-react';
 import './Footer.css';
 
 export default function Footer() {
@@ -21,7 +20,8 @@ export default function Footer() {
         <div className="ss-right">
           <div className="ss-contact">
             <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.5rem' }}>
-              <Instagram size={20} /> @chattipathal
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+              @chattipathal
             </p>
             <p>hello@okayspace.com</p>
           </div>
