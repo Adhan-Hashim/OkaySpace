@@ -194,7 +194,7 @@ export default function MeditationsView() {
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.45 }}
       style={{
-        backgroundImage: `url(${bgLake})`,
+        backgroundImage: `url(${bgForest})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
