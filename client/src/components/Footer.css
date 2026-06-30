@@ -44,8 +44,9 @@
   height: 250px;
   object-fit: contain;
   /* Rotate slightly to match the whimsical feel */
-  transform: rotate(-5deg) scale(1.1);
-  mix-blend-mode: multiply; /* Removes white background and blends into the watercolor */
+  transform: rotate(-10deg) scale(1.1);
+  filter: brightness(0) invert(1); /* Makes the dark logo pure white */
+  opacity: 0.95;
 }
 
 .ss-center {
