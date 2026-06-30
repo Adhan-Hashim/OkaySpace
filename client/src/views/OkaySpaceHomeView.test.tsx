@@ -29,24 +29,19 @@ vi.mock('framer-motion', () => {
 });
 
 describe('OkaySpaceHomeView', () => {
-  test('renders the main heading and subtitle', () => {
+  test('renders the main heading and quote', () => {
     render(<OkaySpaceHomeView />);
     
-    expect(screen.getByText('A Safe Space for Your Mind')).toBeDefined();
-    expect(screen.getByText(/Tools for emotional clarity/i)).toBeDefined();
+    expect(screen.getByText('A safe space for you')).toBeDefined();
+    expect(screen.getByText(/You don't have to be okay to come here/i)).toBeDefined();
   });
 
-  test('can type in the input and trigger a reframing', () => {
+  test('renders the feature cards', () => {
     render(<OkaySpaceHomeView />);
     
-    const input = screen.getByPlaceholderText(/What's on your mind?/i);
-    expect(input).toBeDefined();
-
-    fireEvent.change(input, { target: { value: 'I feel stressed' } });
-    expect(input.value).toBe('I feel stressed');
-
-    const button = screen.getByText('Refract Thought');
-    fireEvent.click(button);
-    // Since useStore is mocked, we just verify the component doesn't crash on interaction
+    expect(screen.getByText('Echo')).toBeDefined();
+    expect(screen.getByText('Prism')).toBeDefined();
+    expect(screen.getByText('Meditations')).toBeDefined();
+    expect(screen.getByText('Nexus')).toBeDefined();
   });
 });
