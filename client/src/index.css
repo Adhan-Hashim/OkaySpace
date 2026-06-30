@@ -172,12 +172,12 @@ p { color: var(--text-secondary); line-height: 1.7; }
   :root {
     --footer-h: 0px !important; /* No margin on main-content */
   }
-  
   .footer-fixed-container {
     position: relative !important;
     height: auto !important;
     width: 100% !important;
     display: block !important;
+    margin-top: -50px; /* Pull footer up behind main-content's curved corners */
   }
 }
 
@@ -186,7 +186,7 @@ p { color: var(--text-secondary); line-height: 1.7; }
   bottom: 0;
   left: 0;
   width: 100%;
-  height: var(--footer-h);
+  height: calc(var(--footer-h) + 50px);
   z-index: 1;
 }
 

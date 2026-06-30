@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 4rem 6rem; 
+  padding: calc(4rem + 50px) 6rem 4rem; 
   background-image: url('../assets/footer-photo-bg.png');
   background-size: cover;
   background-position: center center; /* Keep the center of the photo in view */
@@ -139,7 +139,7 @@
   }
   
   .ss-footer {
-    padding: 3rem 1.5rem;
+    padding: calc(3rem + 50px) 1.5rem 3rem;
     min-height: 85vh !important; /* Ensure the background photo is expansive */
     background-position: center center !important; /* Fix white bar clipping from bottom anchored images */
     overflow: hidden; /* Force background to contain all elements */
