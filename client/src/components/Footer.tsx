@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../assets/logo.png';
+import malayalamLogo from '../assets/malayalam-logo.png';
 import './Footer.css';
 
 export default function Footer() {
@@ -12,7 +13,7 @@ export default function Footer() {
         </div>
 
         <div className="ss-center">
-          <h1 className="ss-title">OKAYSPACE</h1>
+          <img src={malayalamLogo} alt="Malayalam Logo" className="ss-center-logo" />
         </div>
 
         <div className="ss-right">

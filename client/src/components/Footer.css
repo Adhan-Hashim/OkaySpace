@@ -13,25 +13,17 @@
   position: relative;
   z-index: 1;
   color: white;
-  min-height: 120px; /* Much lower height */
+  min-height: 80vh; /* Massive cinematic block */
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Align to the top bright sky area */
   justify-content: space-between;
-  padding: 1rem 6rem; /* Tighter vertical padding, wider horizontal padding */
+  padding: 4rem 6rem; 
+  background-image: url('../assets/footer-photo-bg.png');
+  background-size: cover;
+  background-position: center bottom; /* Anchor photo to the bottom */
 }
 
-.ss-footer::before {
-  content: "";
-  position: absolute;
-  top: -80px; left: -80px; right: -80px; bottom: -80px; /* Expanded area */
-  background-image: url('../assets/footer-bg-green.png');
-  background-size: 100% 100%; /* Force the entire long brush stroke to fit the wide container */
-  background-position: center;
-  background-repeat: no-repeat;
-  mix-blend-mode: multiply;
-  z-index: -1;
-  pointer-events: none;
-}
+/* Removed ::before watercolor overlay */
 
 .ss-left {
   flex: 1;
@@ -60,16 +52,10 @@
   z-index: 2;
 }
 
-.ss-title {
-  font-family: 'Chewy', cursive, sans-serif;
-  font-size: 2.5rem; /* Scaled down to fit */
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  margin: 0;
-  line-height: 1;
-  text-align: center;
-  color: white !important;
-  text-shadow: 2px 2px 0px rgba(18, 34, 26, 0.5); /* dark green cutout shadow effect */
+.ss-center-logo {
+  height: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.1));
 }
 
 .ss-subtitle {
