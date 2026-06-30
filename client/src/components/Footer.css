@@ -11,7 +11,6 @@
   width: 100%;
   max-width: 1100px;
   position: relative;
-  z-index: 1;
   color: white;
   min-height: 350px;
   display: flex;
@@ -23,9 +22,9 @@
 .ss-footer::before {
   content: "";
   position: absolute;
-  top: -40px; left: -40px; right: -40px; bottom: -40px;
+  top: -80px; left: -80px; right: -80px; bottom: -80px; /* Expanded area */
   background-image: url('../assets/watercolor-bg.png');
-  background-size: 100% 100%;
+  background-size: cover; /* This makes it zoom in to fill the space! */
   background-position: center;
   background-repeat: no-repeat;
   mix-blend-mode: multiply;
