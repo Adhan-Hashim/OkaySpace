@@ -34,14 +34,18 @@ function App() {
     <AuthProvider>
       <div className="app-layout">
         <Navigation />
-        <main className="main-content">
+        <main className="main-content" style={{ marginBottom: showFooter ? '80vh' : 0, borderRadius: showFooter ? '0 0 50px 50px' : 0, boxShadow: showFooter ? '0px 20px 50px rgba(0,0,0,0.2)' : 'none' }}>
           <MotionConfig reducedMotion="user">
             <AnimatePresence mode="wait">
               <ActiveComponent key={activeView} />
             </AnimatePresence>
           </MotionConfig>
         </main>
-        {showFooter && <Footer />}
+        {showFooter && (
+          <div className="footer-fixed-container">
+            <Footer />
+          </div>
+        )}
       </div>
     </AuthProvider>
   );
