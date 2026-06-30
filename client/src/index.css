@@ -161,6 +161,7 @@ p { color: var(--text-secondary); line-height: 1.7; }
   position: relative;
   z-index: 2;
   background-color: var(--bg); /* Ensure solid background to hide footer beneath */
+  min-height: 100vh; /* Guarantee the page content covers the initial viewport so the footer only reveals on scroll */
 }
 
 .footer-fixed-container {
