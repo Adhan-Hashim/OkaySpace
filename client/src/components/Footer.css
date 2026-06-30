@@ -24,7 +24,7 @@
   content: "";
   position: absolute;
   top: -80px; left: -80px; right: -80px; bottom: -80px; /* Expanded area */
-  background-image: url('../assets/watercolor-bg.png');
+  background-image: url('../assets/footer-bg-green.png');
   background-size: 100% 100%; /* Force the entire long brush stroke to fit the wide container */
   background-position: center;
   background-repeat: no-repeat;
