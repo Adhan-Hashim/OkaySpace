@@ -168,10 +168,51 @@ Respond with JSON: { "response": "your response text" }`;
 
     } catch (err) {
         console.error('Echo error:', err);
-        res.json({
-            response: "I'm here with you. Even when connections flicker, the space for reflection remains. What's on your mind?",
-            sentiment: { emotion: 'neutral', intensity: 0.5 },
-        });
+        const responses = {
+            sadness: [
+                "I can feel the weight in your words. Sadness is a signal that something important to you is being affected. What feels most heavy right now?",
+                "It takes courage to sit with sadness rather than push it away. I'm here with you in this space. What's beneath the surface?",
+                "Your sadness is valid. It shows the depth of your capacity to feel. Would you like to explore what might help lighten this?",
+            ],
+            anxiety: [
+                "I notice the tension in what you're sharing. Let's slow down together. What is the single most pressing worry right now?",
+                "Anxiety often tries to protect us by imagining worst-case scenarios. What's the story your mind is telling you?",
+                "When everything feels urgent, nothing gets processed. Let's take this one piece at a time. What's the first thread to pull?",
+            ],
+            anger: [
+                "Anger is a powerful emotion — it often means a boundary has been crossed. What feels violated or unfair to you?",
+                "I hear the intensity in your words. Anger can be a messenger. What is it trying to tell you?",
+                "It's okay to feel angry. Let's channel that energy — what change would make this situation feel more just?",
+            ],
+            joy: [
+                "That brightness in your words is beautiful. What sparked this feeling, and how can you create more of it?",
+                "I love seeing this energy! Joy is worth savoring. Take a moment to really sit with this good feeling.",
+                "What a wonderful state to be in. Notice this moment — it's data for your mind that good things happen too.",
+            ],
+            calm: [
+                "There's a groundedness in your words. This calm is a powerful state — it's where your clearest thinking happens.",
+                "I can sense your equilibrium. From this centered place, what feels most true to you right now?",
+            ],
+            hope: [
+                "I can feel the forward momentum in your words. Hope is the mind's way of saying 'there's a path.' What direction do you want to move in?",
+                "That spark of hope is powerful. Let's nurture it — what would the next small step look like?",
+            ],
+            neutral: [
+                "Thank you for sharing. I'm curious to understand more — what's the feeling underneath these words?",
+                "I hear you. Sometimes the most important conversations start from a neutral place. What would you like to explore?",
+                "Tell me more. I want to understand not just what you're thinking, but what you're feeling about it.",
+            ],
+            confusion: [
+                "Confusion can actually be a sign of growth — it means your old framework isn't fitting anymore. What feels most unclear?",
+                "Let's untangle this together. If you had to name just one thing that feels confusing, what would it be?",
+            ],
+        };
+
+        const sentiment = detectSentiment(message || '');
+        const pool = responses[sentiment.emotion] || responses.neutral;
+        const response = pool[Math.floor(Math.random() * pool.length)];
+
+        res.json({ response, sentiment });
     }
 };
 
@@ -237,10 +278,22 @@ Respond with JSON: { "response": "your response", "distortion": "name of distort
 
     } catch (err) {
         console.error('Echo reframe error:', err);
+        const sentiment = detectSentiment(message || '');
+        const distortion = detectDistortion(message || '');
+        const distortionInfo = distortion
+            ? `I notice a cognitive pattern here: **${distortion}**. This is when our mind ${
+                distortion === 'Catastrophizing' ? 'jumps to the worst possible outcome' :
+                distortion === 'All-or-Nothing' ? 'sees things in absolute black-and-white terms' :
+                distortion === 'Mind Reading' ? 'assumes we know what others are thinking' :
+                distortion === 'Overgeneralization' ? 'takes one event and applies it to everything' :
+                distortion === 'Emotional Reasoning' ? 'treats feelings as facts' :
+                'creates rigid rules with "should" and "must"'
+            }.\n\n`
+            : '';
         res.json({
-            response: "That's a heavy thought. Let me reflect it back differently: What would you say if your best friend came to you with this exact thought?",
-            sentiment: { emotion: 'neutral', intensity: 0.5 },
-            distortion: null,
+            response: `${distortionInfo}Let me ask you this: If you were giving advice to someone you deeply care about who shared this exact thought, what would you say to them? Often we're much kinder to others than to ourselves.`,
+            sentiment,
+            distortion,
         });
     }
 };
