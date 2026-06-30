@@ -9,15 +9,15 @@
 
 .ss-footer {
   width: 100%;
-  max-width: 1400px; /* Much wider */
+  max-width: 100%; /* Full width */
   position: relative;
-  z-index: 1; /* Restored to ensure the watercolor background is visible */
+  z-index: 1;
   color: white;
-  min-height: 200px; /* Less height */
+  min-height: 120px; /* Much lower height */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 4rem;
+  padding: 1rem 6rem; /* Tighter vertical padding, wider horizontal padding */
 }
 
 .ss-footer::before {
@@ -25,7 +25,7 @@
   position: absolute;
   top: -80px; left: -80px; right: -80px; bottom: -80px; /* Expanded area */
   background-image: url('../assets/watercolor-bg.png');
-  background-size: cover; /* This makes it zoom in to fill the space! */
+  background-size: 100% 100%; /* Force the entire long brush stroke to fit the wide container */
   background-position: center;
   background-repeat: no-repeat;
   mix-blend-mode: multiply;
@@ -42,7 +42,7 @@
 }
 
 .ss-character {
-  height: 140px; /* Scaled down for shorter footer */
+  height: 80px; /* Scaled down for much shorter footer */
   object-fit: contain;
   /* Rotate slightly to match the whimsical feel */
   transform: rotate(-10deg) scale(1.1);
@@ -62,14 +62,14 @@
 
 .ss-title {
   font-family: 'Chewy', cursive, sans-serif;
-  font-size: 3.5rem; /* Scaled down slightly */
+  font-size: 2.5rem; /* Scaled down to fit */
   font-weight: 400;
   letter-spacing: 0.05em;
   margin: 0;
   line-height: 1;
   text-align: center;
   color: white !important;
-  text-shadow: 2px 2px 0px rgba(180, 50, 40, 0.5); /* slight cutout shadow effect */
+  text-shadow: 2px 2px 0px rgba(18, 34, 26, 0.5); /* dark green cutout shadow effect */
 }
 
 .ss-subtitle {
