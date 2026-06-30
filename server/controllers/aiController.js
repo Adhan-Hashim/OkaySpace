@@ -11,6 +11,20 @@ const getGemini = () => {
     return new GoogleGenerativeAI(apiKey);
 };
 
+const safeParseJSON = (text) => {
+    if (!text) return null;
+    let clean = text.trim();
+    if (clean.startsWith('```')) {
+        clean = clean.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+    }
+    try {
+        return JSON.parse(clean);
+    } catch (e) {
+        console.error("Failed to parse JSON:", e, "Original text:", text);
+        return null;
+    }
+};
+
 // Simple in-memory sentiment analysis fallback
 const EMOTION_KEYWORDS = {
     joy: ['happy', 'glad', 'excited', 'wonderful', 'amazing', 'great', 'love', 'grateful', 'blessed', 'fantastic', 'awesome'],
@@ -209,8 +223,13 @@ Respond with JSON: { "response": "your response text" }`;
         const chat = model.startChat({ history: chatHistory });
         const result = await chat.sendMessage(message);
         
-        const parsed = JSON.parse(result.response.text());
-        res.json({ response: parsed.response, sentiment });
+        const textResponse = result.response.text();
+        const parsed = safeParseJSON(textResponse);
+        if (parsed && parsed.response) {
+            res.json({ response: parsed.response, sentiment });
+        } else {
+            throw new Error("Invalid JSON response format from Gemini");
+        }
 
     } catch (err) {
         console.error('Echo error:', err);
@@ -271,14 +290,17 @@ Respond with JSON: { "response": "your response", "distortion": "name of distort
             }
         });
 
-        const result = await model.generateContent(message);
-        const parsed = JSON.parse(result.response.text());
-        
-        res.json({
-            response: parsed.response,
-            sentiment,
-            distortion: parsed.distortion || distortion,
-        });
+        const textResponse = result.response.text();
+        const parsed = safeParseJSON(textResponse);
+        if (parsed && parsed.response) {
+            res.json({
+                response: parsed.response,
+                sentiment,
+                distortion: parsed.distortion || distortion,
+            });
+        } else {
+            throw new Error("Invalid JSON response format from Gemini");
+        }
 
     } catch (err) {
         console.error('Echo reframe error:', err);
@@ -371,9 +393,13 @@ Keep each facet 2-3 sentences. Be specific to the user's thought, not generic.`;
             }
         });
 
-        const result = await model.generateContent(thought);
-        const parsed = JSON.parse(result.response.text());
-        res.json(parsed);
+        const textResponse = result.response.text();
+        const parsed = safeParseJSON(textResponse);
+        if (parsed && parsed.facets) {
+            res.json(parsed);
+        } else {
+            throw new Error("Invalid JSON response format from Gemini");
+        }
 
     } catch (err) {
         console.error('Prism error:', err);
